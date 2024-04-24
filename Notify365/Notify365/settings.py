@@ -36,7 +36,13 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.staticfiles', 
+    'settings',
+    'log',
+    'notification',
+    'automatizations',
+    'customer',
+    'dashboard',   
 ]
 
 MIDDLEWARE = [
@@ -54,7 +60,7 @@ ROOT_URLCONF = 'Notify365.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -74,9 +80,13 @@ WSGI_APPLICATION = 'Notify365.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "dev_notify365",
+        "USER": "doadmin",
+        "PASSWORD": "AVNS_bw1W65lBHbqt6AgGRst",
+        "HOST": "db-postgresql-nyc3-notify365-do-user-11845072-0.c.db.ondigitalocean.com",
+        "PORT": "25060",
     }
 }
 
