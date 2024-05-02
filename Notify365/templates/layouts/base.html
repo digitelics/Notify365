@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html class="h-full bg-white" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href={% static 'css/style.css' %}>
+    {% block css %}  {% endblock css %}
+    <title>{% block title %} {% endblock %}</title>
+</head>
+<body class="h-full">
+<div>
+    {% include "layouts/partials/menu.html" %}
+  <div class="lg:pl-72">
+     <!-- Page title & actions -->
+      <div class="border-b border-gray-200 px-4 py-4 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8 horizontal-gradient">
+        <div class="min-w-0 flex-1">
+          <h1 class="text-lg font-medium leading-6 text-gray-900 sm:truncate">Dashboard</h1>
+        </div>
+        <div class="mt-4 flex sm:ml-4 sm:mt-0">
+            {% block header-button %} {% endblock %}
+        </div>
+      </div>   
+
+    <main class="py-10">
+      <div class="px-4 sm:px-6 lg:px-8">
+        {% block content %}{% endblock  %}
+      </div>
+    </main>
+  </div>
+</div>
+
+    {% block script %}  {% endblock script %} 
+</body>
+</html>
