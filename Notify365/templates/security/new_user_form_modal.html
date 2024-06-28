@@ -1,0 +1,208 @@
+
+
+<section class="hidden overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center" id="modal-new_user">
+  <form action="{% url 'new-user' %}" method="POST" id="myForm" class="modal-position" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="shadow sm:overflow-hidden sm:rounded-md">
+      <div class="bg-white">
+        <div class="flex items-center justify-between p-4 bg-purple-50 bg-opacity-50 md:p-5 border-b rounded-t dark:border-gray-600">
+          <div>
+            <h2 id="payment-details-heading" class="text-lg font-medium leading-6 text-gray-900">Add new user</h2>
+            <p class="mt-1 text-sm text-gray-500"></p>
+          </div>
+          <button type="button" onclick="toggleModal('modal-new_user')" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
+            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+            </svg>
+            <span class="sr-only">Close modal</span>
+          </button>
+        </div>
+
+        <div class="mt-6 px-10 pb-5 grid grid-cols-4 gap-y-3 gap-x-6">
+          <div class="col-span-4 sm:col-span-2">
+            <label for="name" class="block text-sm font-medium leading-6 text-gray-900">Full name</label>
+            <input type="text" name="name" id="first-name" autocomplete="cc-given-name" tabindex="1" class="mt-2 align-input block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6">
+            <span class="error-message"></span>
+          </div>
+
+          <div class="col-span-4 sm:col-span-2">
+            <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
+            <input type="password" name="password" id="password" tabindex="4" autocomplete="cc-given-name" class="mt-2 block align-input w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6">
+            <span class="error-message"></span>
+          </div>
+
+          <div class="col-span-4 sm:col-span-2">
+            <label for="phone" class="block text-sm font-medium leading-6 text-gray-900">Phone</label>
+            <input type="text" name="phone" id="phone" max="10" tabindex="2" autocomplete="cc-given-tel" class="mt-2 block w-full align-input rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6">
+            <span class="error-message"></span>
+          </div>
+
+          <div class="col-span-4 sm:col-span-2">
+            <label for="password2" class="block text-sm font-medium leading-6 text-gray-900">Confirm password</label>
+            <input type="password" name="password2" id="password2" tabindex="5" autocomplete="cc-given-password" class="mt-2 block w-full align-input rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6">
+            <span class="error-message"></span>
+          </div>
+
+          <div class="col-span-4 sm:col-span-2">
+            <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email</label>
+            <input type="email" name="email" id="email" tabindex="3" autocomplete="cc-given-email" class="mt-2 block w-full align-input rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6">
+            <span class="error-message"></span>
+          </div>
+
+          <div class="col-span-4 sm:col-span-2">
+            <label for="avatar" class="block text-sm font-medium leading-6 text-gray-900">Profile Picture</label>
+            <input type="file" id="avatar" name="avatar" tabindex="6" class="mt-2 block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6">
+            <span class="error-message"></span>
+          </div>
+        </div> 
+      </div>
+      <div class="bg-gray-50 px-4 py-3 text-right sm:px-6">
+        <button type="submit" class="inline-flex justify-center rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900">Save</button>
+      </div>
+    </div>
+  </form>
+</section>
+
+<div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="modal-new_user-backdrop"></div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('myForm');
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('password2');
+    const nameInput = document.getElementById('first-name');
+    const emailInput = document.getElementById('email');
+    const avatarInput = document.getElementById('avatar');
+    const phoneInput = document.getElementById('phone');
+
+    // Phone validation
+    phoneInput.addEventListener('keypress', function (event) {
+      if (event.which < 48 || event.which > 57 || this.value.length === 10) {
+        event.preventDefault();
+      }
+    });
+
+    form.addEventListener('submit', function (event) {
+      // Prevent the form from submitting
+      event.preventDefault();
+
+      // Reset previous error messages
+      resetErrorMessages();
+
+      // Validate all fields
+      let isValid = true;
+
+      if (!nameInput.value.trim()) {
+        setErrorFor(nameInput, 'Full name cannot be blank');
+        isValid = false;
+      } else if (nameInput.value.trim().length > 100) {
+        setErrorFor(nameInput, 'Full name cannot exceed 100 characters');
+        isValid = false;
+      }
+
+      if (!emailInput.value.trim()) {
+        setErrorFor(emailInput, 'Email cannot be blank');
+        isValid = false;
+      } else if (!isValidEmail(emailInput.value.trim())) {
+        setErrorFor(emailInput, 'Invalid email format');
+        isValid = false;
+      } else if (emailInput.value.trim().length > 100) {
+        setErrorFor(emailInput, 'Email cannot exceed 100 characters');
+        isValid = false;
+      }
+
+      if (!passwordInput.value.trim()) {
+        setErrorFor(passwordInput, 'Password cannot be blank');
+        isValid = false;
+      } else {
+        const passwordValidation = isValidPassword(passwordInput.value.trim());
+        if (!passwordValidation.isValid) {
+          setErrorFor(passwordInput, passwordValidation.message);
+          isValid = false;
+        } else if (passwordInput.value.trim().length > 100) {
+          setErrorFor(passwordInput, 'Password cannot exceed 100 characters');
+          isValid = false;
+        }
+      }
+
+      if (!confirmPasswordInput.value.trim()) {
+        setErrorFor(confirmPasswordInput, 'Confirm password cannot be blank');
+        isValid = false;
+      } else if (confirmPasswordInput.value.trim() !== passwordInput.value.trim()) {
+        setErrorFor(confirmPasswordInput, 'Passwords do not match');
+        isValid = false;
+      }
+
+      if (!phoneInput.value.trim()) {
+        setErrorFor(phoneInput, 'Phone number cannot be blank');
+        isValid = false;
+      }
+
+      if (avatarInput.files.length > 0) {
+        const fileSize = avatarInput.files[0].size; // in bytes
+        if (fileSize > 2 * 1024 * 1024) { // 2 MB in bytes
+          setErrorFor(avatarInput, 'Profile picture size cannot exceed 2MB');
+          isValid = false;
+        }
+      }
+
+      if (isValid) {
+        // Show loading indicator
+        document.getElementById('loadingIndicator').classList.remove('hidden');
+
+        // Close modal
+        toggleModal('modal-new_user');
+
+        // Submit the form
+        form.submit();
+      }
+    });
+
+    // Function to set error message for a field
+    function setErrorFor(input, message) {
+      const formControl = input.parentElement;
+      const errorMessage = formControl.querySelector('.error-message');
+      errorMessage.textContent = message;
+      input.classList.add('error');
+    }
+
+    // Function to reset all error messages
+    function resetErrorMessages() {
+      const errorMessages = document.querySelectorAll('.error-message');
+      errorMessages.forEach(function (errorMessage) {
+        errorMessage.textContent = '';
+      });
+
+      const errorInputs = document.querySelectorAll('.error');
+      errorInputs.forEach(function (input) {
+        input.classList.remove('error');
+      });
+    }
+
+    // Function to check if an email is valid
+    function isValidEmail(email) {
+      const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+      return re.test(email);
+    }
+
+    // Function to check if a password is valid
+    function isValidPassword(password) {
+      if (password.length < 8) {
+        return { isValid: false, message: 'Password must be at least 8 characters long' };
+      }
+      if (!/[A-Z]/.test(password)) {
+        return { isValid: false, message: 'Password must contain at least one uppercase letter' };
+      }
+      if (!/[a-z]/.test(password)) {
+        return { isValid: false, message: 'Password must contain at least one lowercase letter' };
+      }
+      if (!/\d/.test(password)) {
+        return { isValid: false, message: 'Password must contain at least one number' };
+      }
+      return { isValid: true, message: '' };
+    }
+  });
+</script>
+
+

@@ -1,0 +1,67 @@
+{% extends "settings/setting_template.html" %}
+{% block setting_content %}
+       <!-- Main content -->
+        <h1 class="text-3xl font-bold tracking-tight text-slate-900 mb-5">General Settings</h1>
+
+      <header class="border-b border-white/5">
+        <!-- Secondary navigation -->
+        <nav class="flex overflow-x-auto py-4 text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
+          <ul role="list" class="flex flex-wrap -mb-px">
+            <li class="me-2">
+              <a href={% url 'general_setting' 'general' %} class="general inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">General</a>
+            </li>
+            <li class="me-2">
+              <a href="{% url 'general_setting' 'product' %}" class="service inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Services</a>
+            </li>
+            <li class="me-2">
+              <a href={% url 'general_setting' 'mt' %} class="mtemplate inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Messages Templates</a>
+            </li>
+            <li class="me-2">
+              <a href={% url 'general_setting' 'automatization' %} class="automatization inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Automatizations</a>
+            </li>
+            <li class="me-2">
+              <a href={% url 'general_setting' 'providers' %} class="provider inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Providers</a>
+            </li>
+            <li class="me-2">
+              <a href={% url 'general_setting' 'ss' %} class="ss inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">State of Services</a>
+            </li>
+          </ul>
+        </nav>
+      </header>
+        {% if tab == "product" %}
+            {% include "settings/product_template.html" %}
+        {% elif tab == 'tcompany'%}
+            {% include "settings/type_of_company_template.html" %}
+        {% elif tab == 'mt'%}
+            {% include "settings/message_template_template.html" %}
+        {% elif tab == 'ct'%}
+            {% include "settings/category_of_template_template.html" %}
+        {% elif tab == 'automatization'%}
+            {% include "settings/automatizations_template.html" %}
+        {% elif tab == 'providers'%}
+            {% include "settings/provider_template.html" %}
+        {% elif tab == 'tp'%}
+            {% include "settings/type_of_provider_template.html" %}
+        {% elif tab == 'ss'%}
+            {% include "settings/state_of_services_template.html" %}
+         {% elif tab == 'general'%}
+            {% include "settings/nomenclators_template.html" %}
+        {% endif %}
+
+      {% block general_setting_sections %}
+
+      {% endblock general_setting_sections %}
+{% endblock setting_content %}
+{% block script %}
+<script>
+   window.addEventListener("load", (event) => {
+        const menulinks = document.getElementsByClassName("general-settings");    
+        for (i = 0; i < menulinks.length; i++) {
+                menulinks[i].className += " settings-menu-selected";
+            }
+        // event.currentTarget.className += " tab-selected";
+    
+    });
+
+</script>
+{% endblock script %}

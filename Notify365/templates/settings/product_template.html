@@ -1,0 +1,260 @@
+    
+      <div class="space-y-6 sm:px-6 lg:col-span-9 lg:px-0">
+        <section aria-labelledby="billing-history-heading">
+          <div class="bg-white pt-6 shadow sm:overflow-hidden sm:rounded-md">
+            
+            <div class="md:flex md:items-center md:justify-between px-4 sm:px-6">
+              <div class="min-w-0 flex-1">
+                <h2 id="billing-history-heading" class="text-lg font-medium leading-6 text-gray-900">List of Services / Products</h2>
+              </div>
+              <div class="mt-4 flex md:ml-4 md:mt-0">
+               <button type="button" onclick="toggleModal('modal-add-product')" class="order-0 inline-flex items-center rounded-md bg-purple-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600 sm:order-1 sm:ml-3">Create</button>
+              </div>
+            </div>
+            <div class="mt-6 flex flex-col">
+              <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                  <div class="overflow-hidden border-t border-gray-200">
+                    <table class="min-w-full divide-y divide-gray-200">
+                      <thead class="bg-gray-300 bg-opacity-50">
+                        <tr>
+                          <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Date</th>
+                          <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Name</th>
+                          <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Description</th>
+                          <!--
+                            `relative` is added here due to a weird bug in Safari that causes `sr-only` headings to introduce overflow on the body on mobile.
+                          -->
+                          <th scope="col" class="relative px-6 py-3 text-left text-sm font-medium text-gray-500">
+                            <span class="sr-only">View datails</span>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-gray-200 bg-white">
+                       {% for product in products %}
+                        <tr>
+                           <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
+                              <time datetime="2020-01-01">{{ product.created_at }}</time>
+                            </td>
+                            <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{{ product.name }}</td>
+                            <td class="whitespace-wrap px-6 py-4 text-sm text-gray-500">{{ product.description }}</td>
+                            <td class="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
+                              <div class="flex flex-1 gap-2 justify-end">
+                                <button class="edit-product-btn" data-productId={{product.id}} data-productName="{{ product.name }}" data-productDescription="{{ product.description }}" data-documents="{{ product.documents.all|join:',' }}">
+                                    <span title="Edit">
+                                        <svg fill="none" viewBox="0 0 26 26" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-green-500 hover:text-green-300">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                                        </svg>
+                                    </span>
+                                </button>
+                                <button class="delete-product-btn" data-deleteProductId={{product.id}} data-deleteProductName="{{ product.name }}">
+                                    <span title="Delete user">
+                                      <svg fill="none" viewBox="0 0 26 26" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-red-600 hover:text-red-400">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                      </svg>
+                                    </span>
+                                </button>
+                              </div>
+                            </td>
+                        </tr>
+                         {% endfor %}
+                        <!-- More payments... -->
+                      </tbody>
+                    </table>
+                    {% include "layouts/partials/pagination.html" %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+{% include "settings/modals/product_modal.html" %}
+{% include "settings/modals/update_product_modal.html" %}
+{% include "settings/modals/delete_product.html" %}
+      </div>
+<div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="modal-add-product-backdrop"></div>
+<div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="modal-update-product-backdrop"></div>
+<div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="modal-delete-product-backdrop"></div>
+
+<script type="text/javascript">
+
+      function toggleModal(modalID){
+        document.getElementById(modalID).classList.toggle("hidden");
+        document.getElementById(modalID + "-backdrop").classList.toggle("hidden");
+        document.getElementById(modalID).classList.toggle("flex");
+        document.getElementById(modalID + "-backdrop").classList.toggle("flex");
+      }
+
+      $(document).ready(function() {
+        // Evento de clic en el botón Editar producto
+        $('.edit-product-btn').click(function() {
+            // Obtener los datos del producto del atributo data
+            var name = $(this).data('productname');
+            var description = $(this).data('productdescription');
+            var productDocuments = $(this).data('documents').split(',');
+            var id = $(this).data('productid');
+
+            // Actualizar el action del formulario con el ID del producto
+            var actionUrl = '{% url "product-edit" 0 %}'.replace('0', id);
+            $('#editProductForm').attr('action', actionUrl);
+
+            // Llenar los campos del formulario en el modal de edición con los datos del producto
+            $('#edit-product-name').val(name);
+            $('#edit-product-description').val(description);
+
+            var allDocuments = {{ documents_json|safe }};
+
+            // Limpiar los checkboxes
+            $('#edit-product-documents').empty();
+
+            
+            // Crear los checkboxes y marcar los documentos asociados al producto
+            allDocuments.forEach(function(doc) {
+              var isChecked = productDocuments.includes(doc.name.toString()) ? 'checked' : '';
+              var checkbox = `
+                <div class="relative flex items-start py-4">
+                  <div class="min-w-0 flex-1 text-sm leading-6">
+                    <label for="document${doc.id}" class="select-none font-medium text-gray-900">${doc.name}</label>
+                  </div>
+                  <div class="ml-3 flex h-6 items-center">
+                    <input id="document${doc.id}" value="${doc.id}" name="documents" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" ${isChecked}>
+                  </div>
+                </div>`;
+              $('#edit-product-documents').append(checkbox);
+            });
+       
+
+            // Mostrar el modal
+            toggleModal("modal-update-product");
+        });
+
+        // Evento de clic en el botón delete
+        $('.delete-product-btn').click(function() {
+            // Obtener los datos del atributo data
+            var id = $(this).data('deleteproductid');
+            var name = $(this).data('deleteproductname');
+
+            // Actualizar el action del formulario con el ID
+            var actionUrl = '{% url "product-remove" 0 %}'.replace('0', id);
+            $('#deleteProductForm').attr('action', actionUrl);
+            $('#delete-product').text(name);
+            toggleModal("modal-delete-product")
+        });
+    });
+
+    window.addEventListener("load", (event) => {
+      const tablinks = document.getElementsByClassName("service");    
+      for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className += " tab-selected";
+                console.log(event.currentTarget);
+            }
+      // event.currentTarget.className += " tab-selected";
+  
+    });
+
+   document.addEventListener('DOMContentLoaded', function () {
+          const addProductForm = document.getElementById('addProductForm');
+          const addProductNameInput = document.getElementById('add-product-name');
+          const AddDescriptionInput = document.getElementById('add-product-description');
+
+          const editProductForm = document.getElementById('editProductForm');
+          const editProductNameInput = document.getElementById('edit-product-name');
+          const editDescriptionInput = document.getElementById('edit-product-description');
+
+          const deleteProductForm = document.getElementById('deleteProductForm')
+
+
+           addProductForm.addEventListener('submit', function (event) {
+            // Prevent the form from submitting
+            event.preventDefault();
+            let isValid = true;
+            resetErrorMessages();
+
+            if (!addProductNameInput.value.trim()) {
+              setErrorFor(addProductNameInput, 'Service name cannot be blank');
+              isValid = false;
+            } else if (addProductNameInput.value.trim().length > 100) {
+              setErrorFor(addProductNameInput, 'Service name cannot exceed 100 characters');
+              isValid = false;
+            }
+
+            if (AddDescriptionInput.value.trim().length > 100) {
+              setErrorFor(AddDescriptionInput, 'Description cannot exceed 100 characters');
+              isValid = false;
+            }
+
+            if (isValid) {
+              // Show loading indicator
+              document.getElementById('loadingIndicator').classList.remove('hidden');
+              toggleModal('modal-add-product');
+              // Submit the form
+              addProductForm.submit();
+            }
+          });
+
+          editProductForm.addEventListener('submit', function (event) {
+            // Prevent the form from submitting
+            event.preventDefault();
+            let isValid = true;
+            resetErrorMessages();
+
+            if (!editProductNameInput.value.trim()) {
+              setErrorFor(editProductNameInput, 'Service name cannot be blank');
+              isValid = false;
+            } else if (editProductNameInput.value.trim().length > 100) {
+              setErrorFor(editProductNameInput, 'Service name cannot exceed 100 characters');
+              isValid = false;
+            }
+
+            if (editDescriptionInput.value.trim().length > 100) {
+              setErrorFor(editDescriptionInput, 'Description cannot exceed 100 characters');
+              isValid = false;
+            }
+
+            if (isValid) {
+              // Show loading indicator
+              document.getElementById('loadingIndicator').classList.remove('hidden');
+              toggleModal('modal-update-product');
+              // Submit the form
+              editProductForm.submit();
+            }
+          });
+          
+          
+          deleteProductForm.addEventListener('submit', function (event) {
+            // Prevent the form from submitting
+            event.preventDefault();
+            let isValid = true;
+            
+
+            if (isValid) {
+              // Show loading indicator
+              document.getElementById('loadingIndicator').classList.remove('hidden');
+              toggleModal('modal-delete-product');
+              // Submit the form
+              deleteProductForm.submit();
+            }
+          });
+
+          // Function to reset all error messages
+          function resetErrorMessages() {
+              const errorMessages = document.querySelectorAll('.error-message');
+              errorMessages.forEach(function (errorMessage) {
+                  errorMessage.textContent = '';
+              });
+          }
+
+          // Function to set error message for a field
+          function setErrorFor(input, message) {
+            const formControl = input.parentElement;
+            const errorMessage = formControl.querySelector('.error-message');
+            errorMessage.textContent = message;
+            input.classList.add('error');
+          }
+
+   });
+
+
+</script>
+
+
+

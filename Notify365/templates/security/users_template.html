@@ -1,0 +1,173 @@
+{% extends "settings/setting_template.html" %}
+{% block setting_content %}
+<div class="space-y-6 sm:px-6 lg:col-span-9 lg:px-0">
+  <section aria-labelledby="billing-history-heading">
+    <div class="bg-white pt-6 shadow sm:overflow-hidden sm:rounded-t-md">
+      <div class="md:flex md:items-center md:justify-between px-4 sm:px-6">
+        <div class="min-w-0 flex-1">
+          <h2 id="billing-history-heading" class="text-lg font-medium leading-6 text-gray-900">List of Users</h2>
+        </div>
+        <div class="mt-4 flex md:ml-4 md:mt-0">
+          <button type="button" onclick="toggleModal('modal-new_user')" class="order-0 inline-flex items-center rounded-md bg-purple-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600 sm:order-1 sm:ml-3">Create</button>
+        </div>
+      </div>
+      <div class="mt-6 flex flex-col">
+        <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+            <div class="overflow-hidden border-t border-gray-200">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-300 bg-opacity-50">
+                  <tr>
+                    <th scope="col" class="px-4 py-3 text-left text-sm font-semibold text-gray-900">Name</th>
+                    <th scope="col" class="px-4 py-3 text-left text-sm font-semibold text-gray-900">Email</th>
+                    <th scope="col" class="px-4 py-3 text-left text-sm font-semibold text-gray-900">Tel</th>
+                    <th scope="col" class="px-4 py-3 text-left text-sm font-semibold text-gray-900">Subscription</th>
+                    <th scope="col" class="relative px-4 py-3 text-left text-sm font-medium text-gray-500">
+                      <span class="sr-only">View details</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 bg-white">
+                 {% for user in page_obj %}
+                     <tr>
+                      <td class="whitespace-nowrap px-4 py-4 text-sm text-gray-500">{{ user.name }}</td>
+                      <td class="whitespace-nowrap px-4 py-4 text-sm text-gray-500">{{ user.email }}</td>
+                      <td class="whitespace-nowrap px-4 py-4 text-sm text-gray-500">{{ user.tel }}</td>
+                      <td class="whitespace-nowrap px-4 py-4 text-sm text-gray-500">{{ user.subscription }}</td>
+                      <td class="whitespace-nowrap px-4 py-4 text-right text-sm font-medium">
+                        <div class="flex flex-1 gap-2 justify-end">
+                          <button class="edit-user-btn" data-id={{user.id}} data-name="{{ user.name }}" data-email="{{ user.email }}" data-tel="{{ user.tel }}" data-avatar="{{ user.avatar }}">
+                              <span title="Edit">
+                                  <svg fill="none" viewBox="0 0 26 26" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-green-500 hover:text-green-300">
+                                      <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                                  </svg>
+                              </span>
+                          </button>
+                          <button class="reset-password-btn" data-id="{{user.id}}" data-name="{{ user.name }}">
+                              <span title="Reset password">
+                                  <svg fill="none" viewBox="0 0 26 26" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-orange-400 hover:text-yellow-400">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                                  </svg>
+                              </span>
+                          </button>
+                          <button class="delete-user-btn" data-id={{user.id}} data-name="{{ user.name }}">
+                              <span title="Delete user">
+                                <svg fill="none" viewBox="0 0 26 26" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-red-600 hover:text-red-400">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                </svg>
+                              </span>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                 {% endfor %}
+                </tbody>
+              </table>
+              <!-- Aquí va el bloque de paginación -->
+              {% include "layouts/partials/pagination.html" %}
+              <!-- Fin del bloque de paginación -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+{% include "security/update_user_form_modal.html" %}
+{% include "security/delete_user_modal.html" %}
+{% include "security/reset_password_form_modal.html" %}
+{% include "security/new_user_form_modal.html" %}
+
+{% endblock setting_content %}
+
+{% block script %}
+
+ <script type="text/javascript">
+    function toggleModal(modalID){
+      document.getElementById(modalID).classList.toggle("hidden");
+      document.getElementById(modalID + "-backdrop").classList.toggle("hidden");
+      document.getElementById(modalID).classList.toggle("flex");
+      document.getElementById(modalID + "-backdrop").classList.toggle("flex");
+    }
+    
+    window.addEventListener("load", (event) => {
+      const tablinks = document.getElementsByClassName("service");    
+      for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className += " tab-selected";
+                console.log(event.currentTarget);
+            }
+      // event.currentTarget.className += " tab-selected";
+  
+    });
+
+    window.addEventListener("load", (event) => {
+        const menulinks = document.getElementsByClassName("users");    
+        for (i = 0; i < menulinks.length; i++) {
+                menulinks[i].className += " settings-menu-selected";
+            }
+        // event.currentTarget.className += " tab-selected";
+    
+    });
+
+    $(document).ready(function() {
+        // Evento de clic en el botón Editar
+        $('.edit-user-btn').click(function() {
+            // Obtener los datos del usuario del atributo data
+            var name = $(this).data('name');
+            var email = $(this).data('email');
+            var tel = $(this).data('tel');
+            var avatar = $(this).data('avatar');
+            var id = $(this).data('id');
+
+            // Actualizar el action del formulario con el ID del usuario
+            var actionUrl = '{% url "edit-user" 0 %}'.replace('0', id);
+            $('#myFormEdit').attr('action', actionUrl);
+
+            // Llenar los campos del formulario en el modal de edición con los datos del usuario
+            $('#full-name-edit').val(name);
+            $('#email-edit').val(email);
+            $('#phone-edit').val(tel);
+            $('#avatar-edit').val(avatar);
+
+            toggleModal("modal-edit_user")
+        });
+
+      // Evento de clic en el botón reset password
+        $('.reset-password-btn').click(function() {
+            // Obtener los datos del usuario del atributo data
+            var id = $(this).data('id');
+            var name = $(this).data('name');
+
+            // Actualizar el action del formulario con el ID del usuario
+            var actionUrl = '{% url "reset-password" 0 %}'.replace('0', id);
+            $('#myFormResetPassword').attr('action', actionUrl);
+
+            $('#user-full-name').text(name);
+
+            toggleModal("modal-reset-password")
+        });
+
+      // Evento de clic en el botón delete
+        $('.delete-user-btn').click(function() {
+            // Obtener los datos del usuario del atributo data
+            var id = $(this).data('id');
+            var name = $(this).data('name');
+
+            // Actualizar el action del formulario con el ID del usuario
+            var actionUrl = '{% url "delete-user" 0 %}'.replace('0', id);
+            $('#myFormDeleteUser').attr('action', actionUrl);
+            $('#delete-user-full-name').text(name);
+            toggleModal("modal-delete-user")
+        });
+    });
+
+  </script>
+  
+
+
+{% endblock script %}
+       
+
+

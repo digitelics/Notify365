@@ -1,0 +1,17 @@
+<div id="loadingIndicator" class="fixed inset-0 z-50 flex items-center justify-center bg-gray-700 bg-opacity-50">
+  <div class="spinner-border text-white lds-dual-ring" role="status">
+  <span class="sr-only">Saving</span>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Ocultar el indicador de carga
+        hideLoadingIndicator();
+    });
+
+    function hideLoadingIndicator() {
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        loadingIndicator.classList.add('hidden');
+    }
+</script>

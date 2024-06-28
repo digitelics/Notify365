@@ -1,0 +1,194 @@
+{% extends "settings/setting_template.html" %}
+{% block setting_content %}
+       <!-- Main content -->
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900">My Account</h1>
+
+      <form action={% url 'edit-account' %} class="divide-y-slate-200 mt-6 space-y-8 divide-y" method="POST" id="updateAccountForm" enctype="multipart/form-data">
+      {% csrf_token %}
+        <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-6 sm:gap-x-6">
+          <div class="sm:col-span-6">
+            <h2 class="text-xl font-medium text-slate-900">Profile</h2>
+            <p class="mt-1 text-sm text-slate-500">This information never be displayed publicly so be careful what you share.</p>
+          </div>
+
+          <div class="sm:col-span-3">
+            <label for="name" class="block text-sm font-medium leading-6 text-slate-900">Name</label>
+            <input type="text" name="name" id="name" value="{{ data.name }}" autocomplete="given-name" class="px-2 mt-2 block w-full rounded-md border-0 py-1.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6">
+            <span class="error-message"></span>
+          </div>
+
+          <div class="sm:col-span-3">
+            <label for="email" class="block text-sm font-medium leading-6 text-slate-900">Email</label>
+            <input type="email" name="email" id="email" value="{{ data.email }}" autocomplete="family-name" class="px-2 mt-2 block w-full rounded-md border-0 py-1.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6">
+            <span class="error-message"></span>
+         </div>
+
+           <div class="sm:col-span-3">
+            <label for="phone" class="block text-sm font-medium leading-6 text-slate-900">Phone number</label>
+            <input type="text" name="phone" id="phone" value="{{ data.phone }}" autocomplete="given-name" class="px-2 mt-2 block w-full rounded-md border-0 py-1.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6">
+            <span class="error-message"></span>
+          </div>
+
+          <div class="sm:col-span-3">
+            <label for="company" class="block text-sm font-medium leading-6 text-slate-900">My Company</label>
+            <input type="email" name="company" id="company" value="{{ data.company }}" readonly class="px-2 mt-2 block w-full rounded-md border-0 py-1.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6">
+          </div>
+
+          <div class="sm:col-span-6">
+            <label for="username" class="block text-sm font-medium leading-6 text-slate-900">Username</label>
+            <div class="mt-2 flex rounded-md shadow-sm">
+              <input type="email" name="username" id="username" readonly value="{{data.user}}" class="px-2 block w-full min-w-0 flex-1 rounded-none rounded-r-md border-0 py-1.5 text-slate-900 ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6">
+            </div>
+          </div>
+
+          <div class="sm:col-span-6">
+            <label for="photo" class="block text-sm font-medium leading-6 text-slate-900">Photo</label>
+            <div class="mt-2 flex items-center">
+              <img class="inline-block h-12 w-12 rounded-full" src="{{data.avatar}}" alt="">
+              <div class="relative ml-4">
+                <input id="user-photo" name="user-photo" type="file" class="peer absolute inset-0 h-full w-full rounded-md opacity-0">
+                <span class="error-message"></span>
+                <label for="user-photo" class="pointer-events-none block rounded-md bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 peer-hover:bg-slate-50 peer-focus:ring-2 peer-focus:ring-blue-600">
+                  <span>Change</span>
+                  <span class="sr-only"> user photo</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="update-password" class="grid grid-cols-1 gap-y-6 pt-8 sm:grid-cols-6 sm:gap-x-6 ">
+          <div class="sm:col-span-6">
+            <h2 class="text-xl font-medium text-slate-900">Change your Password</h2>
+            <p class="mt-1 text-sm text-slate-500">Please note that you will need to login again after this action.</p>
+          </div>
+
+           <div class="flex justify-end gap-x-3 pt-8">
+            <button type="button" data-id="{{data.id}}" data-name="{{ data.name }}" class="reset-password-btn bg-red-300 rounded-md bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50">Reset Password</button>
+          </div>
+
+          
+
+
+          <p class="text-sm text-slate-500 sm:col-span-6">This account was created on <time datetime="2017-01-05T20:35:40">January 5, 2017, 8:35:40 PM</time>.</p>
+        </div>
+
+        <div class="flex justify-end gap-x-3 pt-8">
+          <button type="button" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50">Cancel</button>
+          <button type="submit" class="inline-flex justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Save</button>
+        </div>
+      </form>  
+    {% include "security/reset_password_form_modal.html" %}
+{% endblock setting_content %}
+{% block script %}
+<script>
+   window.addEventListener("load", (event) => {
+        const menulinks = document.getElementsByClassName("account");    
+        for (i = 0; i < menulinks.length; i++) {
+                menulinks[i].className += " settings-menu-selected";
+            }
+        // event.currentTarget.className += " tab-selected";
+    
+    });
+
+    function toggleModal(modalID){
+      document.getElementById(modalID).classList.toggle("hidden");
+      document.getElementById(modalID + "-backdrop").classList.toggle("hidden");
+      document.getElementById(modalID).classList.toggle("flex");
+      document.getElementById(modalID + "-backdrop").classList.toggle("flex");
+    }
+
+    // Evento de clic en el botón reset password
+    $('.reset-password-btn').click(function() {
+        // Obtener los datos del usuario del atributo data
+        var id = $(this).data('id');
+        var name = $(this).data('name');
+
+        // Actualizar el action del formulario con el ID del usuario
+        var actionUrl = '{% url "reset-password" 0 %}'.replace('0', id);
+        $('#myFormResetPassword').attr('action', actionUrl);
+
+        $('#user-full-name').text(name);
+
+        toggleModal("modal-reset-password")
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('updateAccountForm');
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const avatarInput = document.getElementById('user-photo');
+    const phoneInput = document.getElementById('phone');
+
+  
+
+    // Phone validation
+    phoneInput.addEventListener('keypress', function (event) {
+        if (event.which < 48 || event.which > 57 || this.value.length === 10) {
+            event.preventDefault();
+        }
+    });
+
+    form.addEventListener('submit', function (event) {
+      // Prevent the form from submitting
+      event.preventDefault();
+      let isValid = true;
+      resetErrorMessages();
+
+      if (!nameInput.value.trim()) {
+        setErrorFor(nameInput, 'Name cannot be blank');
+        isValid = false;
+      } else if (nameInput.value.trim().length > 100) {
+        setErrorFor(nameInput, 'Name cannot exceed 100 characters');
+        isValid = false;
+      }
+
+      if (avatarInput.files.length > 0) {
+        const fileSize = avatarInput.files[0].size; // in bytes
+        if (fileSize > 2 * 1024 * 1024) { // 2 MB in bytes
+          setErrorFor(avatarInput, 'Profile picture size cannot exceed 2MB');
+          isValid = false;
+        }
+      }
+
+      if (!emailInput.value.trim()) {
+        setErrorFor(emailInput, 'Email cannot be blank');
+        isValid = false;
+      } else if (emailInput.value.trim().length > 50) {
+        setErrorFor(emailInput, 'Email cannot exceed 50 characters');
+        isValid = false;
+      }
+
+      if (!phoneInput.value.trim()) {
+        setErrorFor(phoneInput, 'Phone number cannot be blank');
+        isValid = false;
+      }
+
+      if (isValid) {
+        // Show loading indicator
+        document.getElementById('loadingIndicator').classList.remove('hidden');
+        // Submit the form
+        form.submit();
+      }
+    });
+
+    // Function to reset all error messages
+    function resetErrorMessages() {
+        const errorMessages = document.querySelectorAll('.error-message');
+        errorMessages.forEach(function (errorMessage) {
+            errorMessage.textContent = '';
+        });
+    }
+
+    // Function to set error message for a field
+    function setErrorFor(input, message) {
+      const formControl = input.parentElement;
+      const errorMessage = formControl.querySelector('.error-message');
+      errorMessage.textContent = message;
+      input.classList.add('error');
+    }
+    
+});
+
+</script>
+{% endblock script %}

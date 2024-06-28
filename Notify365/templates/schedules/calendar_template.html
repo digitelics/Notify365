@@ -1,0 +1,649 @@
+{% extends "layouts/base.html" %}
+{% block title %}Calendar{% endblock %}
+{% block content %}
+<div class="lg:flex lg:h-full lg:flex-col p-10">
+  <header class="flex items-center justify-between border-b border-gray-200 px-6 py-4 lg:flex-none mt-14">
+    <h1 class="text-base font-semibold leading-6 text-gray-900">
+      <time datetime="2022-01">April 2024</time>
+    </h1>
+    <div class="flex items-center">
+      <div class="relative flex items-center rounded-md bg-white shadow-sm md:items-stretch">
+    
+    {% comment %}
+
+       <button type="button" class="flex h-9 w-12 items-center justify-center rounded-l-md border-y border-l border-gray-300 pr-1 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:pr-0 md:hover:bg-gray-50">
+          <span class="sr-only">Previous month</span>
+          <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
+          </svg>
+        </button>
+        <button type="button" class="hidden border-y border-gray-300 px-3.5 text-sm font-semibold text-gray-900 hover:bg-gray-50 focus:relative md:block">Today</button>
+        <span class="relative -mx-px h-5 w-px bg-gray-300 md:hidden"></span>
+        <button type="button" class="flex h-9 w-12 items-center justify-center rounded-r-md border-y border-r border-gray-300 pl-1 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:pl-0 md:hover:bg-gray-50">
+          <span class="sr-only">Next month</span>
+          <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+          </svg>
+        </button>
+
+    {% endcomment %}
+     
+      </div>
+      <div class="hidden md:ml-4 md:flex md:items-center">
+        <div class="relative">
+          <button type="button" onclick="openDropdown(event,'calendar-option')" class="flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" id="menu-button" aria-expanded="false" aria-haspopup="true">
+            Month view
+            <svg class="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+            </svg>
+          </button>
+
+          <!--
+            Dropdown menu, show/hide based on menu state.
+
+            Entering: "transition ease-out duration-100"
+              From: "transform opacity-0 scale-95"
+              To: "transform opacity-100 scale-100"
+            Leaving: "transition ease-in duration-75"
+              From: "transform opacity-100 scale-100"
+              To: "transform opacity-0 scale-95"
+          -->
+          <div id="calendar-option" class="hidden absolute right-0 z-10 mt-3 w-36 origin-top-right overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+            <div class="py-1" role="none">
+              <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
+              <a href={% url 'day' %} class="hover:text-indigo-600 hover:bg-gray-100 text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">Day view</a>
+            </div>
+          </div>
+        </div>
+        <div class="ml-6 h-6 w-px bg-gray-300"></div>
+        <button type="button" onclick="toggleModal('modal-event')" class="ml-6 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Add event</button>
+      </div>
+      <div class="relative ml-6 md:hidden">
+        <button type="button" class="-mx-2 flex items-center rounded-full border border-transparent p-2 text-gray-400 hover:text-gray-500" id="menu-0-button" aria-expanded="false" aria-haspopup="true">
+          <span class="sr-only">Open menu</span>
+          <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" />
+          </svg>
+        </button>
+
+        <!--
+          Dropdown menu, show/hide based on menu state.
+
+          Entering: "transition ease-out duration-100"
+            From: "transform opacity-0 scale-95"
+            To: "transform opacity-100 scale-100"
+          Leaving: "transition ease-in duration-75"
+            From: "transform opacity-100 scale-100"
+            To: "transform opacity-0 scale-95"
+        -->
+        <div class="absolute right-0 z-10 mt-3 w-36 origin-top-right divide-y divide-gray-100 overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-0-button" tabindex="-1">
+          <div class="py-1" role="none">
+            <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
+            <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-0-item-0">Create event</a>
+          </div>
+          <div class="py-1" role="none">
+            <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-0-item-1">Go to today</a>
+          </div>
+          <div class="py-1" role="none">
+            <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-0-item-2">Day view</a>
+            <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-0-item-3">Week view</a>
+            <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-0-item-4">Month view</a>
+            <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-0-item-5">Year view</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+  <div class="shadow ring-1 ring-black ring-opacity-5 lg:flex lg:flex-auto lg:flex-col">
+    <div class="grid grid-cols-7 gap-px border-b border-gray-300 bg-gray-200 text-center text-xs font-semibold leading-6 text-gray-700 lg:flex-none">
+      <div class="flex justify-center bg-white py-2">
+        <span>M</span>
+        <span class="sr-only sm:not-sr-only">on</span>
+      </div>
+      <div class="flex justify-center bg-white py-2">
+        <span>T</span>
+        <span class="sr-only sm:not-sr-only">ue</span>
+      </div>
+      <div class="flex justify-center bg-white py-2">
+        <span>W</span>
+        <span class="sr-only sm:not-sr-only">ed</span>
+      </div>
+      <div class="flex justify-center bg-white py-2">
+        <span>T</span>
+        <span class="sr-only sm:not-sr-only">hu</span>
+      </div>
+      <div class="flex justify-center bg-white py-2">
+        <span>F</span>
+        <span class="sr-only sm:not-sr-only">ri</span>
+      </div>
+      <div class="flex justify-center bg-white py-2">
+        <span>S</span>
+        <span class="sr-only sm:not-sr-only">at</span>
+      </div>
+      <div class="flex justify-center bg-white py-2">
+        <span>S</span>
+        <span class="sr-only sm:not-sr-only">un</span>
+      </div>
+    </div>
+    <div class="flex bg-gray-200 text-xs leading-6 text-gray-700 lg:flex-auto">
+      <div class="hidden w-full lg:grid lg:grid-cols-7 lg:grid-rows-6 lg:gap-px">
+        <!--
+          Always include: "relative py-2 px-3"
+          Is current month, include: "bg-white"
+          Is not current month, include: "bg-gray-50 text-gray-500"
+        -->
+        <div class="relative bg-gray-50 px-3 py-2 text-gray-500">
+          <!--
+            Is today, include: "flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 font-semibold text-white"
+          -->
+          <time datetime="2021-12-27">27</time>
+        </div>
+        <div class="relative bg-gray-50 px-3 py-2 text-gray-500">
+          <time datetime="2021-12-28">28</time>
+        </div>
+        <div class="relative bg-gray-50 px-3 py-2 text-gray-500">
+          <time datetime="2021-12-29">29</time>
+        </div>
+        <div class="relative bg-gray-50 px-3 py-2 text-gray-500">
+          <time datetime="2021-12-30">30</time>
+        </div>
+        <div class="relative bg-gray-50 px-3 py-2 text-gray-500">
+          <time datetime="2021-12-31">31</time>
+        </div>
+        <div class="relative bg-white px-3 py-2">
+          <time datetime="2022-01-01">1</time>
+        </div>
+        <div class="relative bg-white px-3 py-2">
+          <time datetime="2022-01-01">2</time>
+        </div>
+        <div class="relative bg-white px-3 py-2">
+          <time datetime="2022-01-03">3</time>
+          <ol class="mt-2">
+            <li>
+              <a href="#" class="group flex">
+                <p class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600">Design review</p>
+                <time datetime="2022-01-03T10:00" class="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block">10AM</time>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="group flex">
+                <p class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600">Sales meeting</p>
+                <time datetime="2022-01-03T14:00" class="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block">2PM</time>
+              </a>
+            </li>
+          </ol>
+        </div>
+        <div class="relative bg-white px-3 py-2">
+          <time datetime="2022-01-04">4</time>
+        </div>
+        <div class="relative bg-white px-3 py-2">
+          <time datetime="2022-01-05">5</time>
+        </div>
+        <div class="relative bg-white px-3 py-2">
+          <time datetime="2022-01-06">6</time>
+        </div>
+        <div class="relative bg-white px-3 py-2">
+          <time datetime="2022-01-07">7</time>
+          <ol class="mt-2">
+            <li>
+              <a href="#" class="group flex">
+                <p class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600">Date night</p>
+                <time datetime="2022-01-08T18:00" class="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block">6PM</time>
+              </a>
+            </li>
+          </ol>
+        </div>
+        <div class="relative bg-white px-3 py-2">
+          <time datetime="2022-01-08">8</time>
+        </div>
+        <div class="relative bg-white px-3 py-2">
+          <time datetime="2022-01-09">9</time>
+        </div>
+        <div class="relative bg-white px-3 py-2">
+          <time datetime="2022-01-10">10</time>
+        </div>
+        <div class="relative bg-white px-3 py-2">
+          <time datetime="2022-01-11">11</time>
+        </div>
+        <div class="relative bg-white px-3 py-2">
+          <time datetime="2022-01-12" class="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 font-semibold text-white">12</time>
+          <ol class="mt-2">
+            <li>
+              <a href="#" class="group flex">
+                <p class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600">Sam's birthday party</p>
+                <time datetime="2022-01-25T14:00" class="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block">2PM</time>
+              </a>
+            </li>
+          </ol>
+        </div>
+        <div class="relative bg-white px-3 py-2">
+          <time datetime="2022-01-13">13</time>
+        </div>
+        <div class="relative bg-white px-3 py-2">
+          <time datetime="2022-01-14">14</time>
+        </div>
+        <div class="relative bg-white px-3 py-2">
+          <time datetime="2022-01-15">15</time>
+        </div>
+        <div class="relative bg-white px-3 py-2">
+          <time datetime="2022-01-16">16</time>
+        </div>
+        <div class="relative bg-white px-3 py-2">
+          <time datetime="2022-01-17">17</time>
+        </div>
+        <div class="relative bg-white px-3 py-2">
+          <time datetime="2022-01-18">18</time>
+        </div>
+        <div class="relative bg-white px-3 py-2">
+          <time datetime="2022-01-19">19</time>
+        </div>
+        <div class="relative bg-white px-3 py-2">
+          <time datetime="2022-01-20">20</time>
+        </div>
+        <div class="relative bg-white px-3 py-2">
+          <time datetime="2022-01-21">21</time>
+        </div>
+        <div class="relative bg-white px-3 py-2">
+          <time datetime="2022-01-22">22</time>
+          <ol class="mt-2">
+            <li>
+              <a href="#" class="group flex">
+                <p class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600">Maple syrup museum</p>
+                <time datetime="2022-01-22T15:00" class="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block">3PM</time>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="group flex">
+                <p class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600">Hockey game</p>
+                <time datetime="2022-01-22T19:00" class="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block">7PM</time>
+              </a>
+            </li>
+          </ol>
+        </div>
+        <div class="relative bg-white px-3 py-2">
+          <time datetime="2022-01-23">23</time>
+        </div>
+        <div class="relative bg-white px-3 py-2">
+          <time datetime="2022-01-24">24</time>
+        </div>
+        <div class="relative bg-white px-3 py-2">
+          <time datetime="2022-01-25">25</time>
+        </div>
+        <div class="relative bg-white px-3 py-2">
+          <time datetime="2022-01-26">26</time>
+        </div>
+        <div class="relative bg-white px-3 py-2">
+          <time datetime="2022-01-27">27</time>
+        </div>
+        <div class="relative bg-white px-3 py-2">
+          <time datetime="2022-01-28">28</time>
+        </div>
+        <div class="relative bg-white px-3 py-2">
+          <time datetime="2022-01-29">29</time>
+        </div>
+        <div class="relative bg-white px-3 py-2">
+          <time datetime="2022-01-30">30</time>
+        </div>
+        <div class="relative bg-white px-3 py-2">
+          <time datetime="2022-01-31">31</time>
+        </div>
+        <div class="relative bg-gray-50 px-3 py-2 text-gray-500">
+          <time datetime="2022-02-01">1</time>
+        </div>
+        <div class="relative bg-gray-50 px-3 py-2 text-gray-500">
+          <time datetime="2022-02-02">2</time>
+        </div>
+        <div class="relative bg-gray-50 px-3 py-2 text-gray-500">
+          <time datetime="2022-02-03">3</time>
+        </div>
+        <div class="relative bg-gray-50 px-3 py-2 text-gray-500">
+          <time datetime="2022-02-04">4</time>
+          <ol class="mt-2">
+            <li>
+              <a href="#" class="group flex">
+                <p class="flex-auto truncate font-medium text-gray-900 group-hover:text-indigo-600">Cinema with friends</p>
+                <time datetime="2022-02-04T21:00" class="ml-3 hidden flex-none text-gray-500 group-hover:text-indigo-600 xl:block">9PM</time>
+              </a>
+            </li>
+          </ol>
+        </div>
+        <div class="relative bg-gray-50 px-3 py-2 text-gray-500">
+          <time datetime="2022-02-05">5</time>
+        </div>
+        <div class="relative bg-gray-50 px-3 py-2 text-gray-500">
+          <time datetime="2022-02-06">6</time>
+        </div>
+      </div>
+      <div class="isolate grid w-full grid-cols-7 grid-rows-6 gap-px lg:hidden">
+        <!--
+          Always include: "flex h-14 flex-col py-2 px-3 hover:bg-gray-100 focus:z-10"
+          Is current month, include: "bg-white"
+          Is not current month, include: "bg-gray-50"
+          Is selected or is today, include: "font-semibold"
+          Is selected, include: "text-white"
+          Is not selected and is today, include: "text-indigo-600"
+          Is not selected and is current month, and is not today, include: "text-gray-900"
+          Is not selected, is not current month, and is not today: "text-gray-500"
+        -->
+        <button type="button" class="flex h-14 flex-col bg-gray-50 px-3 py-2 text-gray-500 hover:bg-gray-100 focus:z-10">
+          <!--
+            Always include: "ml-auto"
+            Is selected, include: "flex h-6 w-6 items-center justify-center rounded-full"
+            Is selected and is today, include: "bg-indigo-600"
+            Is selected and is not today, include: "bg-gray-900"
+          -->
+          <time datetime="2021-12-27" class="ml-auto">27</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-gray-50 px-3 py-2 text-gray-500 hover:bg-gray-100 focus:z-10">
+          <time datetime="2021-12-28" class="ml-auto">28</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-gray-50 px-3 py-2 text-gray-500 hover:bg-gray-100 focus:z-10">
+          <time datetime="2021-12-29" class="ml-auto">29</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-gray-50 px-3 py-2 text-gray-500 hover:bg-gray-100 focus:z-10">
+          <time datetime="2021-12-30" class="ml-auto">30</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-gray-50 px-3 py-2 text-gray-500 hover:bg-gray-100 focus:z-10">
+          <time datetime="2021-12-31" class="ml-auto">31</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-white px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-01-01" class="ml-auto">1</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-white px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-01-02" class="ml-auto">2</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-white px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-01-03" class="ml-auto">3</time>
+          <span class="sr-only">2 events</span>
+          <span class="-mx-0.5 mt-auto flex flex-wrap-reverse">
+            <span class="mx-0.5 mb-1 h-1.5 w-1.5 rounded-full bg-gray-400"></span>
+            <span class="mx-0.5 mb-1 h-1.5 w-1.5 rounded-full bg-gray-400"></span>
+          </span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-white px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-01-04" class="ml-auto">4</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-white px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-01-05" class="ml-auto">5</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-white px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-01-06" class="ml-auto">6</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-white px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-01-07" class="ml-auto">7</time>
+          <span class="sr-only">1 event</span>
+          <span class="-mx-0.5 mt-auto flex flex-wrap-reverse">
+            <span class="mx-0.5 mb-1 h-1.5 w-1.5 rounded-full bg-gray-400"></span>
+          </span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-white px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-01-08" class="ml-auto">8</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-white px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-01-09" class="ml-auto">9</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-white px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-01-10" class="ml-auto">10</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-white px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-01-11" class="ml-auto">11</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-white px-3 py-2 font-semibold text-indigo-600 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-01-12" class="ml-auto">12</time>
+          <span class="sr-only">1 event</span>
+          <span class="-mx-0.5 mt-auto flex flex-wrap-reverse">
+            <span class="mx-0.5 mb-1 h-1.5 w-1.5 rounded-full bg-gray-400"></span>
+          </span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-white px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-01-13" class="ml-auto">13</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-white px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-01-14" class="ml-auto">14</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-white px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-01-15" class="ml-auto">15</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-white px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-01-16" class="ml-auto">16</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-white px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-01-17" class="ml-auto">17</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-white px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-01-18" class="ml-auto">18</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-white px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-01-19" class="ml-auto">19</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-white px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-01-20" class="ml-auto">20</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-white px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-01-21" class="ml-auto">21</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-white px-3 py-2 font-semibold text-white hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-01-22" class="ml-auto flex h-6 w-6 items-center justify-center rounded-full bg-gray-900">22</time>
+          <span class="sr-only">2 events</span>
+          <span class="-mx-0.5 mt-auto flex flex-wrap-reverse">
+            <span class="mx-0.5 mb-1 h-1.5 w-1.5 rounded-full bg-gray-400"></span>
+            <span class="mx-0.5 mb-1 h-1.5 w-1.5 rounded-full bg-gray-400"></span>
+          </span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-white px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-01-23" class="ml-auto">23</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-white px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-01-24" class="ml-auto">24</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-white px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-01-25" class="ml-auto">25</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-white px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-01-26" class="ml-auto">26</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-white px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-01-27" class="ml-auto">27</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-white px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-01-28" class="ml-auto">28</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-white px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-01-29" class="ml-auto">29</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-white px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-01-30" class="ml-auto">30</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-white px-3 py-2 text-gray-900 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-01-31" class="ml-auto">31</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-gray-50 px-3 py-2 text-gray-500 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-02-01" class="ml-auto">1</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-gray-50 px-3 py-2 text-gray-500 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-02-02" class="ml-auto">2</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-gray-50 px-3 py-2 text-gray-500 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-02-03" class="ml-auto">3</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-gray-50 px-3 py-2 text-gray-500 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-02-04" class="ml-auto">4</time>
+          <span class="sr-only">1 event</span>
+          <span class="-mx-0.5 mt-auto flex flex-wrap-reverse">
+            <span class="mx-0.5 mb-1 h-1.5 w-1.5 rounded-full bg-gray-400"></span>
+          </span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-gray-50 px-3 py-2 text-gray-500 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-02-05" class="ml-auto">5</time>
+          <span class="sr-only">0 events</span>
+        </button>
+        <button type="button" class="flex h-14 flex-col bg-gray-50 px-3 py-2 text-gray-500 hover:bg-gray-100 focus:z-10">
+          <time datetime="2022-02-06" class="ml-auto">6</time>
+          <span class="sr-only">0 events</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="px-4 py-10 sm:px-6 lg:hidden">
+    <ol class="divide-y divide-gray-100 overflow-hidden rounded-lg bg-white text-sm shadow ring-1 ring-black ring-opacity-5">
+      <li class="group flex p-4 pr-6 focus-within:bg-gray-50 hover:bg-gray-50">
+        <div class="flex-auto">
+          <p class="font-semibold text-gray-900">Maple syrup museum</p>
+          <time datetime="2022-01-15T09:00" class="mt-2 flex items-center text-gray-700">
+            <svg class="mr-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd" />
+            </svg>
+            3PM
+          </time>
+        </div>
+        <a href="#" class="ml-6 flex-none self-center rounded-md bg-white px-3 py-2 font-semibold text-gray-900 opacity-0 shadow-sm ring-1 ring-inset ring-gray-300 hover:ring-gray-400 focus:opacity-100 group-hover:opacity-100">Edit<span class="sr-only">, Maple syrup museum</span></a>
+      </li>
+      <li class="group flex p-4 pr-6 focus-within:bg-gray-50 hover:bg-gray-50">
+        <div class="flex-auto">
+          <p class="font-semibold text-gray-900">Hockey game</p>
+          <time datetime="2022-01-22T19:00" class="mt-2 flex items-center text-gray-700">
+            <svg class="mr-2 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd" />
+            </svg>
+            7PM
+          </time>
+        </div>
+        <a href="#" class="ml-6 flex-none self-center rounded-md bg-white px-3 py-2 font-semibold text-gray-900 opacity-0 shadow-sm ring-1 ring-inset ring-gray-300 hover:ring-gray-400 focus:opacity-100 group-hover:opacity-100">Edit<span class="sr-only">, Hockey game</span></a>
+      </li>
+    </ol>
+  </div>
+</div>
+
+ <!-- NEW EVENT MODAL -->
+        <section class="hidden overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center" id="modal-event">
+          <form action="#" method="POST" class="modal-position-event">
+          {% csrf_token %}
+            <div class="shadow sm:overflow-hidden sm:rounded-md">
+              <div class="bg-white">
+                <div class="flex items-center justify-between p-4 bg-purple-50 bg-opacity-50 md:p-5 border-b rounded-t dark:border-gray-600">
+                  <div>
+                      <h2 id="payment-details-heading" class="text-lg font-medium leading-6 text-gray-900">Add New event</h2>
+                      <p class="mt-1 text-sm text-gray-500"></p>
+                    </div>
+                    <button type="button" onclick="toggleModal('modal-event')" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+
+                <div class="mt-6 px-10 pb-5 grid grid-cols-4 gap-6">
+                  <div class="col-span-2 sm:col-span-2">
+                    <label for="first-name" class="block text-sm font-medium leading-6 text-gray-900">Event</label>
+                    <input type="text" name="first-name" id="first-name" autocomplete="cc-given-name" class="mt-2 block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6">
+                  </div>
+
+                  <div class="col-span-4 sm:col-span-4">
+                    <label for="last-name" class="block text-sm font-medium leading-6 text-gray-900">Description</label>
+                    <textarea id="description" name="description" rows="3" class="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
+                  </div> 
+                  <div class="col-span-2 sm:col-span-2">
+                    <label for="last-name" class="block text-sm font-medium leading-6 text-gray-900">Select date</label>
+                    <div class="relative">
+                        <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                            <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+                        </div>
+                        <input datepicker type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
+                        </div>
+                    </div>
+                    
+                  <div class="col-span-2 sm:col-span-2">
+                    <label for="last-name" class="block text-sm font-medium leading-6 text-gray-900">Select hour</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 end-0 top-0 flex items-center pe-3.5 pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <input type="time" id="time" class="bg-gray-50 border leading-none border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" min="09:00" max="18:00" value="00:00" required />
+                        </div>
+                  </div>               
+              </div>
+              <div class="bg-gray-50 px-4 py-3 text-right sm:px-6">
+                <button type="submit" class="inline-flex justify-center rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900">Save</button>
+              </div>
+            </div>
+          </form>
+        </section>
+        <div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="modal-event-backdrop"></div>
+{% endblock %}
+{% block script %}  
+<script src="https://unpkg.com/@popperjs/core@2.9.1/dist/umd/popper.min.js" charset="utf-8"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
+<script type="text/javascript">
+  function openDropdown(event,dropdownID){
+    let element = event.target;
+    while(element.nodeName !== "BUTTON"){
+      element = element.parentNode;
+    }
+    var popper = Popper.createPopper(element, document.getElementById(dropdownID), {
+      placement: 'bottom-start'
+    });
+    document.getElementById(dropdownID).classList.toggle("hidden");
+    document.getElementById(dropdownID).classList.toggle("block");
+  }
+
+  function closeDropdown(event,dropdownID){
+    document.getElementById(dropdownID).classList.toggle("hidden");
+  }
+
+    function toggleModal(modalID){
+        document.getElementById(modalID).classList.toggle("hidden");
+        document.getElementById(modalID + "-backdrop").classList.toggle("hidden");
+        document.getElementById(modalID).classList.toggle("flex");
+        document.getElementById(modalID + "-backdrop").classList.toggle("flex");
+    }
+
+    window.addEventListener("load", (event) => {
+        const menulinks = document.getElementsByClassName("calendar"); 
+        
+        for (i = 0; i < menulinks.length; i++) {
+                menulinks[i].className += " main-menu-selected";
+            }
+        // event.currentTarget.className += " tab-selected";
+    
+    });
+
+</script>
+{% endblock script %} 

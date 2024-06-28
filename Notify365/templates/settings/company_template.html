@@ -1,0 +1,305 @@
+{% extends "settings/setting_template.html" %}
+{% block setting_content %}
+       <!-- Main content -->
+              <h1 class="text-3xl font-bold tracking-tight text-slate-900">Company</h1>
+
+              <form action={% url 'company-edit' %} class="divide-y-slate-200 mt-6 space-y-8 divide-y" method="POST" id="updateCompanyForm" enctype="multipart/form-data">
+              {% csrf_token %}
+                <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-6 sm:gap-x-6">
+                  <div class="sm:col-span-6">
+                    <h2 class="text-xl font-medium text-slate-900">Details</h2> 
+                    <p class="mt-1 text-sm text-slate-500">This information never be displayed publicly so be careful what you share.</p>
+                  </div>
+
+                  <div class="sm:col-span-6">
+                    <label for="company-name" class="block text-sm font-medium leading-6 text-slate-900">Company name</label>
+                    <input type="text" name="company-name" id="company-name" value="{{data.name}}" class="align-input px-2 block w-full min-w-0 flex-1 rounded-none rounded-r-md border-0 py-1.5 text-slate-900 ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6">
+                    <span class="error-message"></span>
+                  </div>
+
+                   <div class="sm:col-span-3">
+                    <label for="phone" class="block text-sm font-medium leading-6 text-slate-900">Phone number</label>
+                    <input type="text" name="phone" id="phone" autocomplete="tel" reuired value="{{data.phone}}" class="align-input px-2 mt-2 block w-full rounded-md border-0 py-1.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6">
+                    <span class="error-message"></span>
+                  </div>
+
+                  <div class="sm:col-span-3">
+                    <label for="represented" class="block text-sm font-medium leading-6 text-slate-900">Represented by</label>
+                    <input type="text" name="represented" id="represented" required value="{{data.represented}}" autocomplete="family-name" class="align-input px-2 mt-2 block w-full rounded-md border-0 py-1.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6">
+                    <span class="error-message"></span>
+                  </div>
+
+                  <div class="border-slate-200 border sm:col-span-6 grid grid-cols-1 sm:gap-x-6 drop-shadow-xl px-4 py-2 rounded-md">
+                    <div class="sm:col-span-6 mb-4"> 
+                      <label for="address" class="block text-sm font-medium leading-6 text-slate-900">Address</label>
+                      <input type="text" name="address" id="address" value="{{data.address}}" autocomplete="address" class="align-input px-2 block w-full min-w-0 flex-1 rounded-none rounded-r-md border-0 py-1.5 text-slate-900 ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6">
+                      <span class="error-message"></span>
+                    </div>
+
+                    <div class="sm:col-span-2 mb-4">
+                      <label for="city" class="block text-sm font-medium leading-6 text-slate-900">City</label>
+                      <input type="text" name="city" id="city" value="{{data.city}}" autocomplete="city" class="align-input px-2 mt-2 block w-full rounded-md border-0 py-1.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6">
+                      <span class="error-message"></span>
+                    </div>
+
+                    <div class="sm:col-span-2 mb-4 autocomplete-container">
+                        <label for="state-filter" class="block text-sm font-medium leading-6 text-slate-900">State</label>
+                        <input type="text" id="state-filter" value="{{data.state}}" placeholder="Type to filter states..." class="align-input px-2 mt-2 block w-full rounded-md border-0 py-1.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6">
+                        <select name="state" id="state" required class="align-input hidden px-2 mt-2 block w-full rounded-md border-0 py-1.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6">
+                            <option value="">Select a state</option>
+                            {% for state in data.states %}
+                                <option value="{{ state.id }}" data-name="{{ state.name }}" {% if state.id == data.state.id %}selected{% endif %}>{{ state.state }}</option>
+                            {% endfor %}
+                        </select>
+                        <span class="error-message"></span>
+                    </div>
+
+                    <div class="sm:col-span-2 mb-4">
+                      <label for="represented" class="block text-sm font-medium leading-6 text-slate-900">Zip code</label>
+                      <input type="text" name="zip-code" id="zip-code" value="{{data.zcode}}" autocomplete="family-name"  class="align-input px-2 mt-2 block w-full rounded-md border-0 py-1.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6">
+                      <span class="error-message"></span>
+                    </div>
+                  </div>
+
+                  <div class="sm:col-span-6">
+                    <label for="photo" class="block text-sm font-medium leading-6 text-slate-900">Company Logo</label>
+                    <div class="mt-2 flex items-center">
+                      {% if data.logo %}
+                          <img class="inline-block h-12 w-12 rounded-full" src="{{ data.logo }}" alt="Company Logo">
+                      {% else %}
+                          <img class="inline-block h-12 w-12 rounded-full" src="images/image-default.png" alt="Default Logo">
+                       {% endif %}
+                      <div class="relative ml-4">
+                        <input id="logo" name="logo" type="file" value="{{ data.logo }}" class="peer absolute inset-0 h-full w-full rounded-md opacity-0">
+                        <span class="error-message"></span>
+                        <label for="logo" class="pointer-events-none block rounded-md bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 peer-hover:bg-slate-50 peer-focus:ring-2 peer-focus:ring-blue-600">
+                          <span>Change</span>
+                          <span class="sr-only"> Company logo</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                 
+                <div class="grid grid-cols-1 gap-y-6 pt-8 sm:grid-cols-6 sm:gap-x-6">
+                  <div class="sm:col-span-6">
+                    <h2 class="text-xl font-medium text-slate-900">Subscription Information</h2>
+                    <p class="mt-1 text-sm text-slate-500">This information is about your subscription plan.</p>
+                  </div>
+
+                  {% if not data.status %}
+                    <div class="bg-green-300 w-full h-10 sm:col-span-6 p-2 text-slate-900">
+                       Subscription status: <span class="font-bold">Active</span>
+                    </div>
+                  {% else %}
+                      <div class="bg-red-300 w-full h-10 sm:col-span-6 p-2 text-slate-900">
+                        Subscription status: <span class="font-bold">Expired</span>
+                      </div>
+                  {% endif %}
+                 
+                  <div class="sm:col-span-3">
+                    <label for="email-address" class="block text-sm font-medium leading-6 text-slate-900">Activation date</label>
+                    <input type="text" name="email-address" id="email-address" value="{{ data.activation_date }}" readonly autocomplete="email" class="mt-2 block w-full rounded-md border-0 py-1.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6">
+                  </div>
+
+                  <div class="sm:col-span-3">
+                    <label for="phone-number" class="block text-sm font-medium leading-6 text-slate-900">Expiration date</label>
+                    <input type="text" name="phone-number" id="phone-number" value="{{ data.expiration_date }}"readonly autocomplete="tel" class="mt-2 block w-full rounded-md border-0 py-1.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6">
+                  </div>
+
+                  <div class="sm:col-span-3">
+                    <label for="language" class="block text-sm font-medium leading-6 text-slate-900">Available Users</label>
+                    <input type="text" name="language" id="language" readonly value="{{ data.available_users }} of {{ data.user_allowed }}" class="mt-2 block w-full rounded-md border-0 py-1.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6">
+                  </div>
+
+                   <div class="sm:col-span-3">
+                    <label for="language" class="block text-sm font-medium leading-6 text-slate-900">Monthly payment</label>
+                    <input type="text" name="language" id="language" readonly value="${{ data.montyhly_payment }}" class="mt-2 block w-full rounded-md border-0 py-1.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6">
+                  </div>
+
+                  <p class="text-sm text-slate-500 sm:col-span-6">This company was created on <time>{{data.created}}</time>.</p>
+                </div>
+
+                <div class="flex justify-end gap-x-3 pt-8">
+                  <button type="button" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-50">Cancel</button>
+                  <button type="submit" id="btnUpdate" class="inline-flex justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Save</button>
+                </div>
+              </form>
+{% endblock setting_content %}
+{% block script %}
+<script>
+   window.addEventListener("load", (event) => {
+        const menulinks = document.getElementsByClassName("company");    
+        for (i = 0; i < menulinks.length; i++) {
+                menulinks[i].className += " settings-menu-selected";
+            }
+        // event.currentTarget.className += " tab-selected";
+    
+    });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('updateCompanyForm');
+    const companyInput = document.getElementById('company-name');
+    const stateInput = document.getElementById('state-filter');
+    const cityInput = document.getElementById('city');
+    const stateSelect = document.getElementById('state');
+    const zipCodeInput = document.getElementById('zip-code');
+    const phoneInput = document.getElementById('phone');
+    const addressInput = document.getElementById('address');
+    const representativeInput = document.getElementById('represented');
+    const logoInput = document.getElementById('logo');
+
+    // Phone validation
+    phoneInput.addEventListener('keypress', function (event) {
+        if (event.which < 48 || event.which > 57 || this.value.length === 10) {
+            event.preventDefault();
+        }
+    });
+
+    form.addEventListener('submit', function (event) {
+      // Prevent the form from submitting
+      event.preventDefault();
+      let isValid = true;
+      resetErrorMessages();
+
+      if (!companyInput.value.trim()) {
+        setErrorFor(companyInput, 'Company name cannot be blank');
+        isValid = false;
+      } else if (companyInput.value.trim().length > 100) {
+        setErrorFor(companyInput, 'Company name cannot exceed 100 characters');
+        isValid = false;
+      }
+
+       if (!cityInput.value.trim()) {
+        setErrorFor(cityInput, 'City cannot be blank');
+        isValid = false;
+      } else if (cityInput.value.trim().length > 100) {
+        setErrorFor(cityInput, 'City name cannot exceed 100 characters');
+        isValid = false;
+      }
+
+      if (!addressInput.value.trim()) {
+        setErrorFor(addressInput, 'Address cannot be blank');
+        isValid = false;
+      } else if (addressInput.value.trim().length > 255) {
+        setErrorFor(addressInput, 'Address cannot exceed 255 characters');
+        isValid = false;
+      }
+
+      if (logoInput.files.length > 0) {
+        const fileSize = logoInput.files[0].size; // in bytes
+        if (fileSize > 2 * 1024 * 1024) { // 2 MB in bytes
+          setErrorFor(logoInput, 'Profile picture size cannot exceed 2MB');
+          isValid = false;
+        }
+      }
+
+      if (!isStateValid()) {
+        isValid = false;
+        setErrorFor(stateInput, 'Please select a valid state from the list.');
+      }
+
+      if (zipCodeInput.value.trim().length > 10) {
+        setErrorFor(zipCodeInput, 'Zip code cannot exceed 9 characters.');
+        isValid = false;
+      } else if (!isZipCodeValid()) {
+        isValid = false;
+        setErrorFor(zipCodeInput, 'Zip code should contain only numbers.');
+      } else if (!zipCodeInput.value.trim()) {
+        setErrorFor(zipCodeInput, 'Zip code cannot be blank');
+        isValid = false;
+      }
+
+      if (!phoneInput.value.trim()) {
+        setErrorFor(phoneInput, 'Phone number cannot be blank');
+        isValid = false;
+      }
+
+      if (!representativeInput.value.trim()) {
+        setErrorFor(representativeInput, 'Representative name cannot be blank');
+        isValid = false;
+      } else if (representativeInput.value.trim().length > 100) {
+        setErrorFor(representativeInput, 'Representative name cannot exceed 100 characters');
+        isValid = false;
+      }
+
+      if (isValid) {
+        // Show loading indicator
+        document.getElementById('loadingIndicator').classList.remove('hidden');
+        // Submit the form
+        form.submit();
+      }
+    });
+
+    // Function to reset all error messages
+    function resetErrorMessages() {
+        const errorMessages = document.querySelectorAll('.error-message');
+        errorMessages.forEach(function (errorMessage) {
+            errorMessage.textContent = '';
+        });
+    }
+
+    // Function to set error message for a field
+    function setErrorFor(input, message) {
+      const formControl = input.parentElement;
+      const errorMessage = formControl.querySelector('.error-message');
+      errorMessage.textContent = message;
+      input.classList.add('error');
+    }
+
+    stateInput.addEventListener('input', function () {
+        const filter = stateInput.value.toLowerCase();
+        const options = stateSelect.querySelectorAll('option');
+
+        let matchFound = false;
+        options.forEach(option => {
+            const text = option.textContent.toLowerCase();
+            if (text.includes(filter) && filter !== '') {
+                option.style.display = '';
+                matchFound = true;
+            } else {
+                option.style.display = 'none';
+            }
+        });
+
+        if (matchFound) {
+            stateSelect.size = options.length;
+            stateSelect.style.display = 'block';
+        } else {
+            stateSelect.style.display = 'none';
+        }
+    });
+
+    stateSelect.addEventListener('change', function () {
+        const selectedOption = stateSelect.options[stateSelect.selectedIndex];
+        stateInput.value = selectedOption.textContent;
+        stateSelect.style.display = 'none';
+    });
+
+    document.addEventListener('click', function (event) {
+        if (!stateInput.contains(event.target) && !stateSelect.contains(event.target)) {
+            stateSelect.style.display = 'none';
+        }
+    });
+
+    function isStateValid() {
+        const stateValue = stateInput.value.toLowerCase();
+        const options = stateSelect.querySelectorAll('option');
+        for (let option of options) {
+            if (option.textContent.toLowerCase() === stateValue) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function isZipCodeValid() {
+      const zipCodePattern = /^[0-9-]{1,10}$/;
+      return zipCodePattern.test(zipCodeInput.value);
+    }
+});
+
+</script>
+{% endblock script %}
+

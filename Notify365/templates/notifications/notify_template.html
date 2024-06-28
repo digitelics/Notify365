@@ -1,0 +1,39 @@
+{% extends "layouts/base.html" %}
+{% block title %}Notifications{% endblock %}
+{% block content %}
+    <!--
+  This example requires updating your template:
+
+  ```
+  <html class="h-full bg-white">
+  <body class="h-full">
+  ```
+-->
+<div>
+  <main class="lg:pl-72">
+    <div class="xl:pl-96">
+      <div class="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
+        <!-- Main area -->
+      </div>
+    </div>
+  </main>
+
+  <aside class="fixed inset-y-0 left-72 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
+    <!-- Secondary column (hidden on smaller screens) -->
+  </aside>
+</div>
+
+{% endblock %}
+{% block script %}
+    <script>
+        window.addEventListener("load", (event) => {
+            const menulinks = document.getElementsByClassName("notification"); 
+            
+            for (i = 0; i < menulinks.length; i++) {
+                    menulinks[i].className += " main-menu-selected";
+                }
+            // event.currentTarget.className += " tab-selected";
+        
+        });
+    </script>
+{% endblock script %}

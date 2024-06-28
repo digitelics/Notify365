@@ -1,0 +1,611 @@
+ <div class="space-y-6 sm:px-6 lg:col-span-9 lg:px-0">
+        <section aria-labelledby="category-of-template" class="pt-5">
+          <div class="bg-white pt-6 shadow sm:overflow-hidden sm:rounded-md">
+            
+            <div class="md:flex md:items-center md:justify-between px-4 sm:px-6">
+              <div class="min-w-0 flex-1">
+                <h2 id="category-of-template" class="text-lg font-medium leading-6 text-gray-900">Templates category</h2>
+              </div>
+              <div class="mt-4 flex md:ml-4 md:mt-0">
+               <button type="button" onclick="toggleModal('modal-template')" class="order-0 inline-flex items-center rounded-md bg-purple-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600 sm:order-1 sm:ml-3">Create</button>
+              </div>
+            </div>
+            <div class="mt-6 flex flex-col">
+              <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                  <div class="overflow-hidden border-t border-gray-200">
+                    <table class="min-w-full divide-y divide-gray-200">
+                      <thead class="bg-gray-300 bg-opacity-50">
+                        <tr>
+                          <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Creation date</th>
+                          <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Category</th>
+                          <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Description</th>
+                          <th scope="col" class="relative px-6 py-3 text-left text-sm font-medium text-gray-500">
+                            <span class="sr-only">View receipt</span>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-gray-200 bg-white">
+                        {% for template_category in template_categories  %}
+                           <tr>
+                              <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
+                                <time datetime="2020-01-01">{{ template_category.created_at }}</time>
+                              </td>
+                              <td class="whitespace-wrap px-6 py-4 text-sm text-gray-500">{{ template_category.name }}</td>
+                              <td class="whitespace-wrap px-6 py-4 text-sm text-gray-500">{{ template_category.description }}</td>
+                              <td class="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
+                                <div class="flex flex-1 gap-2 justify-end">
+                                  <button class="edit-template-category-btn" data-id={{template_category.id}} data-name="{{ template_category.name }}" data-description="{{ template_category.description }}">
+                                      <span title="Edit">
+                                          <svg fill="none" viewBox="0 0 26 26" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-green-500 hover:text-green-300">
+                                              <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                                          </svg>
+                                      </span>
+                                  </button>
+                                  <button class="delete-template-category-btn" data-id={{template_category.id}} data-name="{{ template_category.name }}">
+                                      <span title="Delete user">
+                                        <svg fill="none" viewBox="0 0 26 26" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-red-600 hover:text-red-400">
+                                          <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                        </svg>
+                                      </span>
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                        {% endfor %}
+                        <!-- More payments... -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section aria-labelledby="type-of-provider" class="pt-5">
+          <div class="bg-white pt-6 shadow sm:overflow-hidden sm:rounded-md">
+            
+            <div class="md:flex md:items-center md:justify-between px-4 sm:px-6">
+              <div class="min-w-0 flex-1">
+                <h2 id="type-of-provider" class="text-lg font-medium leading-6 text-gray-900">Provider Type</h2>
+              </div>
+              <div class="mt-4 flex md:ml-4 md:mt-0">
+               <button type="button" onclick="toggleModal('modal-provider-type')" class="order-0 inline-flex items-center rounded-md bg-purple-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600 sm:order-1 sm:ml-3">Create</button>
+              </div>
+            </div>
+            <div class="mt-6 flex flex-col">
+              <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                  <div class="overflow-hidden border-t border-gray-200">
+                    <table class="min-w-full divide-y divide-gray-200">
+                      <thead class="bg-gray-300 bg-opacity-50">
+                        <tr>
+                          <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Creation date</th>
+                          <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Type</th>
+                          <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Description</th>
+                          <!--
+                            `relative` is added here due to a weird bug in Safari that causes `sr-only` headings to introduce overflow on the body on mobile.
+                          -->
+                          <th scope="col" class="relative px-6 py-3 text-left text-sm font-medium text-gray-500">
+                            <span class="sr-only">View receipt</span>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-gray-200 bg-white">
+                        {% for provider_type in provider_types %}
+                           <tr>
+                              <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
+                                <time datetime="2020-01-01">{{ provider_type.created_at }}</time>
+                              </td>
+                              <td class="whitespace-wrap px-6 py-4 text-sm text-gray-500">{{ provider_type.name }}</td>
+                              <td class="whitespace-wrap px-6 py-4 text-sm text-gray-500">{{ provider_type.description }}</td>
+                              <td class="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
+                                <div class="flex flex-1 gap-2 justify-end">
+                                  <button class="edit-provider-type-btn" data-providerTypeId={{provider_type.id}} data-providerTypeName="{{ provider_type.name }}" data-providerTypeDescription="{{ provider_type.description }}">
+                                      <span title="Edit">
+                                          <svg fill="none" viewBox="0 0 26 26" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-green-500 hover:text-green-300">
+                                              <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                                          </svg>
+                                      </span>
+                                  </button>
+                                  <button class="delete-provider-type-btn" data-idDeleteProviderType={{provider_type.id}} data-deleteProviderType="{{ provider_type.name }}">
+                                      <span title="Delete user">
+                                        <svg fill="none" viewBox="0 0 26 26" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-red-600 hover:text-red-400">
+                                          <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                        </svg>
+                                      </span>
+                                  </button>
+                               </div>
+                              </td>
+                            </tr>
+                        {% endfor %}
+                        <!-- More payments... -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+         <section aria-labelledby="required-documents" class="pt-5">
+          <div class="bg-white pt-6 shadow sm:overflow-hidden sm:rounded-md">
+            
+            <div class="md:flex md:items-center md:justify-between px-4 sm:px-6">
+              <div class="min-w-0 flex-1">
+                <h2 id="required-documents" class="text-lg font-medium leading-6 text-gray-900">Required Documents</h2>
+              </div>
+              <div class="mt-4 flex md:ml-4 md:mt-0">
+               <button type="button" onclick="toggleModal('modal-document')" class="order-0 inline-flex items-center rounded-md bg-purple-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600 sm:order-1 sm:ml-3">Create</button>
+              </div>
+            </div>
+            <div class="mt-6 flex flex-col">
+              <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                  <div class="overflow-hidden border-t border-gray-200">
+                    <table class="min-w-full divide-y divide-gray-200">
+                      <thead class="bg-gray-300 bg-opacity-50">
+                        <tr>
+                          <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Creation date</th>
+                          <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Document</th>
+                          <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Description</th>
+                          <!--
+                            `relative` is added here due to a weird bug in Safari that causes `sr-only` headings to introduce overflow on the body on mobile.
+                          -->
+                          <th scope="col" class="relative px-6 py-3 text-left text-sm font-medium text-gray-500">
+                            <span class="sr-only">View receipt</span>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-gray-200 bg-white">
+                      {% for required_document in required_documents %}
+                        <tr>
+                          <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
+                            <time datetime="2020-01-01">{{ required_document.created_at }}</time>
+                          </td>
+                          <td class="whitespace-wrap px-6 py-4 text-sm text-gray-500">{{ required_document.name }}</td>
+                          <td class="whitespace-wrap px-6 py-4 text-sm text-gray-500">{{ required_document.description }}</td>
+                          <td class="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
+                           <div class="flex flex-1 gap-2 justify-end">
+                              <button class="edit-required-document-btn" data-requiredDocumentId={{required_document.id}} data-document="{{ required_document.name }}" data-requiredDocumentDescription="{{ required_document.description }}">
+                                  <span title="Edit">
+                                      <svg fill="none" viewBox="0 0 26 26" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-green-500 hover:text-green-300">
+                                          <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                                      </svg>
+                                  </span>
+                              </button>
+                              <button class="delete-required-document-btn" data-requiredDocumentId={{required_document.id}} data-document="{{ required_document.name }}">
+                                  <span title="Delete user">
+                                    <svg fill="none" viewBox="0 0 26 26" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-red-600 hover:text-red-400">
+                                      <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                    </svg>
+                                  </span>
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      {% endfor %}
+                        
+                        <!-- More payments... -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+</div>
+
+<!-- ------------------------------------------ -Modals- ---------------------------------------------------- -->
+
+{% include "settings/modals/provider_type_modal.html" %}
+{% include "settings/modals/update_provider_type_modal.html" %}
+{% include "settings/modals/delete_provider_type.html" %}
+
+{% include "settings/modals/template_category_modal.html" %}
+{% include "settings/modals/update_template_category_modal.html" %}
+{% include "settings/modals/delete_template_category.html" %}
+
+{% include "settings/modals/required_document_modal.html" %} 
+{% include "settings/modals/update_required_document_modal.html" %}
+{% include "settings/modals/delete_required_document.html" %}
+
+<div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="modal-template-backdrop"></div>
+<div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="modal-provider-type-backdrop"></div>
+<div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="update-provider-type-modal-backdrop"></div>
+<div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="modal-delete-provider_type-backdrop"></div>
+<div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="modal-document-backdrop"></div>
+<div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="update-modal-template-backdrop"></div>
+<div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="modal-delete-category-template-backdrop"></div>
+<div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="update-modal-document-backdrop"></div>
+<div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="modal-delete-required-document-backdrop"></div>
+
+<script type="text/javascript">
+
+     function toggleModal(modalID){
+            document.getElementById(modalID).classList.toggle("hidden");
+            document.getElementById(modalID + "-backdrop").classList.toggle("hidden");
+            document.getElementById(modalID).classList.toggle("flex");
+            document.getElementById(modalID + "-backdrop").classList.toggle("flex");
+        }
+
+    $(document).ready(function() {
+        // Evento de clic en el botón Editar template category
+        $('.edit-template-category-btn').click(function() {
+            // Obtener los datos del usuario del atributo data
+            var name = $(this).data('name');
+            var description = $(this).data('description');
+            var id = $(this).data('id');
+
+            // Actualizar el action del formulario con el ID del usuario
+            var actionUrl = '{% url "template-category-edit" 0 %}'.replace('0', id);
+            $('#editTemplateCategoryForm').attr('action', actionUrl);
+
+            // Llenar los campos del formulario en el modal de edición con los datos del usuario
+            $('#edit-category-name').val(name);
+            $('#edit-description').val(description);
+          
+
+            toggleModal("update-modal-template")
+        });
+      
+
+      // Evento de clic en el botón delete
+        $('.delete-template-category-btn').click(function() {
+            // Obtener los datos del atributo data
+            var id = $(this).data('id');
+            var name = $(this).data('name');
+
+            // Actualizar el action del formulario con el ID
+            var actionUrl = '{% url "template-category-remove" 0 %}'.replace('0', id);
+            $('#deleteCategoryTemplateForm').attr('action', actionUrl);
+            $('#delete-category-template').text(name);
+            toggleModal("modal-delete-category-template")
+        });
+
+         // Evento de clic en el botón Editar provider type
+        $('.edit-provider-type-btn').click(function() {
+            // Obtener los datos del atributo data
+            var name = $(this).data('providertypename');
+            var description = $(this).data('providertypedescription');
+            var id = $(this).data('providertypeid');
+
+            // Actualizar el action del formulario con el ID
+            var actionUrl = '{% url "provider-type-edit" 0 %}'.replace('0', id);
+            $('#editProviderTypeForm').attr('action', actionUrl);
+
+            // Llenar los campos del formulario en el modal de edición con los datos
+            $('#edit-provider-type').val(name);
+            $('#edit-provider-type-description').val(description);
+          
+
+            toggleModal("update-provider-type-modal")
+        });
+
+         // Evento de clic en el botón delete provider type
+        $('.delete-provider-type-btn').click(function() {
+            // Obtener los datos del atributo data
+            var id = $(this).data('iddeleteprovidertype');
+            var name = $(this).data('deleteprovidertype');
+
+            // Actualizar el action del formulario con el ID
+            var actionUrl = '{% url "provider-type-remove" 0 %}'.replace('0', id);
+            $('#deleteProviderTypeForm').attr('action', actionUrl);
+            $('#delete-provider-type').text(name);
+            toggleModal("modal-delete-provider_type")
+        });
+
+         // Evento de clic en el botón Editar required document
+        $('.edit-required-document-btn').click(function() {
+            // Obtener los datos del atributo data
+            var name = $(this).data('document');
+            var description = $(this).data('requireddocumentdescription');
+            var id = $(this).data('requireddocumentid');
+
+            // Actualizar el action del formulario con el ID
+            var actionUrl = '{% url "required-document-edit" 0 %}'.replace('0', id);
+            $('#updateRequiredDocumentForm').attr('action', actionUrl);
+
+            // Llenar los campos del formulario en el modal de edición con los datos
+            $('#update-document-name').val(name);
+            $('#update-document-description').val(description);
+          
+
+            toggleModal("update-modal-document")
+        });
+
+          // Evento de clic en el botón delete required document
+        $('.delete-required-document-btn').click(function() {
+            // Obtener los datos del atributo data
+            var id = $(this).data('requireddocumentid');
+            var name = $(this).data('document');
+
+            // Actualizar el action del formulario con el ID
+            var actionUrl = '{% url "required-document-remove" 0 %}'.replace('0', id);
+            $('#deleteRequiredDocumentForm').attr('action', actionUrl);
+            $('#delete-required-document').text(name);
+            toggleModal("modal-delete-required-document")
+        });
+
+    });
+        window.addEventListener("load", (event) => {
+              const tablinks = document.getElementsByClassName("general");    
+              for (i = 0; i < tablinks.length; i++) {
+                        tablinks[i].className += " tab-selected";
+                        console.log(event.currentTarget);
+                    }
+          
+            });
+            
+
+        document.addEventListener('DOMContentLoaded', function () {
+          const form = document.getElementById('templateCategoryForm');
+          const categoryInput = document.getElementById('category-name');
+          const descriptionInput = document.getElementById('description');
+
+          const editForm = document.getElementById('editTemplateCategoryForm');
+          const editCategoryInput = document.getElementById('edit-category-name');
+          const editDescriptionInput = document.getElementById('edit-description');
+
+          const deleteForm = document.getElementById('deleteCategoryTemplateForm')
+          
+          /* PROVIDER TYPE VARS */
+          const addFormProviderType = document.getElementById('ProviderTypeForm');
+          const typeInput = document.getElementById('provider-type');
+          const descriptionProviderTypeInput = document.getElementById('description-provider-type');
+
+          const editFormProviderType = document.getElementById('editProviderTypeForm');
+          const edittypeInput = document.getElementById('edit-provider-type');
+          const editProviderTypeDescriptionInput = document.getElementById('edit-provider-type-description');
+
+          const deleteProviderTypeForm = document.getElementById('deleteProviderTypeForm')
+
+          /* REQUIRE DOCUMENT VARS */
+          const addFormRequiredDocument = document.getElementById('requiredDocumentForm');
+          const documentNameInput = document.getElementById('document-name');
+          const descriptionRequiredDocumentInput = document.getElementById('document-description');
+
+          const updateRequiredDocumentForm = document.getElementById('updateRequiredDocumentForm');
+          const updateRequiredDocumentInput = document.getElementById('update-document-name');
+          const updateRequirementDocumentDescriptionInput = document.getElementById('update-document-description');
+
+          const deleteRequiredDocumentForm = document.getElementById('deleteRequiredDocumentForm')
+         
+          deleteForm.addEventListener('submit', function (event) {
+            // Prevent the form from submitting
+            event.preventDefault();
+            let isValid = true;
+            
+
+            if (isValid) {
+              // Show loading indicator
+              document.getElementById('loadingIndicator').classList.remove('hidden');
+              toggleModal('modal-delete-category-template');
+              // Submit the form
+              deleteForm.submit();
+            }
+          });
+
+          
+          editForm.addEventListener('submit', function (event) {
+            // Prevent the form from submitting
+            event.preventDefault();
+            let isValid = true;
+            resetErrorMessages();
+
+            if (!editCategoryInput.value.trim()) {
+              setErrorFor(editCategoryInput, 'Category cannot be blank');
+              isValid = false;
+            } else if (editCategoryInput.value.trim().length > 100) {
+              setErrorFor(editCategoryInput, 'Category name cannot exceed 100 characters');
+              isValid = false;
+            }
+
+            if (editDescriptionInput.value.trim().length > 100) {
+              setErrorFor(editDescriptionInput, 'Description cannot exceed 100 characters');
+              isValid = false;
+            }
+
+            if (isValid) {
+              // Show loading indicator
+              document.getElementById('loadingIndicator').classList.remove('hidden');
+              toggleModal('update-modal-template');
+              // Submit the form
+              editForm.submit();
+            }
+          });
+          
+          form.addEventListener('submit', function (event) {
+            // Prevent the form from submitting
+            event.preventDefault();
+            let isValid = true;
+            resetErrorMessages();
+
+            if (!categoryInput.value.trim()) {
+              setErrorFor(categoryInput, 'Category cannot be blank');
+              isValid = false;
+            } else if (categoryInput.value.trim().length > 100) {
+              setErrorFor(categoryInput, 'Category name cannot exceed 100 characters');
+              isValid = false;
+            }
+
+            if (descriptionInput.value.trim().length > 100) {
+              setErrorFor(descriptionInput, 'Description cannot exceed 100 characters');
+              isValid = false;
+            }
+
+            if (isValid) {
+              // Show loading indicator
+              document.getElementById('loadingIndicator').classList.remove('hidden');
+              toggleModal('modal-template');
+              // Submit the form
+              form.submit();
+            }
+          });
+
+          addFormProviderType.addEventListener('submit', function (event) {
+            // Prevent the form from submitting
+            event.preventDefault();
+            let isValid = true;
+            resetErrorMessages();
+
+            if (!typeInput.value.trim()) {
+              setErrorFor(typeInput, 'Type cannot be blank');
+              isValid = false;
+            } else if (typeInput.value.trim().length > 100) {
+              setErrorFor(typeInput, 'Provider type cannot exceed 100 characters');
+              isValid = false;
+            }
+
+            if (descriptionProviderTypeInput.value.trim().length > 100) {
+              setErrorFor(descriptionInput, 'Description cannot exceed 100 characters');
+              isValid = false;
+            }
+
+            if (isValid) {
+              // Show loading indicator
+              document.getElementById('loadingIndicator').classList.remove('hidden');
+              toggleModal('modal-provider-type');
+              // Submit the form
+              addFormProviderType.submit();
+            }
+          });
+
+          editFormProviderType.addEventListener('submit', function (event) {
+            // Prevent the form from submitting
+            event.preventDefault();
+            let isValid = true;
+            resetErrorMessages();
+
+            if (!edittypeInput.value.trim()) {
+              setErrorFor(edittypeInput, 'Type cannot be blank');
+              isValid = false;
+            } else if (edittypeInput.value.trim().length > 100) {
+              setErrorFor(edittypeInput, 'Type cannot exceed 100 characters');
+              isValid = false;
+            }
+
+            if (editProviderTypeDescriptionInput.value.trim().length > 100) {
+              setErrorFor(editProviderTypeDescriptionInput, 'Description cannot exceed 100 characters');
+              isValid = false;
+            }
+
+            if (isValid) {
+              // Show loading indicator
+              document.getElementById('loadingIndicator').classList.remove('hidden');
+              toggleModal('update-provider-type-modal');
+              // Submit the form
+              editFormProviderType.submit();
+            }
+          });
+
+          deleteProviderTypeForm.addEventListener('submit', function (event) {
+            // Prevent the form from submitting
+            event.preventDefault();
+            let isValid = true;
+            
+
+            if (isValid) {
+              // Show loading indicator
+              document.getElementById('loadingIndicator').classList.remove('hidden');
+              toggleModal('modal-delete-provider_type');
+              // Submit the form
+              deleteProviderTypeForm.submit();
+            }
+          });
+
+          addFormRequiredDocument.addEventListener('submit', function (event) {
+            // Prevent the form from submitting
+            event.preventDefault();
+            let isValid = true;
+            resetErrorMessages();
+
+            if (!documentNameInput.value.trim()) {
+              setErrorFor(documentNameInput, 'Document cannot be blank');
+              isValid = false;
+            } else if (documentNameInput.value.trim().length > 100) {
+              setErrorFor(documentNameInput, 'Document name cannot exceed 100 characters');
+              isValid = false;
+            }
+
+            if (descriptionRequiredDocumentInput.value.trim().length > 100) {
+              setErrorFor(descriptionRequiredDocumentInput, 'Description cannot exceed 100 characters');
+              isValid = false;
+            }
+
+            if (isValid) {
+              // Show loading indicator
+              document.getElementById('loadingIndicator').classList.remove('hidden');
+              toggleModal('modal-document');
+              // Submit the form
+              addFormRequiredDocument.submit();
+            }
+          });
+
+          updateRequiredDocumentForm.addEventListener('submit', function (event) {
+            // Prevent the form from submitting
+            event.preventDefault();
+            let isValid = true;
+            resetErrorMessages();
+
+            if (!updateRequiredDocumentInput.value.trim()) {
+              setErrorFor(updateRequiredDocumentInput, 'Document name cannot be blank');
+              isValid = false;
+            } else if (updateRequiredDocumentInput.value.trim().length > 100) {
+              setErrorFor(updateRequiredDocumentInput, 'Document name cannot exceed 100 characters');
+              isValid = false;
+            }
+
+            if (updateRequirementDocumentDescriptionInput.value.trim().length > 100) {
+              setErrorFor(updateRequirementDocumentDescriptionInput, 'Description cannot exceed 100 characters');
+              isValid = false;
+            }
+
+            if (isValid) {
+              // Show loading indicator
+              document.getElementById('loadingIndicator').classList.remove('hidden');
+              toggleModal('update-modal-document');
+              // Submit the form
+              updateRequiredDocumentForm.submit();
+            }
+          });
+
+          deleteRequiredDocumentForm.addEventListener('submit', function (event) {
+            // Prevent the form from submitting
+            event.preventDefault();
+            let isValid = true;
+            
+
+            if (isValid) {
+              // Show loading indicator
+              document.getElementById('loadingIndicator').classList.remove('hidden');
+              toggleModal('modal-delete-required-document');
+              // Submit the form
+              deleteRequiredDocumentForm.submit();
+            }
+          });
+
+          // Function to reset all error messages
+          function resetErrorMessages() {
+              const errorMessages = document.querySelectorAll('.error-message');
+              errorMessages.forEach(function (errorMessage) {
+                  errorMessage.textContent = '';
+              });
+          }
+
+          // Function to set error message for a field
+          function setErrorFor(input, message) {
+            const formControl = input.parentElement;
+            const errorMessage = formControl.querySelector('.error-message');
+            errorMessage.textContent = message;
+            input.classList.add('error');
+          }
+          
+      });
+
+     
+
+</script>
