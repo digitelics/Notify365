@@ -3,11 +3,11 @@
    <!-- <button type="button" class="sm:order-0 order-1 ml-3 inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:ml-0">Share</button>
     <button type="button" class="order-0 inline-flex items-center rounded-md bg-purple-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600 sm:order-1 sm:ml-3">Create</button>-->
 {% endblock header-button %}
-{% block title %} Notify365 - Dashboard {% endblock %}
+{% block title %}Dashboard{% endblock %}
 {% block content %}     
-  <div class="relative isolate overflow-hidden">
+  <div class="overflow-hidden">
     <!-- Secondary navigation -->
-    <header class="pb-4 pt-6 sm:pb-6">
+    <header class="pb-4 pt-6 sm:pb-6 mt-14">
       <div class="mx-auto flex max-w-7xl flex-wrap items-center gap-6 px-4 sm:flex-nowrap sm:px-6 lg:px-8">
         <h1 class="text-base font-semibold leading-7 text-gray-900">Customers</h1>
         <div class="order-last flex w-full gap-x-8 text-sm font-semibold leading-6 sm:order-none sm:w-auto sm:border-l sm:border-gray-200 sm:pl-6 sm:leading-7">
@@ -49,16 +49,13 @@
         </div>
       </dl>
     </div>
-
-    <div class="absolute left-0 top-full -z-10 mt-96 origin-top-left translate-y-40 -rotate-90 transform-gpu opacity-20 blur-3xl sm:left-1/2 sm:-ml-96 sm:-mt-10 sm:translate-y-0 sm:rotate-0 sm:transform-gpu sm:opacity-50" aria-hidden="true">
-      <div class="aspect-[1154/678] w-[72.125rem] bg-gradient-to-br from-[#FF80B5] to-[#9089FC]" style="clip-path: polygon(100% 38.5%, 82.6% 100%, 60.2% 37.7%, 52.4% 32.1%, 47.5% 41.8%, 45.2% 65.6%, 27.5% 23.4%, 0.1% 35.3%, 17.9% 0%, 27.7% 23.4%, 76.2% 2.5%, 74.2% 56%, 100% 38.5%)"></div>
-    </div>
+    
   </div>
 
   <div class="space-y-16 py-16 xl:space-y-20">
      <!-- Client estatus -->
     <div class="mx-auto">
-          <div class="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div class="mt-2 grid px-10 grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             <!-- Card -->
             <div class="overflow-hidden rounded-lg bg-gray-50">
               <div class="p-5">
@@ -266,7 +263,7 @@
               </svg>
               <div class="text-sm font-medium leading-6 text-gray-900">Andrew Williams</div>
               <div class="relative ml-auto">
-                <button type="button" class="-m-2.5 block p-2.5 text-gray-400 hover:text-gray-500" id="options-menu-0-button" aria-expanded="false" aria-haspopup="true">
+                <button onclick="openDropdown(event,'option1')" type="button" class="-m-2.5 block p-2.5 text-gray-400 hover:text-gray-500" id="options-menu-0-button" aria-expanded="false" aria-haspopup="true">
                   <span class="sr-only">Open options</span>
                   <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                     <path d="M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" />
@@ -283,10 +280,10 @@
                     From: "transform opacity-100 scale-100"
                     To: "transform opacity-0 scale-95"
                 -->
-                <div class="absolute right-0 z-10 mt-0.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="options-menu-0-button" tabindex="-1">
+                <div id="option1" class="hidden absolute right-0 z-10 mt-0.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="options-menu-0-button" tabindex="-1">
                   <!-- Active: "bg-gray-50", Not Active: "" -->
-                  <a href="#" class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem" tabindex="-1" id="options-menu-0-item-0">View<span class="sr-only">, Tuple</span></a>
-                  <a href="#" class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem" tabindex="-1" id="options-menu-0-item-1">Edit<span class="sr-only">, Tuple</span></a>
+                  <a href="#" class="hover:text-indigo-600 hover:bg-gray-100 block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem" tabindex="-1" id="options-menu-0-item-0">View<span class="sr-only">, Tuple</span></a>
+                  <a href="#" class="hover:text-indigo-600 hover:bg-gray-100 block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem" tabindex="-1" id="options-menu-0-item-1">Edit<span class="sr-only">, Tuple</span></a>
                 </div>
               </div>
             </div>
@@ -311,7 +308,7 @@
               </svg>
               <div class="text-sm font-medium leading-6 text-gray-900">Charles Johnson</div>
               <div class="relative ml-auto">
-                <button type="button" class="-m-2.5 block p-2.5 text-gray-400 hover:text-gray-500" id="options-menu-1-button" aria-expanded="false" aria-haspopup="true">
+                <button type="button" onclick="openDropdown(event,'option2')" class="-m-2.5 block p-2.5 text-gray-400 hover:text-gray-500" id="options-menu-1-button" aria-expanded="false" aria-haspopup="true">
                   <span class="sr-only">Open options</span>
                   <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                     <path d="M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" />
@@ -328,10 +325,10 @@
                     From: "transform opacity-100 scale-100"
                     To: "transform opacity-0 scale-95"
                 -->
-                <div class="absolute right-0 z-10 mt-0.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="options-menu-1-button" tabindex="-1">
+                <div id="option2" class="hidden absolute right-0 z-10 mt-0.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="options-menu-1-button" tabindex="-1">
                   <!-- Active: "bg-gray-50", Not Active: "" -->
-                  <a href="#" class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem" tabindex="-1" id="options-menu-1-item-0">View<span class="sr-only">, SavvyCal</span></a>
-                  <a href="#" class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem" tabindex="-1" id="options-menu-1-item-1">Edit<span class="sr-only">, SavvyCal</span></a>
+                  <a href="#" class="hover:text-indigo-600 hover:bg-gray-100 block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem" tabindex="-1" id="options-menu-1-item-0">View<span class="sr-only">, SavvyCal</span></a>
+                  <a href="#" class="hover:text-indigo-600 hover:bg-gray-100 block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem" tabindex="-1" id="options-menu-1-item-1">Edit<span class="sr-only">, SavvyCal</span></a>
                 </div>
               </div>
             </div>
@@ -356,7 +353,7 @@
               </svg>
               <div class="text-sm font-medium leading-6 text-gray-900">Steven Brown</div>
               <div class="relative ml-auto">
-                <button type="button" class="-m-2.5 block p-2.5 text-gray-400 hover:text-gray-500" id="options-menu-2-button" aria-expanded="false" aria-haspopup="true">
+                <button type="button" onclick="openDropdown(event,'option3')" class="-m-2.5 block p-2.5 text-gray-400 hover:text-gray-500" id="options-menu-2-button" aria-expanded="false" aria-haspopup="true">
                   <span class="sr-only">Open options</span>
                   <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                     <path d="M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" />
@@ -373,10 +370,10 @@
                     From: "transform opacity-100 scale-100"
                     To: "transform opacity-0 scale-95"
                 -->
-                <div class="absolute right-0 z-10 mt-0.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="options-menu-2-button" tabindex="-1">
+                <div id="option3" class="hidden absolute right-0 z-10 mt-0.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="options-menu-2-button" tabindex="-1">
                   <!-- Active: "bg-gray-50", Not Active: "" -->
-                  <a href="#" class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem" tabindex="-1" id="options-menu-2-item-0">View<span class="sr-only">, Reform</span></a>
-                  <a href="#" class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem" tabindex="-1" id="options-menu-2-item-1">Edit<span class="sr-only">, Reform</span></a>
+                  <a href="#" class="hover:text-indigo-600 hover:bg-gray-100 block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem" tabindex="-1" id="options-menu-2-item-0">View<span class="sr-only">, Reform</span></a>
+                  <a href="#" class="hover:text-indigo-600 hover:bg-gray-100 block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem" tabindex="-1" id="options-menu-2-item-1">Edit<span class="sr-only">, Reform</span></a>
                 </div>
               </div>
             </div>
@@ -401,3 +398,34 @@
 
 
 {% endblock  %}
+{% block script %}  
+<script src="https://unpkg.com/@popperjs/core@2.9.1/dist/umd/popper.min.js" charset="utf-8"></script>
+<script>
+  function openDropdown(event,dropdownID){
+    let element = event.target;
+    while(element.nodeName !== "BUTTON"){
+      element = element.parentNode;
+    }
+    var popper = Popper.createPopper(element, document.getElementById(dropdownID), {
+      placement: 'bottom-start'
+    });
+    document.getElementById(dropdownID).classList.toggle("hidden");
+    document.getElementById(dropdownID).classList.toggle("block");
+  }
+
+  function closeDropdown(event,dropdownID){
+    document.getElementById(dropdownID).classList.toggle("hidden");
+  }
+
+   window.addEventListener("load", (event) => {
+        const menulinks = document.getElementsByClassName("dash");
+         
+        for (i = 0; i < menulinks.length; i++) {
+                menulinks[i].className += " main-menu-selected";
+            }
+        // event.currentTarget.className += " tab-selected";
+    
+    });
+</script>
+{% endblock script %} 
+

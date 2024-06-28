@@ -1,42 +1,8 @@
 {% load static %}
-
-
-<!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. -->
   <div class="relative z-50 lg:hidden" role="dialog" aria-modal="true">
-    <!--
-      Off-canvas menu backdrop, show/hide based on off-canvas menu state.
-
-      Entering: "transition-opacity ease-linear duration-300"
-        From: "opacity-0"
-        To: "opacity-100"
-      Leaving: "transition-opacity ease-linear duration-300"
-        From: "opacity-100"
-        To: "opacity-0"
-    -->
     <div class="fixed inset-0 bg-gray-900/80"></div>
-
     <div class="fixed inset-0 flex">
-      <!--
-        Off-canvas menu, show/hide based on off-canvas menu state.
-
-        Entering: "transition ease-in-out duration-300 transform"
-          From: "-translate-x-full"
-          To: "translate-x-0"
-        Leaving: "transition ease-in-out duration-300 transform"
-          From: "translate-x-0"
-          To: "-translate-x-full"
-      -->
       <div class="relative mr-16 flex w-full max-w-xs flex-1">
-        <!--
-          Close button, show/hide based on off-canvas menu state.
-
-          Entering: "ease-in-out duration-300"
-            From: "opacity-0"
-            To: "opacity-100"
-          Leaving: "ease-in-out duration-300"
-            From: "opacity-100"
-            To: "opacity-0"
-        -->
         <div class="absolute left-full top-0 flex w-16 justify-center pt-5">
           <button type="button" class="-m-2.5 p-2.5">
             <span class="sr-only">Close sidebar</span>
@@ -100,7 +66,7 @@
                 </ul>
               </li>
               <li>
-                <div class="text-xs font-semibold leading-6 text-gray-400">Logged Users</div>
+                <div class="text-xs font-semibold leading-6 text-gray-400">Aditional Actions</div>
                 <ul role="list" class="-mx-2 mt-2 space-y-1">
                   <li>
                     <!-- Current: "bg-gray-50 text-indigo-600", Default: "text-gray-700 hover:text-indigo-600 hover:bg-gray-50" -->
@@ -152,13 +118,13 @@
        <!-- User menu -->
         <div class="relative inline-block text-left">
           <div>
-            <button type="button" class="group w-full rounded-md bg-gray-200 px-3.5 py-2 text-left text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-100" id="options-menu-button" aria-expanded="false" aria-haspopup="true">
+            <button onclick="openDropdown(event,'dropdown-profile')" type="button" class="group w-full rounded-md bg-gray-200 px-3.5 py-2 text-left text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-100" id="options-menu-button" aria-expanded="false" aria-haspopup="true">
               <span class="flex w-full items-center justify-between">
                 <span class="flex min-w-0 items-center justify-between space-x-3">
-                  <img class="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300" src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" alt="">
+                  <img class="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300" src="{{ context_processor.avatar }}" alt="">
                   <span class="flex min-w-0 flex-1 flex-col">
-                    <span class="truncate text-sm font-medium text-gray-900">Jessy Schwarz</span>
-                    <span class="truncate text-sm text-gray-500">@jessyschwarz</span>
+                    <span class="truncate text-sm font-medium text-gray-900">{{ context_processor.name }}</span>
+                    <span class="truncate text-sm text-gray-500">{{ context_processor.username }}</span>
                   </span>
                 </span>
                 <svg class="h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -168,31 +134,20 @@
             </button>
           </div>
 
-        <!--
-          Dropdown menu, show/hide based on menu state.
-
-          Entering: "transition ease-out duration-100"
-            From: "transform opacity-0 scale-95"
-            To: "transform opacity-100 scale-100"
-          Leaving: "transition ease-in duration-75"
-            From: "transform opacity-100 scale-100"
-            To: "transform opacity-0 scale-95"
-        -->
-        <!--<div class="absolute left-0 right-0 z-10 mx-3 mt-1 origin-top divide-y divide-gray-200 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="options-menu-button" tabindex="-1">
-           <div class="py-1" role="none">-->
+       <div id="dropdown-profile" style="min-width:12rem" class="hidden absolute left-0 right-0 z-10 mx-3 mt-1 origin-top divide-y divide-gray-200 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="options-menu-button" tabindex="-1">
+           <div class="py-1" role="none">
             <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
-            <!--<a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="options-menu-item-0">View profile</a>
-            <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="options-menu-item-1">Settings</a>
-            <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="options-menu-item-2">Notifications</a>
+            <a href={% url 'account' %} class="hover:text-indigo-600 hover:bg-gray-100 text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="options-menu-item-0">View profile</a>
+            <a href={% url 'general_setting' 'general' %} class="hover:text-indigo-600 hover:bg-gray-100 text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="options-menu-item-1">Settings</a>
+            <a href="#" class="hover:text-indigo-600 hover:bg-gray-100 text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="options-menu-item-2">Notifications</a>
           </div>
           <div class="py-1" role="none">
-            <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="options-menu-item-3">Get desktop app</a>
-            <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="options-menu-item-4">Support</a>
+            <a href="#" class="hover:text-indigo-600 hover:bg-gray-100 text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="options-menu-item-4">Support</a>
           </div>
           <div class="py-1" role="none">
-            <a href="#" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="options-menu-item-5">Logout</a>
+            <a href={% url 'logout' %} onclick="closeDropdown(event,'dropdown-profile')" class="hover:text-indigo-600 hover:bg-gray-100 text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="options-menu-item-5">Logout</a>
           </div>
-        </div>-->
+        </div>
       </div>
       <!-- Sidebar Search -->
       <div class="mt-5">
@@ -212,15 +167,15 @@
             <ul role="list" class="-mx-2 space-y-1">
               <li>
                 <!-- Current: "bg-gray-50 text-indigo-600", Default: "text-gray-700 hover:text-indigo-600 hover:bg-gray-50" -->
-                <a href="#" class="bg-gray-100 text-indigo-600 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
-                  <svg class="h-6 w-6 shrink-0 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                <a href={% url 'dashboard' %} class="dash text-gray-700 hover:text-indigo-600 hover:bg-gray-200 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+                  <svg class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
                   </svg>
                   Dashboard
                 </a>
               </li>
               <li>
-                <a href="#" class="text-gray-700 hover:text-indigo-600 hover:bg-gray-200 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+                <a href={% url 'customers' %} class="customer text-gray-700 hover:text-indigo-600 hover:bg-gray-200 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
                   <svg class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
                   </svg>
@@ -228,7 +183,7 @@
                 </a>
               </li>
               <li>
-                <a href="#" class="text-gray-700 hover:text-indigo-600 hover:bg-gray-200 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+                <a href={% url 'notify' %} class="notification text-gray-700 hover:text-indigo-600 hover:bg-gray-200 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
                   <svg class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z" />
                   </svg>
@@ -236,14 +191,14 @@
                 </a>
               </li>
               <li>
-                <a href="#" class="text-gray-700 hover:text-indigo-600 hover:bg-gray-200 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+                <a href={% url 'calendar' %} class="calendar text-gray-700 hover:text-indigo-600 hover:bg-gray-200 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
                   <svg class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
                   </svg>
                   Calendar
                 </a>
               </li>
-                <a href="#" class="text-gray-700 hover:text-indigo-600 hover:bg-gray-200 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+                <a href="#" class="report text-gray-700 hover:text-indigo-600 hover:bg-gray-200 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
                   <svg class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
                     <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
@@ -254,31 +209,38 @@
             </ul>
           </li>
           <li>
-            <div class="text-xs font-semibold leading-6 text-gray-400">Logged Users</div>
+            <div class="text-xs font-semibold leading-6 text-gray-400">Aditional Actions</div>
             <ul role="list" class="-mx-2 mt-2 space-y-1">
               <li>
                 <!-- Current: "bg-gray-50 text-indigo-600", Default: "text-gray-700 hover:text-indigo-600 hover:bg-gray-50" -->
-                <a href="#" class="text-gray-700 hover:text-indigo-600 hover:bg-gray-200 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
-                  <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white text-gray-400 border-gray-200 group-hover:border-indigo-600 group-hover:text-indigo-600">J</span>
-                  <span class="truncate">Javier Palacios</span>
+                <a href="#" id = "btnOpenNumberPad" class="text-gray-700 hover:text-indigo-600 hover:bg-gray-200 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+                  <svg class="-ml-0.5 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M2 3.5A1.5 1.5 0 013.5 2h1.148a1.5 1.5 0 011.465 1.175l.716 3.223a1.5 1.5 0 01-1.052 1.767l-.933.267c-.41.117-.643.555-.48.95a11.542 11.542 0 006.254 6.254c.395.163.833-.07.95-.48l.267-.933a1.5 1.5 0 011.767-1.052l3.223.716A1.5 1.5 0 0118 15.352V16.5a1.5 1.5 0 01-1.5 1.5H15c-1.149 0-2.263-.15-3.326-.43A13.022 13.022 0 012.43 8.326 13.019 13.019 0 012 5V3.5z" clip-rule="evenodd"></path>
+                  </svg>
+                  <span class="truncate">New Call</span>
+                </a>
+              </li>
+              <li>
+                <a href={% url 'sms' %} class="sms text-gray-700 hover:text-indigo-600 hover:bg-gray-200 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+                  <svg class="-ml-0.5 h-5 w-5 text-gray-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M4.804 21.644A6.707 6.707 0 0 0 6 21.75a6.721 6.721 0 0 0 3.583-1.029c.774.182 1.584.279 2.417.279 5.322 0 9.75-3.97 9.75-9 0-5.03-4.428-9-9.75-9s-9.75 3.97-9.75 9c0 2.409 1.025 4.587 2.674 6.192.232.226.277.428.254.543a3.73 3.73 0 0 1-.814 1.686.75.75 0 0 0 .44 1.223ZM8.25 10.875a1.125 1.125 0 1 0 0 2.25 1.125 1.125 0 0 0 0-2.25ZM10.875 12a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0Zm4.875-1.125a1.125 1.125 0 1 0 0 2.25 1.125 1.125 0 0 0 0-2.25Z" clip-rule="evenodd"></path>
+                  </svg>
+                  <span class="truncate">Text Messages</span>
                 </a>
               </li>
               <li>
                 <a href="#" class="text-gray-700 hover:text-indigo-600 hover:bg-gray-200 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
-                  <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white text-gray-400 border-gray-200 group-hover:border-indigo-600 group-hover:text-indigo-600">T</span>
-                  <span class="truncate">Tailwind Labs</span>
-                </a>
-              </li>
-              <li>
-                <a href="#" class="text-gray-700 hover:text-indigo-600 hover:bg-gray-200 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
-                  <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white text-gray-400 border-gray-200 group-hover:border-indigo-600 group-hover:text-indigo-600">W</span>
-                  <span class="truncate">Wilson Shadows</span>
+                  <svg class="-ml-0.5 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path d="M3 4a2 2 0 00-2 2v1.161l8.441 4.221a1.25 1.25 0 001.118 0L19 7.162V6a2 2 0 00-2-2H3z"></path>
+                            <path d="M19 8.839l-7.77 3.885a2.75 2.75 0 01-2.46 0L1 8.839V14a2 2 0 002 2h14a2 2 0 002-2V8.839z"></path>
+                  </svg>
+                  <span class="truncate">New Email</span>
                 </a>
               </li>
             </ul>
           </li>
           <li class="mt-auto">
-            <a href="#" class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
+            <a href={% url 'general_setting' 'general' %} class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
               <svg class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -290,3 +252,32 @@
       </nav>
     </div>
   </div>
+
+  <!-- Modal call in progress -->
+    {% include 'webcall/call_in_progress_modal.html' %}
+
+  <!-- Modal dial -->
+    {% include 'webcall/dial_modal.html' %}
+
+  <!-- Modal incoming call -->
+    {% include 'webcall/incoming_call_modal.html' %}
+
+<script src="https://unpkg.com/@popperjs/core@2.9.1/dist/umd/popper.min.js" charset="utf-8"></script>
+<script>
+  function openDropdown(event,dropdownID){
+    let element = event.target;
+    while(element.nodeName !== "BUTTON"){
+      element = element.parentNode;
+    }
+    var popper = Popper.createPopper(element, document.getElementById(dropdownID), {
+      placement: 'bottom-start'
+    });
+    document.getElementById(dropdownID).classList.toggle("hidden");
+    document.getElementById(dropdownID).classList.toggle("block");
+  }
+
+  function closeDropdown(event,dropdownID){
+    document.getElementById(dropdownID).classList.toggle("hidden");
+  }
+
+</script>

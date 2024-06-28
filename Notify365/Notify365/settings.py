@@ -12,6 +12,14 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 
+'''ASGI_APPLICATION = 'Notify365.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',  # Utiliza este para pruebas, para producción considera usar Redis o similar
+    },
+}'''
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,7 +33,7 @@ SECRET_KEY = 'django-insecure-(#z#8w_izv%9gesuu=3_2--xiq02!!m&$e!yy$l4-akh#7l#m6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '3a55-2601-586-c501-66f0-f566-c716-d89-c1.ngrok-free.app']
 
 
 # Application definition
@@ -37,12 +45,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles', 
+
+    'channels', 
     'settings',
-    'log',
-    'notification',
+    'logs',
+    'notifications',
     'automatizations',
-    'customer',
-    'dashboard',   
+    'customers',
+    'dashboard', 
+    'schedules',  
+    'security',
+    'webcall',
+    'simple_history',
 ]
 
 MIDDLEWARE = [
@@ -53,6 +67,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'Notify365.middlewares.AutoLogoutMiddleware', 
+    'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
 ROOT_URLCONF = 'Notify365.urls'
@@ -68,6 +84,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'utils.context_processors.user_context_processor',
             ],
         },
     },
@@ -82,13 +99,19 @@ WSGI_APPLICATION = 'Notify365.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "dev_notify365",
+        "NAME": "notify365",
         "USER": "doadmin",
         "PASSWORD": "AVNS_bw1W65lBHbqt6AgGRst",
         "HOST": "db-postgresql-nyc3-notify365-do-user-11845072-0.c.db.ondigitalocean.com",
         "PORT": "25060",
     }
 }
+
+TEMPLATE_CONTEXT_PROCESSORS = [
+    'django.template.context_processors.debug',
+    'django.template.context_processors.request',
+]
+
 
 
 # Password validation
@@ -127,7 +150,26 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# MEDIA_URL =  'static/images/'
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+    '/var/www/static',
+]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTH_USER_MODEL = 'security.CustomUser'
+LOGIN_URL = '/login/'
+
+# Configura la duración de la sesión en segundos
+SESSION_COOKIE_AGE = 1800  # 30 minutos
+
+# Configura para que la sesión se cierre al cerrar el navegador
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# Asegúrate de que Django actualice la sesión con cada solicitud
+SESSION_SAVE_EVERY_REQUEST = True
+

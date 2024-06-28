@@ -2,5 +2,8 @@ from django.shortcuts import render
 
 def client(request):
     
-    return render(request, 'customer/client.html', {})
+    mensaje = "Hola mundo mundial!"
+    categories = ['fotos', 'news', 'services', 'blog']
+    context = {'mensaje' : mensaje, 'categories': categories}
+    return render(request, 'customers/client_template.html', context)
 
