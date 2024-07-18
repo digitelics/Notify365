@@ -36,7 +36,7 @@ SECRET_KEY = 'django-insecure-(#z#8w_izv%9gesuu=3_2--xiq02!!m&$e!yy$l4-akh#7l#m6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '3a55-2601-586-c501-66f0-f566-c716-d89-c1.ngrok-free.app']
+ALLOWED_HOSTS = ['localhost', '3a55-2601-586-c501-66f0-f566-c716-d89-c1.ngrok-free.app', 'notify365.us', 'www.notify365.us']
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
