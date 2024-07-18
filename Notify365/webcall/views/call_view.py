@@ -8,12 +8,17 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpResponse
 import jwt
 
+from notifications.models import Notification
+from customers.models import Customer
+from django.utils import timezone
+
 #from dotenv import load_dotenv
 import os
 import pprint as p
 
 from dotenv import load_dotenv
 load_dotenv()
+
 
 TWIML_APP_SID= os.getenv('TWIML_APP_SID')
 TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
@@ -69,4 +74,24 @@ def call(request):
 
     return HttpResponse(str(response.append(dial)), content_type='text/xml')
 
+@csrf_exempt
+def save_log_call(request):
+    user = request.user
+    customer = Customer.objects.get(pk=1)
+    if request.method == 'POST':
+        duration = request.POST.get('duration', '')
+        direction = request.POST.get('direction', '')
+        text = 'The ' + direction + ' call lasted ' + duration
+        Notification.objects.create(
+                    text=text, 
+                    customer=customer,
+                    date=timezone.now(),
+                    channel=Notification.CALL,
+                    sent_by=user.name
+                )
+        return JsonResponse({'message': 'Registro de llamada guardado exitosamente'})
+    
+    # Manejar otros métodos de solicitud si es necesario
+    return JsonResponse({'error': 'Solicitud no válida'}, status=400)
+   
 

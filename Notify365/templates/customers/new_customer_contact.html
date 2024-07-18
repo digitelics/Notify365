@@ -1,5 +1,5 @@
  <section class="hidden overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center" id="modal-contact">
-      <form action="#" method="POST" class="modal-position">
+      <form action={% url 'add-contact' %} method="POST" class="modal-position">
         {% csrf_token %}
           <div class="shadow sm:overflow-hidden sm:rounded-md">
             <div class="bg-white">
@@ -16,7 +16,7 @@
                   </button>
               </div>
       
-              <div class="mt-6 px-10 pb-5 grid grid-cols-4 gap-y-3 gap-x-6">
+              <div id="customer-contact-form-fields" class="mt-6 px-10 pb-5 grid grid-cols-4 gap-y-3 gap-x-6">
                   
                 <div class="col-span-4 sm:col-span-2">
                   <label for="first-name" class="block text-sm font-medium leading-6 text-gray-900">First name</label>
@@ -39,24 +39,30 @@
                 </div>
 
                   <div class="col-span-4 sm:col-span-2">
-                  <label for="gender" class="block text-sm font-medium leading-6 text-gray-900">Relationship</label>
-                  <select id="gender" name="gender" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                      <option>Offspring</option>
-                      <option>Wife</option>
-                      <option>Husband</option>
-                      <option>Mother</option>
-                      <option>Father</option>
-                      <option>Other</option>
-                      <option selected>Not specified</option>
+                  <label for="relationship" class="block text-sm font-medium leading-6 text-gray-900">Relationship</label>
+                  <select id="relationship" name="relationship" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                      <option value="Father">Father</option>
+                      <option value="Mother">Mother</option>
+                      <option value="Son">Son</option>
+                      <option value="Daughter">Daughter</option>
+                      <option value="Husband">Husband</option>
+                      <option value="Wife">Wife</option>
+                      <option value="Sibling">Sibling</option>
+                      <option value="Uncle">Uncle</option>
+                      <option value="Aunt">Aunt</option>
+                      <option value="Cousin">Cousin</option>
+                      <option value="Friend">Friend</option>
+                      <option value="Other">Other</option>
+                      <option value="" selected>Not specified</option>
                   </select>
                 </div>
 
                   <div class="col-span-4 sm:col-span-2">
                   <label for="gender" class="block text-sm font-medium leading-6 text-gray-900">Gender</label>
                   <select id="gender" name="gender" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                      <option>Male</option>
-                      <option>Female</option>
-                      <option selected>Not specified</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="" selected>Not specified</option>
                   </select>
                 </div>
                 <div class="my-4 col-span-4 sm:col-span-4 ">
@@ -69,6 +75,9 @@
                       </label>
                     </div>
                 </div>
+                {% if data.customer_id %}
+                    <input class="hidden" type="text" class="hidden" name="customerId" value= {{data.customer_id}} >
+                {% endif %}
                 <div id="address" class="hidden col-span-4 sm:col-span-4 ">
                   <div class="lg:col-start-3 lg:row-end-1">
                   <h2 class="sr-only">Address</h2>

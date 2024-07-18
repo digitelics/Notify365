@@ -8,6 +8,7 @@ from security.models import CustomUser as User
 class CustomerDocument(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     document = models.ForeignKey(RequiredDocument, on_delete=models.CASCADE, related_name='customer_documents')
+    description = models.TextField(blank=True, null=True)
     doc_path = models.FileField(upload_to='static/customer_documents/', blank=True, null=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='created_customer_documents')
     

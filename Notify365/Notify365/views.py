@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-from customers.views import client_view, customer_view
+from customers.views import client_view, customer_view, customer_service_view, note_view, document_view, contact_view
 from security.views import login_view, registration_view, user_view, account_view
 from settings.views import setting_view, company_view, security_view, notification_view, general_view, product_view
 from notifications.views import notify_view

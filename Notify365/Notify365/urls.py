@@ -23,6 +23,12 @@ urlpatterns = [
     #path('customers/edit/<int:id>', views.customer_view.customer, name='customer'),
     #path('customers/delete/<int:id>', views.customer_view.customer, name='customer'),
 
+    path('customers/deal/add', views.customer_service_view.add_deal_view, name='add-deal'),
+    path('customers/note/add', views.note_view.add_note_view, name='add-note'),
+    path('customers/contact/add', views.contact_view.add_contact_view, name='add-contact'),
+    path('customers/document/update', views.document_view.update_document_view, name='update-document'),
+
+
     path('notify/', views.notify_view.notify, name="notify"),
     path('calendar/', views.calendar_views.calendar, name='calendar'),
     path('calendar/today', views.calendar_views.day_calendar, name='day'),
@@ -42,7 +48,7 @@ urlpatterns = [
     path('setting/general_settings/product/edit/<int:id>', views.product_view.edit_product_view, name='product-edit'),
     path('setting/general_settings/product/remove/<int:id>', views.product_view.delete_product, name='product-remove'),
     
-    path('webcall/', views.call_view.home, name="webcall"),
+    path('save/log/call/', views.call_view.save_log_call, name="save_log_call"),
     path('token/', views.call_view.get_token, name="get-token"),
     path('webcall/handle_calls/', views.call_view.call, name="call"),
     path('sms/', views.notify_view.sms, name="sms"),

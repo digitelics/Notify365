@@ -18,8 +18,8 @@ class Customer(models.Model):
     FEMALE = 'female'
 
     GENDER_CHOICE =[
-        (MALE, 'male'),
-        (FEMALE, 'female'),
+        (MALE, 'Male'),
+        (FEMALE, 'Female'),
     ]
 
     first_name = models.CharField(max_length=255, blank=False)

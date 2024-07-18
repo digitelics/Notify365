@@ -1,3 +1,8 @@
+'''
+DEPRECATED DO NOT USE
+
+'''
+
 from django.db import models
 from simple_history.models import HistoricalRecords
 from customers.models import Customer  # Ajusta la importación según tu estructura de carpetas

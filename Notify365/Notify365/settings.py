@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from celery.schedules import crontab
+
 
 '''ASGI_APPLICATION = 'Notify365.asgi.application'
 
@@ -22,6 +24,7 @@ CHANNEL_LAYERS = {
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_URL = "http://localhost:8000/"
 
 
 # Quick-start development settings - unsuitable for production
@@ -34,6 +37,13 @@ SECRET_KEY = 'django-insecure-(#z#8w_izv%9gesuu=3_2--xiq02!!m&$e!yy$l4-akh#7l#m6
 DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '3a55-2601-586-c501-66f0-f566-c716-d89-c1.ngrok-free.app']
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
 
 
 # Application definition
@@ -57,6 +67,7 @@ INSTALLED_APPS = [
     'security',
     'webcall',
     'simple_history',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -173,3 +184,28 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 # Asegúrate de que Django actualice la sesión con cada solicitud
 SESSION_SAVE_EVERY_REQUEST = True
 
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  # o el broker que estés utilizando
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_BEAT_SCHEDULE = {
+    'send-birthday-notifications-everyday': {
+        'task': 'notification.tasks.send_birthday_notifications',
+        'schedule': crontab(hour=0, minute=0),  # Se ejecuta todos los días a la medianoche
+    },
+    'send-document-notifications-everyday': {
+        'task': 'notification.tasks.send_document_notifications',
+        'schedule': crontab(hour=0, minute=0),  # Se ejecuta todos los días a la medianoche
+    },
+    'send-expiry-notifications-everyday': {
+        'task': 'notification.tasks.send_expiry_notifications',
+        'schedule': crontab(hour=0, minute=0),  # Se ejecuta todos los días a la medianoche
+    },
+    'send-next-expiry-notifications-everyday': {
+        'task': 'notification.tasks.send_next_expiry_notifications',
+        'schedule': crontab(hour=0, minute=0),  # Se ejecuta todos los días a la medianoche
+    },
+    'send-expiry-tomorrow-notifications-everyday': {
+        'task': 'notification.tasks.send_expiry_tomorrow_notifications',
+        'schedule': crontab(hour=0, minute=0),  # Se ejecuta todos los días a la medianoche
+    },
+}

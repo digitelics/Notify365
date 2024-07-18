@@ -4,12 +4,14 @@ from django.contrib import messages
 from settings.models import State
 from django.urls import reverse
 from django.utils import timezone
-from settings.models import State
+from settings.models import State, Product
 from security.models import CustomUser as User
 from customers.models import Customer, CustomerService, Note, CustomerDocument, AdditionalContact
+from notifications.models import Notification
 from collections import defaultdict
 from django.http import JsonResponse
 from django.db.models import F
+from django.conf import settings
 
 
 
@@ -101,9 +103,15 @@ def customer_detail_view(request, customer_id):
         
         note_list = list(notes)
 
-        aditional_contact = AdditionalContact.objects.filter(customer=customer_id).annotate(contact_name=F('contact__first_name'), contact_last_name=F('contact__last_name'), contact_phone=F('contact__phone')).values('customer', 'contact_name', 'contact_last_name', 'contact_phone', 'relationship')
+        aditional_contact = AdditionalContact.objects.filter(customer=customer_id).annotate(contact_name=F('contact__first_name'), contact_last_name=F('contact__last_name'), contact_phone=F('contact__phone')).values('contact', 'customer', 'contact_name', 'contact_last_name', 'contact_phone', 'relationship')
        
-        documents = CustomerDocument.objects.filter(customer=customer_id).annotate(document_name=F('document__name'), created_by_name=F('created_by__name')).values('document_name', 'customer', 'doc_path', 'created_by_name', 'created_at')
+        documents = CustomerDocument.objects.filter(customer=customer_id).annotate(document_name=F('document__name'), created_by_name=F('created_by__name')).values('id','document_name', 'customer', 'doc_path', 'created_by_name', 'created_at', 'updated_at')
+       
+        notifications = Notification.objects.filter(customer=customer_id).values('customer', 'date', 'channel', 'text', 'sent_by').order_by('-date')
+        for notification in notifications:
+            notification['date'] = notification['date'].strftime('%b %d, %Y %I:%M%p').lower().replace('am', 'am').replace('pm', 'pm')
+
+        services = Product.objects.filter(suscription=request.user.suscription, deleted_at=None).values('name', 'id')
        
         data = {
             'first_name': customer.first_name,
@@ -122,7 +130,10 @@ def customer_detail_view(request, customer_id):
             'deals': deal_list,
             'notes': note_list,
             'documents': list(documents),
-            'contacts':list(aditional_contact)
+            'contacts':list(aditional_contact),
+            'notifications':list(notifications),
+            'services':list(services),
+            'base_url': settings.BASE_URL,
         }
         return JsonResponse(data)
     else:
@@ -130,7 +141,21 @@ def customer_detail_view(request, customer_id):
         customers = Customer.objects.filter(deleted_at=None, created_by__suscription=user_subscription).order_by('first_name')
         customer_count = customers.count()
         grouped_customers = defaultdict(list)
-        
+        aditional_contact = AdditionalContact.objects.filter(customer=customer_id).annotate(contact_name=F('contact__first_name'), contact_last_name=F('contact__last_name'), contact_phone=F('contact__phone')).values('contact', 'customer', 'contact_name', 'contact_last_name', 'contact_phone', 'relationship')
+
+
+        services = Product.objects.filter(suscription=request.user.suscription, deleted_at=None).values('name', 'id')
+
+        deals = CustomerService.objects.filter(customer=customer_id).annotate(product_name=F('product__name')).values(
+            'id', 'product_name', 'customer', 'code', 'activation_date', 'base_premium', 'created_by', 'activation_period', 'deactivation_date', 'product_status'
+        ).order_by('-created_at')
+
+        notes = Note.objects.filter(customer=customer_id).annotate(created_by_name=F('created_by__name')).values(
+            'id', 'note', 'date', 'created_by_name', 'created_at'
+        ).order_by('-date')
+
+        documents = CustomerDocument.objects.filter(customer=customer_id).annotate(document_name=F('document__name'), created_by_name=F('created_by__name')).values('id', 'document_name', 'customer', 'doc_path', 'created_by_name', 'created_at', 'updated_at')
+
         for customer_item in sorted(customers, key=lambda x: x.first_name):
             first_letter = customer_item.first_name[0].upper()
             grouped_customers[first_letter].append(customer_item)
@@ -142,5 +167,12 @@ def customer_detail_view(request, customer_id):
             'grouped_customers': dict(grouped_customers),
             'customer_count': customer_count,
             'customer_created': customer,
+            'deals':deals,
+            'notes':notes,
+            'documents': documents,
+            'services':list(services),
+            'base_url': settings.BASE_URL,
+            'contacts' : aditional_contact,
+            'customer_id':customer_id,
         }
         return render(request, 'customers/customer_template.html', {'data':context})
