@@ -99,7 +99,6 @@ def sms_reply(request):
     from_number = request.POST.get('From')
     customer = Customer.objects.filter(phone=from_number).first()
     body = request.POST.get('Body')
-
     notification = Notification(
         text=body, 
         customer=customer,
@@ -109,5 +108,6 @@ def sms_reply(request):
     )
     notification.save()
  
-    #response = MessagingResponse()
-    #response.message("Gracias por tu mensaje. Pronto te responderemos.")
+    response = MessagingResponse()
+    response.message("Gracias por tu mensaje. Pronto te responderemos.")
+    return HttpResponse(str(response), content_type='text/xml')

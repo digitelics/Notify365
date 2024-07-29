@@ -59,6 +59,8 @@ def add_customer_view(request):
         state = get_object_or_404(State, pk=state_id)
 
         if first_name and last_name and phone:
+            if not phone.startswith('+1'):
+                phone = '+1' + phone.lstrip('0')
             # Creating the customer
             customer = Customer.objects.create(
                 first_name=first_name,
