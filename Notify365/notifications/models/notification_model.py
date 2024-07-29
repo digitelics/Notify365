@@ -5,10 +5,12 @@ class Notification(models.Model):
     EMAIL = 'email'
     TEXT = 'text'
     CALL = 'call'
+    REPLY = 'reply'
     CHANNEL_CHOICES = [
         (EMAIL, 'Email'),
         (TEXT, 'Text'),
-        (CALL, 'Call')
+        (CALL, 'Call'),
+        (REPLY, 'Reply'),
     ]
 
     template = models.ForeignKey('Template', on_delete=models.SET_NULL, null=True, blank=True, related_name='notifications')

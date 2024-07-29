@@ -1,5 +1,5 @@
  <section class="hidden overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center" id="modal-text">
-      <form action="#" method="POST" class="modal-position">
+      <form action={% url 'customer-send-text' %} method="POST" class="modal-position">
       {% csrf_token %}
         <div class="shadow sm:overflow-hidden sm:rounded-md">
           <div class="bg-white">
@@ -16,10 +16,10 @@
                 </button>
             </div>
 
-            <div class="mt-6 px-10 pb-5 grid grid-cols-4 gap-y-3 gap-x-6">
+            <div id="customer-new-text-message" class="mt-6 px-10 pb-5 grid grid-cols-4 gap-y-3 gap-x-6">
               <div class="col-span-4 sm:col-span-2">
                 <label for="to" class="block text-sm font-medium leading-6 text-gray-900">To</label>
-                <input type="text" name="to" id="to" autocomplete="cc-given-name" class="mt-2 block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6" readonly>
+                <input type="text" name="to" id="sms-to" value="" autocomplete="cc-given-name" class="mt-2 block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6" readonly>
               </div>
 
               <div class="col-span-4 sm:col-span-4">

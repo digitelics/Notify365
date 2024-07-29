@@ -3,10 +3,10 @@ from django.shortcuts import render
 from twilio.jwt.access_token import AccessToken
 from twilio.jwt.access_token.grants import VoiceGrant
 from twilio.twiml.voice_response import VoiceResponse, Dial
+from twilio.twiml.messaging_response import MessagingResponse
 
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpResponse
-import jwt
 
 from notifications.models import Notification
 from customers.models import Customer
@@ -14,7 +14,6 @@ from django.utils import timezone
 
 #from dotenv import load_dotenv
 import os
-import pprint as p
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -95,3 +94,20 @@ def save_log_call(request):
     return JsonResponse({'error': 'Solicitud no válida'}, status=400)
    
 
+def sms_reply(request):
+    # Obtén el mensaje entrante y el número de teléfono
+    from_number = request.POST.get('From')
+    customer = Customer.filter(phone=from_number).first()
+    body = request.POST.get('Body')
+
+    notification = Notification(
+        text=body, 
+        customer=customer,
+        date=timezone.now(),
+        channel=Notification.REPLY,
+        sent_by="Customer Message"
+    )
+    notification.save()
+ 
+    #response = MessagingResponse()
+    #response.message("Gracias por tu mensaje. Pronto te responderemos.")

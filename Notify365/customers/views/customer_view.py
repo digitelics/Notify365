@@ -161,6 +161,11 @@ def customer_detail_view(request, customer_id):
             grouped_customers[first_letter].append(customer_item)
         
         states = State.objects.all() 
+
+        notifications = Notification.objects.filter(customer=customer_id).values('customer', 'date', 'channel', 'text', 'sent_by').order_by('-date')
+        for notification in notifications:
+            notification['date'] = notification['date'].strftime('%b %d, %Y %I:%M%p').lower().replace('am', 'am').replace('pm', 'pm')
+
     
         context = {
             'states':states,
@@ -174,5 +179,6 @@ def customer_detail_view(request, customer_id):
             'base_url': settings.BASE_URL,
             'contacts' : aditional_contact,
             'customer_id':customer_id,
+            'notifications':list(notifications),
         }
         return render(request, 'customers/customer_template.html', {'data':context})

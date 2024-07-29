@@ -27,6 +27,8 @@ urlpatterns = [
     path('customers/note/add', views.note_view.add_note_view, name='add-note'),
     path('customers/contact/add', views.contact_view.add_contact_view, name='add-contact'),
     path('customers/document/update', views.document_view.update_document_view, name='update-document'),
+    path('customers/send/text/', views.customer_send_text_message_view.customer_send_message, name='customer-send-text'),
+
 
 
     path('notify/', views.notify_view.notify, name="notify"),
@@ -49,8 +51,12 @@ urlpatterns = [
     path('setting/general_settings/product/remove/<int:id>', views.product_view.delete_product, name='product-remove'),
     
     path('save/log/call/', views.call_view.save_log_call, name="save_log_call"),
+    
+    # URLS CORRESPONDIENTES A LOS ENDPOINT 
     path('token/', views.call_view.get_token, name="get-token"),
     path('webcall/handle_calls/', views.call_view.call, name="call"),
+    path('webcall/reply/text/', views.call_view.sms_reply, name='sms-reply'),
+    
     path('sms/', views.notify_view.sms, name="sms"),
     path('login=fail/', views.login_view.my_login_view, name="my_login_view"),
     path('logout/', views.login_view.logout_view, name="logout"),
