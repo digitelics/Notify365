@@ -55,7 +55,7 @@ urlpatterns = [
     # URLS CORRESPONDIENTES A LOS ENDPOINT 
     path('token/', views.call_view.get_token, name="get-token"),
     path('webcall/handle_calls/', views.call_view.call, name="call"),
-    path('webcall/reply/text/', views.call_view.sms_reply, name='sms-reply'),
+    path('webcall/sms/reply/', views.call_view.sms_reply, name='sms-reply'),
     
     path('sms/', views.notify_view.sms, name="sms"),
     path('login=fail/', views.login_view.my_login_view, name="my_login_view"),
