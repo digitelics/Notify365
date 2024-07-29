@@ -93,7 +93,7 @@ def save_log_call(request):
     # Manejar otros métodos de solicitud si es necesario
     return JsonResponse({'error': 'Solicitud no válida'}, status=400)
    
-
+@csrf_exempt
 def sms_reply(request):
     # Obtén el mensaje entrante y el número de teléfono
     from_number = request.POST.get('From')
