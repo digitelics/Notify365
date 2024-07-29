@@ -97,7 +97,7 @@ def save_log_call(request):
 def sms_reply(request):
     # Obtén el mensaje entrante y el número de teléfono
     from_number = request.POST.get('From')
-    customer = Customer.filter(phone=from_number).first()
+    customer = Customer.objects.filter(phone=from_number).first()
     body = request.POST.get('Body')
 
     notification = Notification(
