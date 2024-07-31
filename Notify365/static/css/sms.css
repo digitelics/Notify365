@@ -401,3 +401,7 @@ body {
 .message-time {
    font-size: 12px; 
 }
+
+.chat-container {
+    height: inherit;
+}

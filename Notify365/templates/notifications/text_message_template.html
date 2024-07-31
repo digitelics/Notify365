@@ -18,7 +18,7 @@
             </div>
             <ul class="people">
                 {% for customer in customers %}
-                    <li class="person {% if customer.id == selected_customer_id %}active{% endif %}" data-chat="person{{ forloop.counter }}" data-id="{{ customer.id }}">
+                     <li class="person {% if customer.id == selected_customer_id %}active{% endif %}" data-chat="person{{ forloop.counter }}" data-id="{{ customer.id }}">
                         <img src="{% static 'images/user-circle-icon.png' %}" alt="" />
                         <span class="name">{{ customer.first_name }} {{ customer.last_name }}</span>
                         <span class="time">
@@ -37,21 +37,23 @@
         </div>
         <div class="right">
             <div class="top"><span>To: <span class="name"></span></span></div>
-            {% for customer in customers %}
-                <div class="chat {% if customer.id == selected_customer_id %}active-chat{% endif %}" data-chat="person{{ forloop.counter }}" {% if customer.id == selected_customer_id %}style="display: flex;"{% else %}style="display: none;"{% endif %}>
-                    <div class="conversation-start">
-                        {% if customer.notifications_list %}
-                            <span>{{ customer.notifications_list.first.date|date:"m/d/Y" }}</span>
-                        {% endif %}
-                    </div>
-                    {% for notification in customer.notifications_list %}
-                        <div class="bubble {% if notification.sent_by == "Customer Message" %}you{% else %}me{% endif %}">
-                            {{ notification.text }}
-                            <div class="message-time">{{ notification.date|date:"m/d/Y H:i A" }}</div>
+            <div class="chat-container">
+                {% for customer in customers %}
+                    <div class="chat {% if customer.id == selected_customer_id %}active-chat{% endif %}" data-chat="person{{ forloop.counter }}">
+                        <div class="conversation-start">
+                            {% if customer.notifications_list %}
+                                <span>{{ customer.notifications_list.first.date|date:"m/d/Y" }}</span>
+                            {% endif %}
                         </div>
-                    {% endfor %}
-                </div>
-            {% endfor %}
+                        {% for notification in customer.notifications_list %}
+                            <div class="bubble {% if notification.sent_by == "Customer Message" %}you{% else %}me{% endif %}">
+                                {{ notification.text }}
+                                <div class="message-time">{{ notification.date|date:"m/d/Y H:i A" }}</div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
             <form id="send-message-form" action="{% url 'send-chat' %}" method="POST"> 
                 {% csrf_token %}
                 <input type="hidden" id="customer-id" name="customer-id" value="">
@@ -69,5 +71,6 @@
 </div>
 {% endblock %}
 {% block script %}
+    <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="{% static 'js/sms.js' %}"></script>
 {% endblock script %}
