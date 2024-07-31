@@ -48,10 +48,6 @@ def send_message_chat(request):
             customer = Customer.objects.get(pk=customerId)
             if attach:
                 url = settings.BASE_URL +  "static/files/notification_attach/" + attach.name
-                status = send_text_notification.send_sms(customer.phone, message, url)
-            else:
-                status = send_text_notification.send_sms(customer.phone, message)
-            if status:
                 notification = Notification(
                     customer = customer,
                     channel = Notification.TEXT,
@@ -61,6 +57,20 @@ def send_message_chat(request):
                     attach = attach
                 )
                 notification.save()
+                print(url)
+                status = send_text_notification.send_sms(customer.phone, message, url)
+            else:
+                status = send_text_notification.send_sms(customer.phone, message)
+                notification = Notification(
+                    customer = customer,
+                    channel = Notification.TEXT,
+                    date = timezone.now(),
+                    sent_by = request.user,
+                    text = message,
+                    attach = attach
+                )
+                notification.save()
+            if status:
                 messages.add_message(request, messages.SUCCESS, 'Message sent successfully.', extra_tags='Message_sent success')
                 return redirect(reverse('sms_detail', args=[customerId] ))
             else:
