@@ -19,6 +19,8 @@ class Notification(models.Model):
     channel = models.CharField(max_length=5, choices=CHANNEL_CHOICES)
     text = models.TextField()
     sent_by = models.TextField(default='Automatic notification')
+    read = models.BooleanField(default=True)
+    attach = models.FileField(upload_to='static/files/notification_attach/', blank=True, null=True)
 
     def __str__(self):
         notification_message = f'Notification: '

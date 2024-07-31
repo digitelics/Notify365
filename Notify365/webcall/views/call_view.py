@@ -104,7 +104,8 @@ def sms_reply(request):
         customer=customer,
         date=timezone.now(),
         channel=Notification.REPLY,
-        sent_by="Customer Message"
+        sent_by="Customer Message",
+        read = False,
     )
     notification.save()
  

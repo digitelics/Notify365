@@ -1,11 +1,10 @@
 {% extends "layouts/base.html" %}
 {% load static %}
- {% block css %}  
-  <link rel="stylesheet" href={% static 'css/sms.css' %}>
- {% endblock css %}
+{% block css %}
+  <link rel="stylesheet" href="{% static 'css/sms.css' %}">
+{% endblock css %}
 {% block title %}Notifications{% endblock %}
 {% block content %}
-
 <div class="wrapper">
     <div class="container">
         <div class="left overflow-auto">
@@ -16,168 +15,59 @@
                         <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clip-rule="evenodd" />
                     </svg>
                 </a>
-                 <a href="javascript:;" class="search bg-purple-600 text-center hover:bg-purple-500 text-webkit-center pt-2 pl-2">
-                    <svg viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-white">
-                         <path fill-rule="evenodd" d="M5.337 21.718a6.707 6.707 0 0 1-.533-.074.75.75 0 0 1-.44-1.223 3.73 3.73 0 0 0 .814-1.686c.023-.115-.022-.317-.254-.543C3.274 16.587 2.25 14.41 2.25 12c0-5.03 4.428-9 9.75-9s9.75 3.97 9.75 9c0 5.03-4.428 9-9.75 9-.833 0-1.643-.097-2.417-.279a6.721 6.721 0 0 1-4.246.997Z" clip-rule="evenodd" />
-                    </svg>
-                </a>
             </div>
             <ul class="people">
-                 {% for i in "x"|rjust:15 %}
-                    <li class="person" data-chat="person{{ forloop.counter }}">
-                    <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/382994/thomas.jpg" alt="" />
-                    <span class="name">Thomas Bangalter</span>
-                    <span class="time">2:09 PM</span>
-                    <span class="preview">I was wondering...</span>
+                {% for customer in customers %}
+                    <li class="person {% if customer.id == selected_customer_id %}active{% endif %}" data-chat="person{{ forloop.counter }}" data-id="{{ customer.id }}">
+                        <img src="{% static 'images/user-circle-icon.png' %}" alt="" />
+                        <span class="name">{{ customer.first_name }} {{ customer.last_name }}</span>
+                        <span class="time">
+                            {% if customer.notifications_list %}
+                                {{ customer.notifications_list.last.date|date:"H:i A" }}
+                            {% endif %}
+                        </span>
+                        <span class="preview">
+                            {% if customer.notifications_list %}
+                                {{ customer.notifications_list.last.text }}
+                            {% endif %}
+                        </span>
                     </li>
                 {% endfor %}
             </ul>
         </div>
         <div class="right">
-            <div class="top"><span>To: <span class="name">Dog Woofson</span></span></div>
-            <div class="chat" data-chat="person1">
-                <div class="conversation-start">
-                    <span>Today, 6:48 AM</span>
+            <div class="top"><span>To: <span class="name"></span></span></div>
+            {% for customer in customers %}
+                <div class="chat {% if customer.id == selected_customer_id %}active-chat{% endif %}" data-chat="person{{ forloop.counter }}" {% if customer.id == selected_customer_id %}style="display: flex;"{% else %}style="display: none;"{% endif %}>
+                    <div class="conversation-start">
+                        {% if customer.notifications_list %}
+                            <span>{{ customer.notifications_list.first.date|date:"m/d/Y" }}</span>
+                        {% endif %}
+                    </div>
+                    {% for notification in customer.notifications_list %}
+                        <div class="bubble {% if notification.sent_by == "Customer Message" %}you{% else %}me{% endif %}">
+                            {{ notification.text }}
+                            <div class="message-time">{{ notification.date|date:"m/d/Y H:i A" }}</div>
+                        </div>
+                    {% endfor %}
                 </div>
-                <div class="bubble you">
-                    Hello,
+            {% endfor %}
+            <form id="send-message-form" action="{% url 'send-chat' %}" method="POST"> 
+                {% csrf_token %}
+                <input type="hidden" id="customer-id" name="customer-id" value="">
+                <div class="write">
+                     <label for="dropzone-file" class="write-link attach cursor-pointer">
+                        <input id="dropzone-file" name="document-file" type="file" class="hidden" />
+                        <span id="file-name" class="ml-2"></span>
+                    </label>
+                    <input type="text" id="message-text" name="message-text" placeholder="Write your message...">
+                    <button type="submit" class="write-link send">Send</button>
                 </div>
-                <div class="bubble you">
-                    it's me.
-                </div>
-                <div class="bubble you">
-                    I was wondering...
-                </div>
-            </div>
-            <div class="chat" data-chat="person2">
-                <div class="conversation-start">
-                    <span>Today, 5:38 PM</span>
-                </div>
-                <div class="bubble you">
-                    Hello, can you hear me?
-                </div>
-                <div class="bubble you">
-                    I'm in California dreaming
-                </div>
-                <div class="bubble me">
-                    ... about who we used to be.
-                </div>
-                <div class="bubble me">
-                    Are you serious?
-                </div>
-                <div class="bubble you">
-                    When we were younger and free...
-                </div>
-                <div class="bubble you">
-                    I've forgotten how it felt before
-                </div>
-            </div>
-            <div class="chat" data-chat="person3">
-                <div class="conversation-start">
-                    <span>Today, 3:38 AM</span>
-                </div>
-                <div class="bubble you">
-                    Hey human!
-                </div>
-                <div class="bubble you">
-                    Umm... Someone took a shit in the hallway.
-                </div>
-                <div class="bubble me">
-                    ... what.
-                </div>
-                <div class="bubble me">
-                    Are you serious?
-                </div>
-                <div class="bubble you">
-                    I mean...
-                </div>
-                <div class="bubble you">
-                    It’s not that bad...
-                </div>
-                <div class="bubble you">
-                    But we’re probably gonna need a new carpet.
-                </div>
-            </div>
-            <div class="chat" data-chat="person4">
-                <div class="conversation-start">
-                    <span>Yesterday, 4:20 PM</span>
-                </div>
-                <div class="bubble me">
-                    Hey human!
-                </div>
-                <div class="bubble me">
-                    Umm... Someone took a shit in the hallway.
-                </div>
-                <div class="bubble you">
-                    ... what.
-                </div>
-                <div class="bubble you">
-                    Are you serious?
-                </div>
-                <div class="bubble me">
-                    I mean...
-                </div>
-                <div class="bubble me">
-                    It’s not that bad...
-                </div>
-            </div>
-            <div class="chat" data-chat="person5">
-                <div class="conversation-start">
-                    <span>Today, 6:28 AM</span>
-                </div>
-                <div class="bubble you">
-                    Wasup
-                </div>
-                <div class="bubble you">
-                    Wasup
-                </div>
-                <div class="bubble you">
-                    Wasup for the third time like is <br />you blind bitch
-                </div>
-
-            </div>
-            <div class="chat" data-chat="person6">
-                <div class="conversation-start">
-                    <span>Monday, 1:27 PM</span>
-                </div>
-                <div class="bubble you">
-                    So, how's your new phone?
-                </div>
-                <div class="bubble you">
-                    You finally have a smartphone :D
-                </div>
-                <div class="bubble me">
-                    Drake?
-                </div>
-                <div class="bubble me">
-                    Why aren't you answering?
-                </div>
-                <div class="bubble you">
-                    howdoyoudoaspace
-                </div>
-            </div>
-            <div class="write">
-                <a href="javascript:;" class="write-link attach"></a>
-                <input type="text" />
-                <a href="javascript:;" class="write-link smiley"></a>
-                <a href="javascript:;" class="write-link send"></a>
-            </div>
+            </form>
         </div>
     </div>
 </div>
-
 {% endblock %}
 {% block script %}
-    <script type="text/javascript" src={% static 'js/sms.js' %}></script>
-    <script>
-        window.addEventListener("load", (event) => {
-            const menulinks = document.getElementsByClassName("sms"); 
-            
-            for (i = 0; i < menulinks.length; i++) {
-                    menulinks[i].className += " main-menu-selected";
-                }
-            // event.currentTarget.className += " tab-selected";
-        
-        });
-    </script>
+    <script type="text/javascript" src="{% static 'js/sms.js' %}"></script>
 {% endblock script %}

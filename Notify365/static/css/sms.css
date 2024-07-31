@@ -86,7 +86,7 @@ body {
         }
         input {
             float: left;
-            width: 235px;
+            width: 85%;
             height: 42px;
             padding: 0 15px;
             border: 1px solid var(--light);
@@ -202,16 +202,14 @@ body {
         .chat {
             position: relative;
             display: none;
-            overflow: hidden;
             padding: 0 35px 92px;
             border-width: 1px 1px 1px 0;
             border-style: solid;
             border-color: var(--light);
             height: calc(100% - 48px);
-            justify-content: flex-end;
-            flex-direction: column;
+            overflow-y: auto;
+            flex-direction: column-reverse;
             &.active-chat {
-                display: block;
                 display: flex;
                 .bubble {
                     transition-timing-function: cubic-bezier(.4,-.04, 1, 1);
@@ -236,7 +234,7 @@ body {
             input {
                 font-size: 16px;
                 float: left;
-                width: 347px;
+                width: 85%;
                 height: 40px;
                 padding: 0 10px;
                 color: var(--dark);
@@ -302,6 +300,12 @@ body {
                 height: 6px;
                 content: '\00a0';
                 transform: rotate(29deg) skew(-35deg);
+            }
+            .timestamp {
+                display: block;
+                font-size: 12px;
+                color: var(--grey);
+                margin-top: 5px;
             }
             &.you {
                 float: left;
@@ -393,4 +397,7 @@ body {
         margin-right: 0;
         opacity: 1;
     }
+}
+.message-time {
+   font-size: 12px; 
 }
