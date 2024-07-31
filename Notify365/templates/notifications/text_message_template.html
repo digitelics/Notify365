@@ -54,7 +54,7 @@
                     </div>
                 {% endfor %}
             </div>
-            <form id="send-message-form" action="{% url 'send-chat' %}" method="POST"> 
+            <form id="send-message-form" action="{% url 'send-chat' %}" method="POST" enctype="multipart/form-data"> 
                 {% csrf_token %}
                 <input type="hidden" id="customer-id" name="customer-id" value="">
                 <div class="write">

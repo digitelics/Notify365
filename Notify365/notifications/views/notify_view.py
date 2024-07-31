@@ -43,13 +43,11 @@ def send_message_chat(request):
     if request.method == 'POST':
         customerId = request.POST.get('customer-id')
         message = request.POST.get('message-text')
-        attach = request.POST.get('document-file')
-
+        attach = request.FILES.get('document-file')
         if customerId and message:
             customer = Customer.objects.get(pk=customerId)
             if attach:
-                url = settings.BASE_URL +  "static/files/notification_attach/" + attach
-                print(url) 
+                url = settings.BASE_URL +  "static/files/notification_attach/" + attach.name
                 status = send_text_notification.send_sms(customer.phone, message, url)
             else:
                 status = send_text_notification.send_sms(customer.phone, message)
