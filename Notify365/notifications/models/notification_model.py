@@ -35,5 +35,4 @@ class Notification(models.Model):
     
     def extension(self):
         name, extension = os.path.splitext(self.attach.name)
-        print('paso por aqui')
         return extension
