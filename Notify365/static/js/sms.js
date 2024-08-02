@@ -50,8 +50,32 @@ document.addEventListener('DOMContentLoaded', function() {
           return;
       }
 
-      // If everything is OK, submit the form
-      this.submit();
+      // If everything is OK, submit the form via AJAX
+      let formData = new FormData(this);
+      $.ajax({
+          url: this.action,
+          type: this.method,
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function(response) {
+              // Clear the input field and file input
+              document.getElementById('message-text').value = '';
+              document.getElementById('dropzone-file').value = '';
+              document.getElementById('file-name').textContent = '';
+
+              // Update the chat messages
+              let chatContainer = document.querySelector('.chat-container');
+              let activeChat = chatContainer.querySelector('.active-chat');
+              activeChat.innerHTML = response.html;
+
+              // Scroll to the bottom of the chat container
+              scrollToBottom();
+          },
+          error: function(xhr, status, error) {
+              console.error('Message send failed:', error);
+          }
+      });
   });
 
   // Display the name of the selected file
@@ -59,4 +83,11 @@ document.addEventListener('DOMContentLoaded', function() {
       var fileName = this.files[0] ? this.files[0].name : '';
       document.getElementById('file-name').textContent = fileName;
   });
+
+  function scrollToBottom() {
+      let activeChat = document.querySelector('.chat-container .active-chat');
+      if (activeChat) {
+          activeChat.scrollTop = activeChat.scrollHeight;
+      }
+  }
 });

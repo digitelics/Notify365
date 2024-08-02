@@ -1,5 +1,6 @@
 from django.db import models
 from customers.models import Customer
+import os
 
 class Notification(models.Model):
     EMAIL = 'email'
@@ -31,3 +32,8 @@ class Notification(models.Model):
         notification_message += f'{self.customer} on {self.date.strftime("%m-%d-%Y")} via {self.channel}'
 
         return notification_message
+    
+    def extension(self):
+        name, extension = os.path.splitext(self.attach.name)
+        print('paso por aqui')
+        return extension

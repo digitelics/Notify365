@@ -1,0 +1,30 @@
+{% load static %}
+
+<div class="conversation-start">
+    {% if customer.notifications_list %}
+        <span>{{ customer.notifications_list.first.date|date:"m/d/Y" }}</span>
+    {% endif %}
+</div>
+{% for notification in customer.notifications_list %}
+    <div class="bubble {% if notification.sent_by == "Customer Message" %}you{% else %}me{% endif %}">
+        {% if notification.attach %}
+            {% if notification.extension == '.jpg' or notification.extension  == '.jpeg' or notification.extension == '.png' or notification.extension == '.gif' %}
+                <a style="text-align: -webkit-center;" href={{ notification.attach.url }} target="_BLANK"><img class="w-full max-w-64" src="{{ notification.attach.url }}" alt="customer"></a>
+                <p class="text-xs pb-5 text-center">{{ notification.file_name }}</p>
+            {% elif notification.extension == '.pdf' %}
+                <a style="text-align: -webkit-center;" href={{ notification.attach.url }} target="_BLANK"><img class="w-full max-w-64" src="{% static 'images/pdf-file-icon.png' %}" alt="customer"></a>
+                <p class="text-xs pb-5 text-center">{{ notification.file_name }}</p>
+            {% elif notification.extension == '.doc' or notification.extension == '.docx' %}
+                <a style="text-align: -webkit-center;" href={{ notification.attach.url }} target="_BLANK"><img class="w-full max-w-64" src="{% static 'images/microsoft-word-icon.png' %}" alt="customer"></a>
+                <p class="text-xs pb-5 text-center">{{ notification.file_name }}</p>
+            {% else %}
+                <a style="text-align: -webkit-center;" href={{ notification.attach.url }} target="_BLANK"><img class="w-full max-w-64" src="{% static 'images/default-file.png' %}" alt="customer"></a>
+                <p class="text-xs pb-5 text-center">{{ notification.file_name }}</p>
+            {% endif %}
+            {{ notification.text }}
+        {% else %}
+            {{ notification.text }}
+        {% endif %}
+        <div class="message-time">{{ notification.date|date:"m/d/Y H:i A" }}</div>
+    </div>
+{% endfor %}

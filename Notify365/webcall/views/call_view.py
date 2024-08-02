@@ -4,6 +4,8 @@ from twilio.jwt.access_token import AccessToken
 from twilio.jwt.access_token.grants import VoiceGrant
 from twilio.twiml.voice_response import VoiceResponse, Dial
 from twilio.twiml.messaging_response import MessagingResponse
+from django.core.files.base import ContentFile
+import requests
 
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpResponse
@@ -93,22 +95,51 @@ def save_log_call(request):
     # Manejar otros métodos de solicitud si es necesario
     return JsonResponse({'error': 'Solicitud no válida'}, status=400)
    
-@csrf_exempt
 def sms_reply(request):
-    # Obtén el mensaje entrante y el número de teléfono
     from_number = request.POST.get('From')
     customer = Customer.objects.filter(phone=from_number).first()
     body = request.POST.get('Body')
+    
+    # Crear la notificación inicial sin el archivo adjunto
     notification = Notification(
-        text=body, 
+        text=body,
         customer=customer,
         date=timezone.now(),
         channel=Notification.REPLY,
         sent_by="Customer Message",
-        read = False,
+        read=False,
     )
     notification.save()
- 
+    
+    # Procesar archivos adjuntos
+    num_media = int(request.POST.get('NumMedia', 0))
+    for i in range(num_media):
+        media_url = request.POST.get(f'MediaUrl{i}')
+        media_content_type = request.POST.get(f'MediaContentType{i}')
+        
+        # Descargar el archivo adjunto
+        response = requests.get(media_url)
+        if response.status_code == 200:
+            file_name = media_url.split('/')[-1]
+            content_file = ContentFile(response.content)
+
+            if i == 0:
+                # Adjuntar el primer archivo a la notificación inicial
+                notification.attach.save(file_name, content_file)
+            else:
+                # Crear nuevas notificaciones para los archivos adicionales
+                additional_notification = Notification(
+                    text="Attached file",
+                    customer=customer,
+                    date=timezone.now(),
+                    channel=Notification.REPLY,
+                    sent_by="Customer Message",
+                    read=False,
+                )
+                additional_notification.attach.save(file_name, content_file)
+                additional_notification.save()
+
+    # Responder al mensaje
     response = MessagingResponse()
     response.message("Gracias por tu mensaje. Pronto te responderemos.")
     return HttpResponse(str(response), content_type='text/xml')

@@ -29,6 +29,7 @@ urlpatterns = [
     path('customers/document/update', views.document_view.update_document_view, name='update-document'),
     path('customers/send/text/', views.customer_send_text_message_view.customer_send_message, name='customer-send-text'),
     path('sms/send/chat/', views.notify_view.send_message_chat, name='send-chat'),
+    path('sms/<int:customer_id>/messages/', views.notify_view.load_messages, name='load-messages'),
 
     path('notify/', views.notify_view.notify, name="notify"),
     path('calendar/', views.calendar_views.calendar, name='calendar'),
@@ -58,6 +59,8 @@ urlpatterns = [
     
     path('sms/', views.notify_view.sms, name="sms"),
     path('sms/<int:customer_id>/', views.notify_view.sms, name='sms_detail'),
+    #path('notifications/get_notifications/<int:customer_id>/', views.notify_view.get_notifications, name='get_customer_messages'),
+
     path('login=fail/', views.login_view.my_login_view, name="my_login_view"),
     path('logout/', views.login_view.logout_view, name="logout"),
     path('setting/users/', views.user_view.UserListView.as_view(), name="users"),

@@ -37,20 +37,10 @@
         </div>
         <div class="right">
             <div class="top"><span>To: <span class="name"></span></span></div>
-            <div class="chat-container">
+            <div class="chat-container" id="chat-container">
                 {% for customer in customers %}
                     <div class="chat {% if customer.id == selected_customer_id %}active-chat{% endif %}" data-chat="person{{ forloop.counter }}">
-                        <div class="conversation-start">
-                            {% if customer.notifications_list %}
-                                <span>{{ customer.notifications_list.first.date|date:"m/d/Y" }}</span>
-                            {% endif %}
-                        </div>
-                        {% for notification in customer.notifications_list %}
-                            <div class="bubble {% if notification.sent_by == "Customer Message" %}you{% else %}me{% endif %}">
-                                {{ notification.text }}
-                                <div class="message-time">{{ notification.date|date:"m/d/Y H:i A" }}</div>
-                            </div>
-                        {% endfor %}
+                        {% include 'notifications/notification_list.html' with customer=customer %}
                     </div>
                 {% endfor %}
             </div>
@@ -58,12 +48,12 @@
                 {% csrf_token %}
                 <input type="hidden" id="customer-id" name="customer-id" value="">
                 <div class="write">
-                     <label for="dropzone-file" class="write-link attach cursor-pointer">
+                    <label for="dropzone-file" class="write-link attach cursor-pointer">
                         <input id="dropzone-file" name="document-file" type="file" class="hidden" />
                         <span id="file-name" class="ml-2"></span>
                     </label>
-                    <input type="text" id="message-text" name="message-text" placeholder="Write your message...">
-                    <button type="submit" class="write-link send">Send</button>
+                    <input type="text" id="message-text" name="message-text" placeholder="Write your message..." class="message-input">
+                    <button type="submit" class="write-link send"></button>
                 </div>
             </form>
         </div>

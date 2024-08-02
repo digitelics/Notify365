@@ -403,5 +403,25 @@ body {
 }
 
 .chat-container {
-    height: inherit;
+    overflow: auto;
+    height: 100%;
+}
+
+.write {
+    display: flex;
+    align-items: center;
+}
+
+.write .attach {
+    display: flex;
+    align-items: center;
+}
+
+.write .message-input {
+    flex: 1;
+    margin-left: 10px;
+}
+
+.write .send {
+    margin-left: 10px;
 }
