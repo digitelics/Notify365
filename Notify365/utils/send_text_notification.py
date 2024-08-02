@@ -15,9 +15,8 @@ def send_sms(to, message, media_urls=None):
             'to': to
         }
         if media_urls:
-            url = settings.BASE_URL + settings.STATIC_URL + "files/notification_attach" + media_urls 
-            print(url)
-            message_params['media_url'] = url
+            print(media_urls)
+            message_params['media_url'] = media_urls
         
         message = client.messages.create(**message_params)
         return message.sid
