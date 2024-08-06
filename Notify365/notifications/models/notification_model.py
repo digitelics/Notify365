@@ -21,7 +21,7 @@ class Notification(models.Model):
     text = models.TextField()
     sent_by = models.TextField(default='Automatic notification')
     read = models.BooleanField(default=True)
-    attach = models.FileField(upload_to='static/filesfiles/notification_attach/', blank=True, null=True)
+    attach = models.FileField(upload_to='staticfiles/files/notification_attach/', blank=True, null=True)
 
     def __str__(self):
         notification_message = f'Notification: '
