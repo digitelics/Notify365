@@ -13,6 +13,8 @@ from django.http import JsonResponse, HttpResponse
 from notifications.models import Notification
 from customers.models import Customer
 from django.utils import timezone
+from mimetypes import guess_extension
+
 
 #from dotenv import load_dotenv
 import os
@@ -124,10 +126,10 @@ def sms_reply(request):
         # Descargar el archivo adjunto
         response = requests.get(media_url, auth=(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN))
         if response.status_code == 200:
-            file_name = media_url.split('/')[-1]
+            extension = guess_extension(media_content_type)
+            file_name = f"{media_url.split('/')[-1]}{extension}"
             print("File name: "+file_name)
             content_file = ContentFile(response.content)
-            print("Content File: "+str(content_file))
 
             if i == 0:
                 # Adjuntar el primer archivo a la notificación inicial
