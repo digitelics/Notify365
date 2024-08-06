@@ -45,10 +45,22 @@ document.addEventListener('DOMContentLoaded', function() {
       e.preventDefault(); // Prevent the default form submission
 
       var messageText = document.getElementById('message-text').value;
-      if (messageText.trim() === '') {
-          alert('Please enter a message');
-          return;
-      }
+        var fileInput = document.getElementById('dropzone-file');
+        var errorMessage = document.getElementById('error-message');
+        var file = fileInput.files[0];
+
+        if (file && file.size > 2 * 1024 * 1024) { // 2 MB limit
+            errorMessage.textContent = 'Attached file size should not exceed 2 MB';
+            errorMessage.style.display = 'block';
+            return;
+        } else {
+            errorMessage.style.display = 'none';
+        }
+
+        if (messageText.trim() === '') {
+            alert('Please enter a message');
+            return;
+        }
 
       // If everything is OK, submit the form via AJAX
       let formData = new FormData(this);
@@ -67,7 +79,10 @@ document.addEventListener('DOMContentLoaded', function() {
               // Update the chat messages
               let chatContainer = document.querySelector('.chat-container');
               let activeChat = chatContainer.querySelector('.active-chat');
-              activeChat.innerHTML = response.html;
+              if (chatContainer && activeChat) {
+                activeChat.innerHTML = response.html;
+              }
+              
 
               // Scroll to the bottom of the chat container
               scrollToBottom();
@@ -90,4 +105,16 @@ document.addEventListener('DOMContentLoaded', function() {
           activeChat.scrollTop = activeChat.scrollHeight;
       }
   }
+
+  document.getElementById('searchInput').addEventListener('keyup', function() {
+      let filter = this.value.toLowerCase();
+      friends.all.forEach(function(f) {
+          let name = f.querySelector('.name').innerText.toLowerCase();
+          if (name.includes(filter)) {
+              f.style.display = '';
+          } else {
+              f.style.display = 'none';
+          }
+      });
+  });
 });

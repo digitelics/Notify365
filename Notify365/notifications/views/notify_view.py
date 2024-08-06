@@ -84,8 +84,8 @@ def send_message_chat(request):
 
 '''
 
-from django.shortcuts import render, redirect
-from django.http import JsonResponse, HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse, HttpResponse, Http404
 from customers.models import Customer
 from notifications.task import send_birthday_notifications, send_document_notifications, send_expiry_notifications, send_next_expiry_notifications, send_expiry_tomorrow_notifications
 from django.contrib.auth.decorators import login_required
@@ -97,6 +97,8 @@ from django.urls import reverse
 from django.conf import settings
 from django.template.loader import render_to_string
 import os
+from django.db.models import Max
+
 
 
 # Create your views here.
@@ -111,7 +113,7 @@ def notify(request):
 
 @login_required
 def sms(request, customer_id=None):
-    customers = Customer.objects.filter(notifications__channel__in=['text', 'reply']).distinct()
+    customers = Customer.objects.filter(notifications__channel__in=['text', 'reply']).distinct().annotate(latest_notification_date=Max('notifications__date')).order_by('-latest_notification_date')
     selected_customer = None
 
     for customer in customers:
@@ -152,8 +154,13 @@ def send_message_chat(request):
         customerId = request.POST.get('customer-id')
         message = request.POST.get('message-text')
         attach = request.FILES.get('document-file')
+
         if customerId and message:
             customer = Customer.objects.get(pk=customerId)
+            if attach and attach.size > 2 * 1024 * 1024:
+                messages.add_message(request, messages.ERROR, 'File size should not exceed 2 MB.', extra_tags='Sending_error error')
+                return redirect(reverse('sms_detail', args=[customerId]))
+            
             if attach:
                 notification = Notification(
                     customer=customer,

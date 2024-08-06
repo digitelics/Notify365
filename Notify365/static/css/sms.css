@@ -291,7 +291,7 @@ body {
             margin-bottom: 8px;
             padding: 13px 14px;
             vertical-align: top;
-            border-radius: 5px;
+            border-radius: 15px;
             &:before {
                 position: absolute;
                 top: 19px;

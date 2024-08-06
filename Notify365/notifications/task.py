@@ -8,6 +8,7 @@ from security.models import CustomUser as User, Suscription
 from utils import template_text
 from django.db.models import Q, Exists, OuterRef
 from datetime import timedelta
+from utils import send_text_notification
 
 
 
@@ -39,6 +40,7 @@ def send_birthday_notifications():
                     date=timezone.now(),
                     channel=template.channel_to,
                 )
+                send_text_notification(customer.phone, text)
                 total_notifications_sent += 1
         else:
             logger.info(f"No template found for subscription {suscription.id}")
@@ -66,6 +68,7 @@ def send_document_notifications():
                     date=timezone.now(),
                     channel=template.channel_to,
                 )
+                send_text_notification(customer.phone, text)
                 total_notifications_sent += 1
         else:
             logger.info(f"No template found for subscription {suscription.id}")
@@ -95,6 +98,7 @@ def send_expiry_notifications():
                     date=timezone.now(),
                     channel=template.channel_to,
                 )
+                send_text_notification(customer.phone, text)
                 total_notifications_sent += 1
         else:
             logger.info(f"No template found for subscription {suscription.id}")
@@ -125,6 +129,7 @@ def send_next_expiry_notifications():
                     date=timezone.now(),
                     channel=template.channel_to,
                 )
+                send_text_notification(customer.phone, text)
                 total_notifications_sent += 1
         else:
             logger.info(f"No template found for subscription {suscription.id}")
@@ -155,6 +160,7 @@ def send_expiry_tomorrow_notifications():
                     date=timezone.now(),
                     channel=template.channel_to,
                 )
+                send_text_notification(customer.phone, text)
                 total_notifications_sent += 1
         else:
             logger.info(f"No template found for subscription {suscription.id}")
