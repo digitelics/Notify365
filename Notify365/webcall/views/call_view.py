@@ -114,7 +114,7 @@ def sms_reply(request):
     
     # Procesar archivos adjuntos
     num_media = int(request.POST.get('NumMedia', 0))
-    print("Atach count: "+num_media)
+    print("Atach count: "+ str(num_media))
     for i in range(num_media):
         media_url = request.POST.get(f'MediaUrl{i}')
         print("Media URL: " + media_url)
