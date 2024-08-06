@@ -22,4 +22,4 @@ def send_sms(to, message, media_urls=None):
         return message.sid
     except Exception as e:
         print(f"Error sending SMS: {e}")
-        return None
+        return "Error"
