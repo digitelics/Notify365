@@ -127,7 +127,7 @@ def sms_reply(request):
             file_name = media_url.split('/')[-1]
             print("File name: "+file_name)
             content_file = ContentFile(response.content)
-            print("Content File: "+content_file)
+            print("Content File: "+str(content_file))
 
             if i == 0:
                 # Adjuntar el primer archivo a la notificación inicial
