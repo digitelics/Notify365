@@ -122,10 +122,12 @@ def sms_reply(request):
         print("Media URL: " + media_content_type)
         
         # Descargar el archivo adjunto
-        response = requests.get(media_url)
+        response = requests.get(media_url, auth=(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN))
         if response.status_code == 200:
             file_name = media_url.split('/')[-1]
+            print("File name: "+file_name)
             content_file = ContentFile(response.content)
+            print("Content File: "+content_file)
 
             if i == 0:
                 # Adjuntar el primer archivo a la notificación inicial
