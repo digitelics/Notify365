@@ -155,7 +155,7 @@ def send_message_chat(request):
         if customerId and message:
             customer = Customer.objects.get(pk=customerId)
             if attach:
-                url = settings.BASE_URL + "static/files/notification_attach/" + attach.name
+                url = settings.BASE_URL + "staticfiles/files/notification_attach/" + attach.name
                 notification = Notification(
                     customer=customer,
                     channel=Notification.TEXT,
