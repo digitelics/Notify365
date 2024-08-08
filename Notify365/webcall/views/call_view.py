@@ -82,7 +82,7 @@ def get_available_agents(company_phone):
     print('Telefono para filtrar agentes disponibles' + company_phone)
     active_user_ids = get_active_sessions()
     # Filtrar usuarios que son agentes y que tienen sesiones activas
-    available_agents = User.objects.filter(id__in=active_user_ids, is_agent=True).first()
+    available_agents = User.objects.filter(id__in=active_user_ids).first()
     if available_agents:
         return True
     return False
