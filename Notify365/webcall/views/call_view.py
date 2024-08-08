@@ -14,7 +14,9 @@ from notifications.models import Notification
 from customers.models import Customer
 from django.utils import timezone
 from mimetypes import guess_extension
-from security.models import Suscription
+from security.models import Suscription, CustomUser as User
+from django.contrib.sessions.models import Session
+
 #from dotenv import load_dotenv
 import os
 
@@ -67,7 +69,7 @@ def call(request):
         dial.number(to_number)
     else:
         print('incoming call')
-        if not hay_agentes_disponibles():  # Implementa esta función para verificar la disponibilidad de agentes
+        if not get_available_agents(caller):  # Implementa esta función para verificar la disponibilidad de agentes
             response.say("Lo siento, no hay agentes disponibles en este momento. Por favor, deje su mensaje después del tono.")
             response.record(max_length=120, action='/webcall/handle_recording/')
         else:
@@ -76,15 +78,27 @@ def call(request):
 
     return HttpResponse(str(response), content_type='text/xml')
 
-def hay_agentes_disponibles():
-    # Implementa tu lógica para verificar la disponibilidad de agentes
-    return False
+def get_available_agents(caller):
+    print('Telefono para filtrar agentes disponibles' + caller)
+    active_user_ids = get_active_sessions()
+    # Filtrar usuarios que son agentes y que tienen sesiones activas
+    available_agents = User.objects.filter(id__in=active_user_ids, is_agent=True)
+    return available_agents
+
+def get_active_sessions():
+    # Obtener sesiones que no han expirado
+    active_sessions = Session.objects.filter(expire_date__gte=timezone.now())
+    # Extraer IDs de usuarios de las sesiones activas
+    active_user_ids = [session.get_decoded().get('_auth_user_id') for session in active_sessions]
+    return active_user_ids
 
 @csrf_exempt
 def handle_recording(request):
     if request.method == 'POST':
         # Tu lógica aquí
         recording_url = request.POST.get('RecordingUrl')
+        caller = request.POST.get('Caller', '')
+        print("Se graba la llamada" + caller)
         print(f"Recording saved at: {recording_url}")
         return HttpResponse("Recording saved.")
     else:
