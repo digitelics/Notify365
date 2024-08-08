@@ -31,6 +31,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True, blank=False, null=False)
     tel = models.CharField(max_length=15, blank=True, null=True)
     suscription = models.ForeignKey(Suscription, on_delete=models.CASCADE, blank=True, null=True)
+    is_agent = models.BooleanField(default=True, blank=True, null=True)
     last_login = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
     deleted_at = models.DateTimeField(null=True, blank=True)

@@ -82,7 +82,7 @@ def get_available_agents(company_phone):
     print('Telefono para filtrar agentes disponibles' + company_phone)
     active_user_ids = get_active_sessions()
     # Filtrar usuarios que son agentes y que tienen sesiones activas
-    available_agents = User.objects.filter(id__in=active_user_ids).first()
+    available_agents = User.objects.filter(id__in=active_user_ids, is_agent=True).first()
     if available_agents:
         return True
     return False
@@ -97,12 +97,34 @@ def get_active_sessions():
 @csrf_exempt
 def handle_recording(request):
     if request.method == 'POST':
-        # Tu lógica aquí
         recording_url = request.POST.get('RecordingUrl')
         to_number = request.POST.get('To', '')
-        print("Se graba la llamada" + to_number)
-        print(f"Recording saved at: {recording_url}")
-        return HttpResponse("Recording saved.")
+        from_number = request.POST.get('From')
+        media_content_type = request.POST.get('MediaContentType')
+
+        if not recording_url or not from_number:
+            return HttpResponse("Missing recording URL or from number.", status=400)    
+
+        response = requests.get(recording_url, auth=(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN))
+        customer = Customer.objects.filter(phone=from_number).first()
+
+        if response.status_code == 200:
+            extension = guess_extension(media_content_type)
+            file_name = f"{response.split('/')[-1]}{extension}"
+            print("File name: "+file_name)
+            content_file = ContentFile(response.content, name=file_name)
+            notification = Notification(
+                text="MISSING CALL",
+                customer=customer,
+                date=timezone.now(),
+                channel=Notification.CALL,
+                sent_by="Customer Call",
+                read=False,
+                attach=content_file,
+                to_number = to_number,
+            )
+            notification.save()
+            return HttpResponse("Recording saved.")
     else:
         return HttpResponseNotAllowed(['POST'])
 
@@ -159,7 +181,6 @@ def sms_reply(request):
         media_url = request.POST.get(f'MediaUrl{i}')
         print("Media URL: " + media_url)
         media_content_type = request.POST.get(f'MediaContentType{i}')
-        print("Media URL: " + media_content_type)
         
         # Descargar el archivo adjunto
         response = requests.get(media_url, auth=(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN))
