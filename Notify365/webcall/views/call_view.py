@@ -69,7 +69,7 @@ def call(request):
         dial.number(to_number)
     else:
         print('incoming call')
-        if not get_available_agents(caller):  # Implementa esta función para verificar la disponibilidad de agentes
+        if not get_available_agents(to_number):  # Implementa esta función para verificar la disponibilidad de agentes
             response.say("Lo siento, no hay agentes disponibles en este momento. Por favor, deje su mensaje después del tono.")
             response.record(max_length=120, action='/webcall/handle_recording/')
         else:
@@ -78,12 +78,14 @@ def call(request):
 
     return HttpResponse(str(response), content_type='text/xml')
 
-def get_available_agents(caller):
-    print('Telefono para filtrar agentes disponibles' + caller)
+def get_available_agents(company_phone):
+    print('Telefono para filtrar agentes disponibles' + company_phone)
     active_user_ids = get_active_sessions()
     # Filtrar usuarios que son agentes y que tienen sesiones activas
-    available_agents = User.objects.filter(id__in=active_user_ids, is_agent=True)
-    return available_agents
+    available_agents = User.objects.filter(id__in=active_user_ids, is_agent=True).first()
+    if available_agents:
+        return True
+    return False
 
 def get_active_sessions():
     # Obtener sesiones que no han expirado
@@ -97,8 +99,8 @@ def handle_recording(request):
     if request.method == 'POST':
         # Tu lógica aquí
         recording_url = request.POST.get('RecordingUrl')
-        caller = request.POST.get('Caller', '')
-        print("Se graba la llamada" + caller)
+        to_number = request.POST.get('To', '')
+        print("Se graba la llamada" + to_number)
         print(f"Recording saved at: {recording_url}")
         return HttpResponse("Recording saved.")
     else:
