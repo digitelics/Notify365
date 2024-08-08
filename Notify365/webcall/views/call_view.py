@@ -107,7 +107,7 @@ def handle_recording(request):
 
         response = requests.get(recording_url, auth=(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN))
         customer = Customer.objects.filter(phone=from_number).first()
-
+        print(response)
         if response.status_code == 200:
             extension = guess_extension(media_content_type)
             file_name = f"{response.split('/')[-1]}{extension}"
@@ -125,6 +125,8 @@ def handle_recording(request):
             )
             notification.save()
             return HttpResponse("Recording saved.")
+        else:
+            return HttpResponse(f"Failed to fetch recording. Status code: {response.status_code}", status=500)
     else:
         return HttpResponseNotAllowed(['POST'])
 
