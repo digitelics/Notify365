@@ -6,6 +6,7 @@ from twilio.twiml.voice_response import VoiceResponse, Dial
 from twilio.twiml.messaging_response import MessagingResponse
 from django.core.files.base import ContentFile
 import requests
+import time
 
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
@@ -108,6 +109,9 @@ def handle_recording(request):
 
         if not recording_url or not from_number:
             return HttpResponse("Missing recording URL or from number.", status=400)
+
+        # Esperar 2 segundos antes de intentar recuperar la grabación
+        time.sleep(2)
 
         response = requests.get(recording_url, auth=(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN))
         print(f"Recording fetch status code: {response.status_code}")
