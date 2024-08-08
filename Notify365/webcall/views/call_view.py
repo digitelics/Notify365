@@ -9,7 +9,7 @@ import requests
 
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseNotAllowed
 from notifications.models import Notification
 from customers.models import Customer
 from django.utils import timezone
@@ -82,10 +82,13 @@ def hay_agentes_disponibles():
 
 @csrf_exempt
 def handle_recording(request):
-    recording_url = request.POST.get('RecordingUrl')
-    # Guarda la URL de la grabación o procesa el mensaje de voz
-    print(f"Recording saved at: {recording_url}")
-    return HttpResponse("Recording saved", content_type='text/plain')
+    if request.method == 'POST':
+        # Tu lógica aquí
+        recording_url = request.POST.get('RecordingUrl')
+        print(f"Recording saved at: {recording_url}")
+        return HttpResponse("Recording saved.")
+    else:
+        return HttpResponseNotAllowed(['POST'])
 
 @csrf_exempt
 def save_log_call(request):

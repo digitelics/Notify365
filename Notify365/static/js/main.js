@@ -45,6 +45,7 @@ $(function () {
             });
             
             device.on("disconnect", function (conn) {
+                let phoneNumber = conn.parameters.From;
                 stop()
                 handleModal("modal-call-in-progress");
                 document.getElementById("callingTo").innerText = "";
@@ -53,6 +54,7 @@ $(function () {
                 var postData = {
                     duration: callDuration,
                     direction: conn.direction,
+                    phoneNumber: phoneNumber
                 };
                 $.ajax({
                     type: "POST",
@@ -68,37 +70,79 @@ $(function () {
             });
 
             device.on("incoming", function (conn) {
-                console.log(conn.parameters)
-                log("Incoming connection from " + conn.parameters.From);
-                document.getElementById("callerNumber").innerHTML = formatPhoneNumber(conn.parameters.From);
-                document.getElementById("callingTo").innerHTML = formatPhoneNumber(conn.parameters.From);
-                //document.getElementById("txtPhoneNumber").innerHTML = conn.parameters.From;
-                handleModal('modal-incomming-call')
+                console.log(conn.parameters.To)
+                let toNumber = conn.parameters.To;
+                let phoneNumber = toNumber.split(':')[1];
+                device.audio.incoming(false);
+                //log("Incoming connection from " + conn.parameters.From);
+            
+                // AJAX request to check if the number is configured for the subscription
+                $.ajax({
+                    url: '/check_number/',  // URL to the endpoint that will check the number
+                    type: 'POST',
+                    data: {
+                        to_number: phoneNumber,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'  // Include CSRF token for Django
+                    },
+                    success: function(response) {
+                        if (response.is_configured) {
+                            document.getElementById("callerNumber").innerHTML = formatPhoneNumber(conn.parameters.From);
+                            document.getElementById("callingTo").innerHTML = formatPhoneNumber(conn.parameters.From);
+                            //document.getElementById("txtPhoneNumber").innerHTML = conn.parameters.From;
+                            handleModal('modal-incomming-call')
 
-                const btnReject = document.getElementById('btnReject');
-                function rejectCall() {
-                    handleModal('modal-incomming-call');
-                    log("Rejected call ..."); 
-                    conn.reject();
-                    btnReject.removeEventListener('click', rejectCall);
-                }
-                btnReject.addEventListener('click', rejectCall);
+                            const btnReject = document.getElementById('btnReject');
+                            function rejectCall() {
+                                handleModal('modal-incomming-call');
+                                log("Rejected call ..."); 
+                                conn.reject();
+                                btnReject.removeEventListener('click', rejectCall);
+                            }
+                            btnReject.addEventListener('click', rejectCall);
 
-                const btnAcceptCalls = document.getElementById('btnAcceptCall');
-                function aceptCall() {
-                    showCallDuration();
-                    handleModal("modal-incomming-call");
-                    console.log("Accepted call ..."); 
-                    conn.accept(); 
-                    btnAcceptCalls.removeEventListener('click', aceptCall);
-                }
-                btnAcceptCalls.addEventListener('click', aceptCall);
-
+                            const btnAcceptCalls = document.getElementById('btnAcceptCall');
+                            function aceptCall() {
+                                showCallDuration();
+                                handleModal("modal-incomming-call");
+                                console.log("Accepted call ..."); 
+                                conn.accept(); 
+                                btnAcceptCalls.removeEventListener('click', aceptCall);
+                            }
+                            btnAcceptCalls.addEventListener('click', aceptCall);
+                            device.audio.incoming(true);
+                        } else {
+                            log("Number is not configured for this subscription.");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error checking the number configuration: ", error);
+                    }
+                });
             });
 
             device.on("cancel", function(conn) {
                 log("Call cancelled by the caller.");
-                handleModal("modal-incomming-call");
+                const modalElement = document.getElementById("modal-incomming-call");
+                if (modalElement && !modalElement.classList.contains("hidden")) {
+                    handleModal("modal-incomming-call");
+                }
+                let phoneNumber = conn.parameters.From;
+                var postData = {
+                    duration: '0',
+                    direction: "MISSING",
+                    phoneNumber: phoneNumber
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/save/log/call/", // Aquí debes poner la URL de tu endpoint en Python
+                    data: postData,
+                    success: function(response) {
+                        console.log("Registro de llamada guardado exitosamente:", response);
+                    },
+                    error: function(err) {
+                        console.error("Error al guardar el registro de la llamada:", err);
+                    }
+                });
             });
 
 
@@ -196,9 +240,17 @@ $(function () {
         console.log(message)
     }
 
-    function handleModal(modalID) {
-        document.getElementById(modalID).classList.toggle("hidden");
-        document.getElementById(modalID).classList.toggle("flex");
+    function handleModal(modalId) {
+        const modal = document.getElementById(modalId);
+        const backdrop = document.getElementById(`${modalId}-backdrop`);
+        if (modal) {
+            modal.classList.toggle("hidden");
+            modal.classList.toggle("flex");
+        }
+        if (backdrop) {
+            backdrop.classList.toggle("hidden");
+            backdrop.classList.toggle("block");
+        }
     }
 
      ///////////////       CALL IN PROGRESS MODAL          ////////////////////////////
