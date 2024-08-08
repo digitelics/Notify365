@@ -28,7 +28,7 @@ def add_deal_view(request):
                     product = Product.objects.get(pk=productId)
                     activation_date = datetime.strptime(activation_date_str, '%Y-%m-%d').date()
 
-                    customer.customer_status = Customer.CLIENTE
+                    customer.customer_status = Customer.CLIENT
                     customer.save()
                     
                     service = CustomerService(

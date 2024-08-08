@@ -5,13 +5,13 @@ from simple_history.models import HistoricalRecords
 
 class Customer(models.Model):
     LEAD = 'lead'
-    CLIENTE = 'cliente'
-    INACTIVO = 'inactive'
+    CLIENT = 'client'
+    INACTIVE = 'inactive'
     
     STATUS_CHOICES = [
         (LEAD, 'Lead'),
-        (CLIENTE, 'Client'),
-        (INACTIVO, 'Inactive'),
+        (CLIENT, 'Client'),
+        (INACTIVE, 'Inactive'),
     ]
 
     MALE = 'male'

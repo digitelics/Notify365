@@ -5,7 +5,7 @@ from simple_history.models import HistoricalRecords
 
 
 class Suscription(models.Model):
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='suscription')
     is_active = models.BooleanField(default=True)
     activation_date = models.DateField()
     expiration_date = models.DateField()

@@ -56,6 +56,8 @@ urlpatterns = [
     path('token/', views.call_view.get_token, name="get-token"),
     path('webcall/handle_calls/', views.call_view.call, name="call"),
     path('webcall/sms/reply/', views.call_view.sms_reply, name='sms-reply'),
+    path('webcall/handle_recording/', views.call_view.handle_recording, name='handle_recording'),
+    path('check_number/', views.call_view.check_number, name='check_number'),
     
     path('sms/', views.notify_view.sms, name="sms"),
     path('sms/<int:customer_id>/', views.notify_view.sms, name='sms_detail'),

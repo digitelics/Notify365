@@ -18,12 +18,12 @@
                         <span class="name">{{ customer.first_name }} {{ customer.last_name }}</span>
                         <span class="time">
                             {% if customer.notifications_list %}
-                                {{ customer.notifications_list.last.date|date:"H:i A" }}
+                                {{ customer.notifications_list.first.date|date:"H:i A" }}
                             {% endif %}
                         </span>
                         <span class="preview">
                             {% if customer.notifications_list %}
-                                {{ customer.notifications_list.last.text }}
+                                {{ customer.notifications_list.first.text }}
                             {% endif %}
                         </span>
                     </li>

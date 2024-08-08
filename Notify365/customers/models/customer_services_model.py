@@ -30,7 +30,7 @@ class CustomerService(models.Model):
         (INACTIVE, 'Inactive'),
     ]
 
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='customer')
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='services')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='service')
     code = models.CharField(max_length=20)
     activation_date = models.DateField()

@@ -8,14 +8,13 @@ from django.core.files.base import ContentFile
 import requests
 
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponse
-
 from notifications.models import Notification
 from customers.models import Customer
 from django.utils import timezone
 from mimetypes import guess_extension
-
-
+from security.models import Suscription
 #from dotenv import load_dotenv
 import os
 
@@ -58,13 +57,9 @@ def get_token(request):
 
 @csrf_exempt
 def call(request):
-
-    # Obtiene los datos del cuerpo de la solicitud HTTP
     caller = request.POST.get('Caller', '')
-
     response = VoiceResponse()
-    dial = Dial(caller_id=TWILIO_NUMBER)  # 'callerId' ha sido cambiado a 'caller_id' en la versión actual de Twilio
-
+    dial = Dial(caller_id=TWILIO_NUMBER)
     to_number = request.POST.get('To', '')
 
     if to_number and to_number != TWILIO_NUMBER:
@@ -72,16 +67,39 @@ def call(request):
         dial.number(to_number)
     else:
         print('incoming call')
-        dial = Dial(caller_id=caller)  # Se cambió el valor de 'dial' si es una llamada entrante
-        dial.client(TWILIO_NUMBER)
+        if not hay_agentes_disponibles():  # Implementa esta función para verificar la disponibilidad de agentes
+            response.say("Lo siento, no hay agentes disponibles en este momento. Por favor, deje su mensaje después del tono.")
+            response.record(max_length=120, action='/webcall/handle_recording')
+        else:
+            dial.client(TWILIO_NUMBER)
+            response.append(dial)
 
-    return HttpResponse(str(response.append(dial)), content_type='text/xml')
+    return HttpResponse(str(response), content_type='text/xml')
+
+def hay_agentes_disponibles():
+    # Implementa tu lógica para verificar la disponibilidad de agentes
+    return False
+
+@csrf_exempt
+def handle_recording(request):
+    recording_url = request.POST.get('RecordingUrl')
+    # Guarda la URL de la grabación o procesa el mensaje de voz
+    print(f"Recording saved at: {recording_url}")
+    return HttpResponse("Recording saved", content_type='text/plain')
 
 @csrf_exempt
 def save_log_call(request):
-    user = request.user
-    customer = Customer.objects.get(pk=1)
+    try:
+        user = request.user
+    except:
+        user = None
     if request.method == 'POST':
+        try:
+            phoneNumber = request.POST.get('phoneNumber', '')
+            customer = Customer.objects.get(phone=phoneNumber)
+        except:
+            customer = None
+
         duration = request.POST.get('duration', '')
         direction = request.POST.get('direction', '')
         text = 'The ' + direction + ' call lasted ' + duration
@@ -90,7 +108,8 @@ def save_log_call(request):
                     customer=customer,
                     date=timezone.now(),
                     channel=Notification.CALL,
-                    sent_by=user.name
+                    sent_by=user.name,
+                    created_by = user
                 )
         return JsonResponse({'message': 'Registro de llamada guardado exitosamente'})
     
@@ -151,3 +170,14 @@ def sms_reply(request):
     response = MessagingResponse()
     response.message("Gracias por tu mensaje. Pronto te responderemos.")
     return HttpResponse(str(response), content_type='text/xml')
+
+
+@csrf_exempt
+@login_required
+def check_number(request):
+    if request.method == "POST":
+        to_number = request.POST.get('to_number')
+        user = request.user
+        subscription = user.suscription
+        is_configured = Suscription.objects.filter(pk=subscription.id, company__phone=to_number).exists()
+        return JsonResponse({'is_configured': is_configured})

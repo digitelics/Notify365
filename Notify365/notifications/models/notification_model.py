@@ -1,6 +1,7 @@
 from django.db import models
 from customers.models import Customer
 import os
+from django.conf import settings
 
 class Notification(models.Model):
     EMAIL = 'email'
@@ -15,13 +16,14 @@ class Notification(models.Model):
     ]
 
     template = models.ForeignKey('Template', on_delete=models.SET_NULL, null=True, blank=True, related_name='notifications')
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='notifications')
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='notifications', blank=True, null=True)
     date = models.DateTimeField()
     channel = models.CharField(max_length=5, choices=CHANNEL_CHOICES)
     text = models.TextField()
     sent_by = models.TextField(default='Automatic notification')
     read = models.BooleanField(default=True)
     attach = models.FileField(upload_to='static/files/notification_attach/', blank=True, null=True)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='created_notification', blank=True, null=True )
 
     def __str__(self):
         notification_message = f'Notification: '

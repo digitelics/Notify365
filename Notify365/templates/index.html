@@ -1,4 +1,5 @@
 {% extends './layouts/base.html' %} 
+{% load static %}
 {% block header-button %}
    <!-- <button type="button" class="sm:order-0 order-1 ml-3 inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:ml-0">Share</button>
     <button type="button" class="order-0 inline-flex items-center rounded-md bg-purple-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600 sm:order-1 sm:ml-3">Create</button>-->
@@ -9,9 +10,10 @@
     <!-- Secondary navigation -->
     <header class="pb-4 pt-6 sm:pb-6 mt-14">
       <div class="mx-auto flex max-w-7xl flex-wrap items-center gap-6 px-4 sm:flex-nowrap sm:px-6 lg:px-8">
-        <h1 class="text-base font-semibold leading-7 text-gray-900">Customers</h1>
+        <h1 class="text-base font-semibold leading-7 text-gray-900">Filters</h1>
         <div class="order-last flex w-full gap-x-8 text-sm font-semibold leading-6 sm:order-none sm:w-auto sm:border-l sm:border-gray-200 sm:pl-6 sm:leading-7">
-          <a href="#" class="text-indigo-600">Last 7 days</a>
+           <a href="#" class="text-indigo-600">Today</a>
+          <a href="#" class="text-gray-700">Last 7 days</a>
           <a href="#" class="text-gray-700">Last 30 days</a>
           <a href="#" class="text-gray-700">All-time</a>
         </div>
@@ -26,26 +28,41 @@
 
     <!-- Stats -->
     <div class="border-b border-b-gray-900/10 lg:border-t lg:border-t-gray-900/5">
-      <dl class="mx-auto grid max-w-7xl grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 lg:px-2 xl:px-0">
+      <dl class="mx-auto grid max-w-7xl grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 lg:px-2 xl:px-0">
         <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-900/5 px-4 py-10 sm:px-6 lg:border-t-0 xl:px-8">
           <dt class="text-sm font-medium leading-6 text-gray-500">New Customers</dt>
-          <dd class="text-xs font-medium text-gray-700">+4.75%</dd>
-          <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900">405</dd>
+          {% comment "" %}
+                    <dd class="text-xs font-medium text-gray-700">+4.75%</dd>
+          {% endcomment %}
+          <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900">{{new_customers_today}}</dd>
         </div>
         <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-900/5 px-4 py-10 sm:px-6 lg:border-t-0 xl:px-8 sm:border-l">
           <dt class="text-sm font-medium leading-6 text-gray-500">New Policy</dt>
-          <dd class="text-xs font-medium text-rose-600">+54.02%</dd>
-          <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900">128</dd>
+          {% comment "" %}
+                    <dd class="text-xs font-medium text-rose-600">+54.02%</dd>
+          {% endcomment %}
+          <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900">{{new_policies_today}}</dd>
         </div>
         <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-900/5 px-4 py-10 sm:px-6 lg:border-t-0 xl:px-8 lg:border-l">
           <dt class="text-sm font-medium leading-6 text-gray-500">Policy Renewals</dt>
-          <dd class="text-xs font-medium text-gray-700">-1.39%</dd>
-          <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900">92</dd>
+          {% comment "" %}
+                    <dd class="text-xs font-medium text-gray-700">-1.39%</dd>
+          {% endcomment %}
+          <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900">{{renewals_today}}</dd>
+        </div>
+         <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-900/5 px-4 py-10 sm:px-6 lg:border-t-0 xl:px-8 lg:border-l">
+          <dt class="text-sm font-medium leading-6 text-gray-500">Policy Canceled</dt>
+          {% comment "" %}
+             <dd class="text-xs font-medium text-gray-700">-1.39%</dd>
+          {% endcomment %}
+          <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900">{{inactives_today}}</dd>
         </div>
         <div class="flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-900/5 px-4 py-10 sm:px-6 lg:border-t-0 xl:px-8 sm:border-l">
           <dt class="text-sm font-medium leading-6 text-gray-500">Base Premium</dt>
-          <dd class="text-xs font-medium text-rose-600">+10.18%</dd>
-          <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900">$39,820.00</dd>
+          {% comment "" %}
+                    <dd class="text-xs font-medium text-rose-600">+10.18%</dd>
+          {% endcomment %}
+          <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900">${{ total_base_premium_today }}</dd>
         </div>
       </dl>
     </div>
@@ -69,7 +86,7 @@
                     <dl>
                       <dt class="truncate text-sm font-medium text-gray-500">Leads</dt>
                       <dd>
-                        <div class="text-lg font-medium text-gray-900">18217</div>
+                        <div class="text-lg font-medium text-gray-900">{{leads}}</div>
                       </dd>
                     </dl>
                   </div>
@@ -77,7 +94,7 @@
               </div>
               <div class="bg-purple-600 px-5 py-3">
                 <div class="text-sm">
-                  <a href="#" class="font-medium text-white hover:text-gray-900">View all</a>
+                  <a onclick="toggleModal('modal-all-leads')" class="font-medium text-white hover:text-gray-900 cursor-pointer">View details</a>
                 </div>
               </div>
             </div>
@@ -93,7 +110,7 @@
                     <dl>
                       <dt class="truncate text-sm font-medium text-gray-500">Clients</dt>
                       <dd>
-                        <div class="text-lg font-medium text-gray-900">10112</div>
+                        <div class="text-lg font-medium text-gray-900">{{clients}}</div>
                       </dd>
                     </dl>
                   </div>
@@ -101,7 +118,7 @@
               </div>
               <div class="bg-green-500 px-5 py-3">
                 <div class="text-sm">
-                  <a href="#" class="font-medium text-white hover:text-gray-900">View all</a>
+                   <a onclick="toggleModal('modal-all-customers')" class="font-medium text-white hover:text-gray-900 cursor-pointer">View details</a>
                 </div>
               </div>
             </div>
@@ -117,7 +134,7 @@
                     <dl>
                       <dt class="truncate text-sm font-medium text-gray-500">Inactive</dt>
                       <dd>
-                        <div class="text-lg font-medium text-gray-900">4378</div>
+                        <div class="text-lg font-medium text-gray-900">{{inactive_customers}}</div>
                       </dd>
                     </dl>
                   </div>
@@ -125,7 +142,7 @@
               </div>
               <div class="bg-pink-600 px-5 py-3">
                 <div class="text-sm">
-                  <a href="#" class="font-medium text-white hover:text-gray-900">View all</a>
+                    <a onclick="toggleModal('modal-all-inactive-customers')" class="font-medium text-white hover:text-gray-900 cursor-pointer">View details</a>
                 </div>
               </div>
             </div>
@@ -157,7 +174,9 @@
                     <div class="absolute inset-y-0 left-0 -z-10 w-screen border-b border-gray-200 bg-gray-50"></div>
                   </th>
                 </tr>
-                <tr>
+               
+                {% for call in calls %}
+                 <tr>
                   <td class="relative py-5 pr-6">
                     <div class="flex gap-x-6">
                       <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="hidden h-6 w-5 flex-none text-gray-400 sm:block">
@@ -185,62 +204,7 @@
                     </div>
                   </td>
                 </tr>
-                <tr>
-                  <td class="relative py-5 pr-6">
-                    <div class="flex gap-x-6">
-                      <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="hidden h-6 w-5 flex-none text-gray-400 sm:block">
-                          <path fill-rule="evenodd" d="M19.5 9.75a.75.75 0 0 1-.75.75h-4.5a.75.75 0 0 1-.75-.75v-4.5a.75.75 0 0 1 1.5 0v2.69l4.72-4.72a.75.75 0 1 1 1.06 1.06L16.06 9h2.69a.75.75 0 0 1 .75.75Z" clip-rule="evenodd" />
-                          <path fill-rule="evenodd" d="M1.5 4.5a3 3 0 0 1 3-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 0 1-.694 1.955l-1.293.97c-.135.101-.164.249-.126.352a11.285 11.285 0 0 0 6.697 6.697c.103.038.25.009.352-.126l.97-1.293a1.875 1.875 0 0 1 1.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 0 1-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5Z" clip-rule="evenodd" />
-                      </svg>
-                      <div class="flex-auto">
-                        <div class="flex items-start gap-x-3">
-                          <div class="text-sm font-medium leading-6 text-gray-900">Activate John Policy</div>
-                          <div class="rounded-md py-1 px-2 text-xs font-medium ring-1 ring-inset text-gray-600 bg-gray-50 ring-gray-500/10">Pending</div>
-                        </div>
-                        <div class="mt-1 text-xs leading-5 text-gray-500">Customer: Jessy Schwarz</div>
-                      </div>
-                    </div>
-                    <div class="absolute bottom-0 right-full h-px w-screen bg-gray-100"></div>
-                    <div class="absolute bottom-0 left-0 h-px w-screen bg-gray-100"></div>
-                  </td>
-                  <td class="hidden py-5 pr-6 sm:table-cell">
-                    <div class="text-sm leading-6 text-gray-900">04-29-2024</div>
-                    <div class="mt-1 text-xs leading-5 text-gray-500">03:00 pm</div>
-                  </td>
-                  <td class="py-5 text-right">
-                    <div class="flex justify-end">
-                      <a href="#" class="text-sm font-medium leading-6 text-indigo-600 hover:text-indigo-500">View</a>
-                    </div>
-=                  </td>
-                </tr>
-                <tr>
-                  <td class="relative py-5 pr-6">
-                    <div class="flex gap-x-6">
-                      <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="hidden h-6 w-5 flex-none text-gray-400 sm:block">
-                          <path fill-rule="evenodd" d="M19.5 9.75a.75.75 0 0 1-.75.75h-4.5a.75.75 0 0 1-.75-.75v-4.5a.75.75 0 0 1 1.5 0v2.69l4.72-4.72a.75.75 0 1 1 1.06 1.06L16.06 9h2.69a.75.75 0 0 1 .75.75Z" clip-rule="evenodd" />
-                          <path fill-rule="evenodd" d="M1.5 4.5a3 3 0 0 1 3-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 0 1-.694 1.955l-1.293.97c-.135.101-.164.249-.126.352a11.285 11.285 0 0 0 6.697 6.697c.103.038.25.009.352-.126l.97-1.293a1.875 1.875 0 0 1 1.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 0 1-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5Z" clip-rule="evenodd" />
-                      </svg>
-                      <div class="flex-auto">
-                        <div class="flex items-start gap-x-3">
-                          <div class="text-sm font-medium leading-6 text-gray-900">Call to all client with pending Document </div>
-                          <div class="rounded-md py-1 px-2 text-xs font-medium ring-1 ring-inset text-red-700 bg-red-50 ring-red-600/10">Overdue</div>
-                        </div>
-                        <div class="mt-1 text-xs leading-5 text-gray-500">Customer: Jessy Schwarz</div>
-                      </div>
-                    </div>
-                    <div class="absolute bottom-0 right-full h-px w-screen bg-gray-100"></div>
-                    <div class="absolute bottom-0 left-0 h-px w-screen bg-gray-100"></div>
-                  </td>
-                  <td class="hidden py-5 pr-6 sm:table-cell">
-                    <div class="text-sm leading-6 text-gray-900">04-29-2024</div>
-                    <div class="mt-1 text-xs leading-5 text-gray-500">09:00 am</div>
-                  </td>
-                  <td class="py-5 text-right">
-                    <div class="flex justify-end">
-                      <a href="#" class="text-sm font-medium leading-6 text-indigo-600 hover:text-indigo-500">View</a>
-                    </div>
-                  </td>
-                </tr>    
+                {% endfor %}
               </tbody>
             </table>
           </div>
@@ -631,11 +595,23 @@
     </div>
   </div>
 
+{% include "customers/all_leads_modal.html" %}
+{% include "customers/all_customers_modal.html" %}
+{% include "customers/all_inactive_customers_modal.html" %}
+
 
 {% endblock  %}
 {% block script %}  
 <script src="https://unpkg.com/@popperjs/core@2.9.1/dist/umd/popper.min.js" charset="utf-8"></script>
 <script>
+
+  function toggleModal(modalID) {
+      document.getElementById(modalID).classList.toggle("hidden");
+      document.getElementById(modalID + "-backdrop").classList.toggle("hidden");
+      document.getElementById(modalID).classList.toggle("flex");
+      document.getElementById(modalID + "-backdrop").classList.toggle("flex");
+  }
+
   function openDropdown(event,dropdownID){
     let element = event.target;
     while(element.nodeName !== "BUTTON"){
@@ -661,6 +637,30 @@
         // event.currentTarget.className += " tab-selected";
     
     });
+
+  function printLeads() {
+      const printSection = document.getElementById('print-section').innerHTML;
+      const originalContents = document.body.innerHTML;
+      document.body.innerHTML = printSection;
+      window.print();
+      document.body.innerHTML = originalContents;
+  }
+
+  function printCustomers() {
+      const printSection = document.getElementById('print-section-customers').innerHTML;
+      const originalContents = document.body.innerHTML;
+      document.body.innerHTML = printSection;
+      window.print();
+      document.body.innerHTML = originalContents;
+  }
+
+  function printInactive() {
+      const printSection = document.getElementById('print-section-inactive').innerHTML;
+      const originalContents = document.body.innerHTML;
+      document.body.innerHTML = printSection;
+      window.print();
+      document.body.innerHTML = originalContents;
+  }
 </script>
 {% endblock script %} 
 

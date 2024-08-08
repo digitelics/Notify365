@@ -292,6 +292,7 @@ body {
             padding: 13px 14px;
             vertical-align: top;
             border-radius: 15px;
+            max-width: 75%;
             &:before {
                 position: absolute;
                 top: 19px;
