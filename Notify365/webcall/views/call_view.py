@@ -121,7 +121,11 @@ def handle_recording(request):
         if not customer:
             return HttpResponse(f"Customer with phone number {from_number} not found.", status=404)
 
-        extension = guess_extension(media_content_type)
+        if media_content_type:
+            extension = guess_extension(media_content_type)
+        else:
+            extension = ".mp3"  # Default to .mp3 if media content type is not provided
+
         file_name = f"{recording_url.split('/')[-1]}{extension}"
         print("File name: " + file_name)
         content_file = ContentFile(response.content, name=file_name)
