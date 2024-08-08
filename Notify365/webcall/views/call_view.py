@@ -102,15 +102,21 @@ def handle_recording(request):
         from_number = request.POST.get('From')
         media_content_type = request.POST.get('MediaContentType')
 
+        print(f"Recording URL: {recording_url}")
+        print(f"From number: {from_number}")
+        print(f"Media content type: {media_content_type}")
+
         if not recording_url or not from_number:
             return HttpResponse("Missing recording URL or from number.", status=400)
 
         response = requests.get(recording_url, auth=(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN))
+        print(f"Recording fetch status code: {response.status_code}")
 
         if response.status_code != 200:
             return HttpResponse(f"Failed to fetch recording. Status code: {response.status_code}", status=500)
 
         customer = Customer.objects.filter(phone=from_number).first()
+        print(f"Customer: {customer}")
 
         if not customer:
             return HttpResponse(f"Customer with phone number {from_number} not found.", status=404)
@@ -119,6 +125,7 @@ def handle_recording(request):
         file_name = f"{recording_url.split('/')[-1]}{extension}"
         print("File name: " + file_name)
         content_file = ContentFile(response.content, name=file_name)
+
         notification = Notification(
             text="MISSING CALL",
             customer=customer,
@@ -133,7 +140,7 @@ def handle_recording(request):
         return HttpResponse("Recording saved.")
     else:
         return HttpResponseNotAllowed(['POST'])
-
+    
 @csrf_exempt
 def save_log_call(request):
     try:
