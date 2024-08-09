@@ -71,7 +71,7 @@ def call(request):
     else:
         print('incoming call')
         if not get_available_agents(to_number):  # Implementa esta función para verificar la disponibilidad de agentes
-            response.say("Lo siento, no hay agentes disponibles en este momento. Por favor, deje su mensaje después del tono.")
+            response.say("Lo siento, no hay agentes disponibles en este momento. Por favor, deje su mensaje después del tono.", language="es-ES")
             response.record(max_length=120, action='/webcall/handle_recording/')
         else:
             dial.client(TWILIO_NUMBER)
