@@ -143,6 +143,7 @@ def handle_recording(request):
             read=False,
             attach=content_file,
             to_number=to_number,
+            from_number = from_number
         )
         notification.save()
         return HttpResponse("Recording saved.")

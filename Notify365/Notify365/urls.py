@@ -7,6 +7,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('client/', views.client_view.client, name="client"),
     path('', views.index, name="dashboard"),
+    path('notification/<int:notification_id>/mark_as_read/', views.mark_as_read, name='mark_as_read'),
     path('test/', views.test, name='test'),
     path('login/', views.login_view.login, name="login"),
     path('registration/', views.registration_view.registration, name="registration"),

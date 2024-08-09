@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
 from django.http import HttpResponse
 from django.utils import timezone
 from customers.models import Customer, CustomerService
@@ -68,7 +69,8 @@ def index(request):
     )
 
     last_24_hours = timezone.now() - timedelta(hours=24)
-    unregistered_calls = Notification.objects.filter(channel='call',date__gte=last_24_hours).exclude(customer__isnull=False)
+    missing_calls = Notification.objects.filter(channel='call',date__gte=last_24_hours, text="MISSING CALL").order_by('-date')
+    messages = Notification.objects.filter(channel='reply',date__gte=last_24_hours).order_by('-date')
 
     context = {
         'new_customers_today': new_customers_today.count(),
@@ -78,7 +80,8 @@ def index(request):
         'total_base_premium_today': total_base_premium_today,
         'leads': leads.count(),
         'leads_list': leads,
-        'calls':unregistered_calls,
+        'calls':missing_calls,
+        'messages': messages,
         'clients': customers_with_services_active.count(),
         'clients_list': customers_with_services_active,
         'inactive_customers': customers_with_all_services_inactive.count(),
@@ -87,6 +90,21 @@ def index(request):
     }
 
     return render(request, 'index.html', context)
+
+
+@login_required
+def mark_as_read(request, notification_id):
+    # Obtiene la notificación o lanza un 404 si no existe
+    notification = get_object_or_404(Notification, id=notification_id)
+    
+    # Cambia el campo 'read' a True y guarda quién la leyó
+    notification.read = True
+    notification.read_by = request.user
+    notification.save()
+
+    # Retorna una respuesta, puedes personalizarla según necesites
+    return redirect(reverse('dashboard'))
+
 
 def test (request):
      return render(request, 'test.html', {})

@@ -22,9 +22,11 @@ class Notification(models.Model):
     text = models.TextField()
     sent_by = models.TextField(default='Automatic notification')
     read = models.BooleanField(default=True)
+    read_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='read_notification', blank=True, null=True )
     attach = models.FileField(upload_to='static/files/notification_attach/', blank=True, null=True)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='created_notification', blank=True, null=True )
     to_number = models.TextField(default='', blank=True, null=True)
+    from_number = models.TextField(default='', blank=True, null=True)
 
     def __str__(self):
         notification_message = f'Notification: '

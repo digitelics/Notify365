@@ -334,3 +334,8 @@ input {
 	width: inherit;
 }
 
+.notification-log{
+  overflow: auto;
+  max-height: 400px;
+}
+
