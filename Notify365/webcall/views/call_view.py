@@ -111,7 +111,7 @@ def handle_recording(request):
             return HttpResponse("Missing recording URL or from number.", status=400)
 
         # Esperar 2 segundos antes de intentar recuperar la grabación
-        time.sleep(2)
+        time.sleep(5)
 
         response = requests.get(recording_url, auth=(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN))
         print(f"Recording fetch status code: {response.status_code}")
