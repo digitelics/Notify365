@@ -111,7 +111,7 @@ def handle_recording(request):
         if not recording_url or not from_number:
             return HttpResponse("Missing recording URL or from number.", status=400)
 
-        # Esperar 2 segundos antes de intentar recuperar la grabación
+        # Esperar 10 segundos antes de intentar recuperar la grabación
         time.sleep(10)
 
         response = requests.get(recording_url, auth=(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN))
@@ -119,12 +119,9 @@ def handle_recording(request):
 
         if response.status_code != 200:
             return HttpResponse(f"Failed to fetch recording. Status code: {response.status_code}", status=500)
-
+       
         customer = Customer.objects.filter(phone=from_number).first()
         print(f"Customer: {customer}")
-
-        if not customer:
-            return HttpResponse(f"Customer with phone number {from_number} not found.", status=404)
 
         if media_content_type:
             extension = guess_extension(media_content_type)
