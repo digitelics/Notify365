@@ -61,7 +61,7 @@ def get_token(request):
 @csrf_exempt
 def call(request):
     response = VoiceResponse()
-    to_number = request.POST.get('To', '')
+    to_number = request.POST.get('To')
 
     if to_number and to_number != TWILIO_NUMBER:
         print('outbound call')
