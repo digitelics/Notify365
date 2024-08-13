@@ -60,21 +60,20 @@ def get_token(request):
 
 @csrf_exempt
 def call(request):
-    caller = request.POST.get('Caller', '')
     response = VoiceResponse()
-    dial = Dial(record="record-from-answer")
-    dial = Dial(caller_id=TWILIO_NUMBER)
     to_number = request.POST.get('To', '')
 
     if to_number and to_number != TWILIO_NUMBER:
         print('outbound call')
+        dial = Dial(record="record-from-answer", caller_id=TWILIO_NUMBER)
         dial.number(to_number)
     else:
         print('incoming call')
-        if not get_available_agents(to_number):  # Implementa esta función para verificar la disponibilidad de agentes
+        if not get_available_agents(to_number):  # Verifica la disponibilidad de agentes
             response.say("Lo siento, no hay agentes disponibles en este momento. Por favor, deje su mensaje después del tono.", language="es-ES")
             response.record(max_length=120, action='/webcall/handle_recording/')
         else:
+            dial = Dial(record="record-from-answer", caller_id=TWILIO_NUMBER)
             dial.client(TWILIO_NUMBER)
             response.append(dial)
 
