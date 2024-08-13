@@ -97,19 +97,38 @@ from django.urls import reverse
 from django.conf import settings
 from django.template.loader import render_to_string
 import os
-from django.db.models import Max
+from django.db.models import Max, Q
+from django.core.paginator import Paginator
+from django.views.generic import ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+
 
 
 
 # Create your views here.
 
 def notify(request):
-    send_expiry_tomorrow_notifications.delay()
-    send_birthday_notifications.delay()
-    send_document_notifications.delay()
-    send_expiry_notifications.delay()
-    send_next_expiry_notifications.delay()
-    return render(request, 'notifications/notify_template.html', {})
+    calls = Notification.objects.filter(
+        Q(channel='call') &
+        (
+            Q(customer__created_by__suscription=request.user.suscription) |
+            Q(to_number=request.user.suscription.company.phone)
+        )
+    ).order_by('-date')
+    
+    paginator = Paginator(calls, 10)  # Paginar el queryset con 10 elementos por página
+    page_number = request.GET.get('page')  # Obtener el número de página de la solicitud GET
+    
+    # Obtener la página solicitada o la primera página por defecto
+    page_obj = paginator.get_page(page_number)
+
+    context = {'page_obj': page_obj}  # Pasar el objeto de página al contexto
+    
+    return render(request, 'notifications/notify_template.html', context)
+
+
+
 
 @login_required
 def sms(request, customer_id=None):

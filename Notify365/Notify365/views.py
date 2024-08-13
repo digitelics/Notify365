@@ -26,6 +26,7 @@ def index(request):
     today = timezone.now().date()
     user = request.user
     suscription = user.suscription
+    company_phone = user.suscription.company.phone
 
     # Clientes creados hoy filtrados por suscripción
     new_customers_today = Customer.objects.filter(created_at__date=today, created_by__suscription=suscription)
@@ -69,7 +70,16 @@ def index(request):
     )
 
     last_24_hours = timezone.now() - timedelta(hours=24)
-    missing_calls = Notification.objects.filter(channel='call',date__gte=last_24_hours, text="MISSING CALL").order_by('-date')
+    missing_calls = Notification.objects.filter(
+          Q(channel='call') &
+          Q(date__gte=last_24_hours) &
+          Q(text="MISSING CALL") &
+          (
+               Q(customer__created_by__suscription=request.user.suscription) |
+               Q(to_number=request.user.suscription.company.phone)
+          )
+    ).order_by('-date') 
+
     messages = Notification.objects.filter(channel='reply',date__gte=last_24_hours).order_by('-date')
 
     context = {

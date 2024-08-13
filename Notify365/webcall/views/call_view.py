@@ -62,6 +62,7 @@ def get_token(request):
 def call(request):
     caller = request.POST.get('Caller', '')
     response = VoiceResponse()
+    dial = Dial(record="record-from-answer")
     dial = Dial(caller_id=TWILIO_NUMBER)
     to_number = request.POST.get('To', '')
 
@@ -136,7 +137,7 @@ def handle_recording(request):
 
         notification = Notification(
             text="MISSING CALL",
-            customer=customer,
+            customer=customer if customer else None,
             date=timezone.now(),
             channel=Notification.CALL,
             sent_by="Customer Call",
