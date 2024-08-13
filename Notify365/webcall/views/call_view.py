@@ -160,7 +160,7 @@ def save_log_call(request):
             customer = Customer.objects.get(phone=phoneNumber)
         except:
             customer = None
-
+        print('este es el numero:' + phoneNumber)
         duration = request.POST.get('duration', '')
         direction = request.POST.get('direction', '')
         text = 'The ' + direction + ' call lasted ' + duration
