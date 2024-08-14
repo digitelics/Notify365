@@ -67,7 +67,7 @@ def call(request):
         print('outbound call')
         dial = Dial(record="record-from-answer", caller_id=TWILIO_NUMBER)
         dial.number(to_number)
-        response.record(max_length=120, action='/webcall/handle_recording/')
+        #response.record(max_length=120, action='/webcall/handle_recording/')
     else:
         print('incoming call')
         if not get_available_agents(to_number):  # Verifica la disponibilidad de agentes
@@ -77,7 +77,7 @@ def call(request):
             dial = Dial(record="record-from-answer", caller_id=TWILIO_NUMBER)
             dial.client(TWILIO_NUMBER)
             response.append(dial)
-            response.record(max_length=120, action='/webcall/handle_recording/')
+            #response.record(max_length=120, action='/webcall/handle_recording/')
 
     return HttpResponse(str(response), content_type='text/xml')
 
@@ -113,8 +113,8 @@ def handle_recording(request):
         if not recording_url or not from_number:
             return HttpResponse("Missing recording URL or from number.", status=400)
 
-        # Esperar 10 segundos antes de intentar recuperar la grabación
-        time.sleep(10)
+        # Esperar 5 segundos antes de intentar recuperar la grabación
+        time.sleep(5)
 
         response = requests.get(recording_url, auth=(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN))
         print(f"Recording fetch status code: {response.status_code}")
@@ -167,7 +167,6 @@ def save_log_call(request):
         duration = request.POST.get('duration', '')
         direction = request.POST.get('direction', '')
         text = 'The ' + direction + ' call lasted ' + duration
-        print('entro')
        
         return JsonResponse({'message': 'Registro de llamada guardado exitosamente'})
     
