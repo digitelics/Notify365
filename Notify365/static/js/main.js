@@ -38,6 +38,8 @@ $(function () {
 
             device.on("connect", function (conn) {
                 log('Call currently in progress'); 
+                console.log(conn.parameters.From)
+                console.log(conn.parameters.To)
                 if( !document.getElementById('callingTo').innerText ){
                     document.getElementById('callingTo').innerText = formatPhoneNumber(document.getElementById("phoneNumber").value.trim());
                 }
@@ -46,6 +48,7 @@ $(function () {
             
             device.on("disconnect", function (conn) {
                 let phoneNumber = conn.parameters.From;
+                let toNumber = conn.parameters.To;
                 stop()
                 handleModal("modal-call-in-progress");
                 document.getElementById("callingTo").innerText = "";
@@ -54,8 +57,9 @@ $(function () {
                 var postData = {
                     duration: callDuration,
                     direction: conn.direction,
-                    phoneNumber: phoneNumber
-                };
+                    fromNumber: phoneNumber,
+                    toNumber: toNumber,
+                };/*
                 $.ajax({
                     type: "POST",
                     url: "/save/log/call/", // Aquí debes poner la URL de tu endpoint en Python
@@ -66,7 +70,7 @@ $(function () {
                     error: function(err) {
                         console.error("Error al guardar el registro de la llamada:", err);
                     }
-                });
+                });*/
             });
 
             device.on("incoming", function (conn) {
@@ -127,11 +131,13 @@ $(function () {
                     handleModal("modal-incomming-call");
                 }
                 let phoneNumber = conn.parameters.From;
+                let toNumber = conn.parameters.To
                 var postData = {
                     duration: '0',
                     direction: "MISSING",
-                    phoneNumber: phoneNumber
-                };
+                    fromNumber: phoneNumber,
+                    toNumber: toNumber,
+                };/*
                 $.ajax({
                     type: "POST",
                     url: "/save/log/call/", // Aquí debes poner la URL de tu endpoint en Python
@@ -142,7 +148,7 @@ $(function () {
                     error: function(err) {
                         console.error("Error al guardar el registro de la llamada:", err);
                     }
-                });
+                });*/
             });
 
 
