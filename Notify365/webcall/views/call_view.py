@@ -62,11 +62,12 @@ def get_token(request):
 def call(request):
     response = VoiceResponse()
     to_number = request.POST.get('To')
-
+    print(to_number)
     if to_number and to_number != TWILIO_NUMBER:
         print('outbound call')
         dial = Dial(record="record-from-answer", caller_id=TWILIO_NUMBER)
         dial.number(to_number)
+        response.record(max_length=120, action='/webcall/handle_recording/')
     else:
         print('incoming call')
         if not get_available_agents(to_number):  # Verifica la disponibilidad de agentes
@@ -76,6 +77,7 @@ def call(request):
             dial = Dial(record="record-from-answer", caller_id=TWILIO_NUMBER)
             dial.client(TWILIO_NUMBER)
             response.append(dial)
+            response.record(max_length=120, action='/webcall/handle_recording/')
 
     return HttpResponse(str(response), content_type='text/xml')
 
@@ -155,7 +157,8 @@ def save_log_call(request):
         user = None
     if request.method == 'POST':
         try:
-            phoneNumber = request.POST.get('phoneNumber', '')
+            phoneNumber = request.POST.get('fromNumber', '')
+            toNumber = request.POST.get('toNumber', '')
             customer = Customer.objects.get(phone=phoneNumber)
         except:
             customer = None
@@ -163,14 +166,8 @@ def save_log_call(request):
         duration = request.POST.get('duration', '')
         direction = request.POST.get('direction', '')
         text = 'The ' + direction + ' call lasted ' + duration
-        Notification.objects.create(
-                    text=text, 
-                    customer=customer,
-                    date=timezone.now(),
-                    channel=Notification.CALL,
-                    sent_by=user.name,
-                    created_by = user
-                )
+        print('entro')
+       
         return JsonResponse({'message': 'Registro de llamada guardado exitosamente'})
     
     # Manejar otros métodos de solicitud si es necesario
