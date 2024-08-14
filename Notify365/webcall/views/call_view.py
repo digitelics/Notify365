@@ -104,6 +104,8 @@ def handle_recording(request):
         to_number = request.POST.get('To', '')
         from_number = request.POST.get('From')
         media_content_type = request.POST.get('MediaContentType')
+        call_duration = request.POST.get('CallDuration')  # Duración de la llamada en segundos
+        call_direction = request.POST.get('Direction')  # Dirección de la llamada (inbound/outbound)
 
         print(f"Recording URL: {recording_url}")
         print(f"From number: {from_number}")
@@ -134,7 +136,7 @@ def handle_recording(request):
         content_file = ContentFile(response.content, name=file_name)
 
         notification = Notification(
-            text="MISSING CALL",
+            text=call_direction+' '+call_duration,
             customer=customer if customer else None,
             date=timezone.now(),
             channel=Notification.CALL,
