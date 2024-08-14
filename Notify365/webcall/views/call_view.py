@@ -136,7 +136,7 @@ def handle_recording(request):
         content_file = ContentFile(response.content, name=file_name)
 
         notification = Notification(
-            text=str(call_direction),
+            text=call_direction,
             customer=customer if customer else None,
             date=timezone.now(),
             channel=Notification.CALL,
