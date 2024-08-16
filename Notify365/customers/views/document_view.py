@@ -20,16 +20,30 @@ def update_document_view(request):
         document = request.POST.get('customer-document')
         filedescription = request.POST.get('filedescription')
         documentFile = request.FILES.get('document-file')
-       
         if document and documentFile:
-            customerDocument = CustomerDocument.objects.get(pk=document)
-            customerDocument.description = filedescription
-            customerDocument.doc_path = documentFile
-            customerDocument.created_by = request.user
-            customerDocument.save()
+            try:
+                customerDocument = CustomerDocument.objects.get(document=document, customer=customerId)
+                customerDocument.description = filedescription
+                customerDocument.doc_path = documentFile
+                customerDocument.created_by = request.user
+                customerDocument.save()
+                messages.add_message(request, messages.SUCCESS, 'Document uploaded successfully.', extra_tags='Document_uploaded success')
+                return redirect(reverse('customer_detail', args=[customerId] ))
+            except:
+                document = RequiredDocument.objects.get(pk=document)
+                customer = Customer.objects.get(pk=customerId)
+                customerDocument = CustomerDocument(
+                    description = filedescription,
+                    doc_path =  documentFile,
+                    created_by = request.user,
+                    document = document,
+                    customer = customer,
+                )
+                customerDocument.save()
+                messages.add_message(request, messages.SUCCESS, 'Document uploaded successfully.', extra_tags='Document_uploaded success')
+                return redirect(reverse('customer_detail', args=[customerId] ))
 
-            messages.add_message(request, messages.SUCCESS, 'Document uploaded successfully.', extra_tags='Document_uploaded success')
-            return redirect(reverse('customer_detail', args=[customerId] ))
+           
         else:
             messages.add_message(request, messages.ERROR, 'Error uploading document. Please provide all required fields.', extra_tags='Uploading_error error')
             return redirect(reverse('customers'))

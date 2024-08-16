@@ -1,0 +1,307 @@
+ <section class="hidden overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center" id="edit-modal-customer">
+      <form id="editCustomerForm" method="POST" class="modal-position">
+      {% csrf_token %}
+        <div class="shadow sm:overflow-hidden sm:rounded-md">
+          <div class="bg-white">
+            <div class="flex items-center justify-between p-4 bg-purple-50 bg-opacity-50 md:p-5 border-b rounded-t dark:border-gray-600">
+              <div>
+                  <h2 id="payment-details-heading" class="text-lg font-medium leading-6 text-gray-900">Edit customer</h2>
+                  <p class="mt-1 text-sm text-gray-500"></p>
+                </div>
+                <button type="button" onclick="toggleModal('edit-modal-customer')" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+
+            <div class="mt-6 px-10 pb-5 grid grid-cols-4 gap-y-3 gap-x-6">
+              <div class="col-span-4 sm:col-span-2">
+                <label for="first-name" class="block text-sm font-medium leading-6 text-gray-900">First name</label>
+                <input type="text" name="first-name" id="edit-first-name" class="mt-2 block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6">
+                <span class="error-message"></span>
+              </div>
+
+              <div class="col-span-4 sm:col-span-2">
+                <label for="last-name" class="block text-sm font-medium leading-6 text-gray-900">Last name</label>
+                <input type="text" name="last-name" id="edit-last-name" class="mt-2 block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6">
+                <span class="error-message"></span>
+              </div>
+
+              <div class="col-span-4 sm:col-span-2">
+                <label for="phone" class="block text-sm font-medium leading-6 text-gray-900">Phone</label>
+                <input type="text" name="phone" id="edit-phone" autocomplete="cc-given-tel" class="mt-2 block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6">
+                <span class="error-message"></span>
+              </div>
+
+              <div class="col-span-4 sm:col-span-2">
+                <label for="dob" class="block text-sm font-medium leading-6 text-gray-900">Date of birth</label>
+                <input type="date" name="dob" id="edit-dob" autocomplete="cc-given-dob" class="mt-2 block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6">
+                <span class="error-message"></span>
+              </div>
+
+                <div class="col-span-4 sm:col-span-2">
+                <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email</label>
+                <input type="email" name="email" id="edit-email" autocomplete="cc-given-email" class="mt-2 block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6">
+                <span class="error-message"></span>
+              </div>
+
+                <div class="col-span-4 sm:col-span-2">
+                <label for="gender" class="block text-sm font-medium leading-6 text-gray-900">Gender</label>
+                <select id="edit-gender" name="gender" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option selected value="">Not specified</option>
+                </select>
+                <span class="error-message"></span>
+              </div>
+
+              <div class="col-span-4 sm:col-span-4 ">
+                <div class="lg:col-start-3 lg:row-end-1">
+                <h2 class="sr-only">Address</h2>
+                <div class="rounded-lg bg-gray-50 shadow-sm ring-1 ring-gray-900/5">
+                    <dl class="flex flex-wrap">
+                    <div class="flex-auto pl-6 pt-3">
+                        <dt class="text-sm font-semibold leading-6 text-gray-900">Address</dt>
+                    </div>
+                    <div class="mt-3 w-full flex-none gap-x-4 border-t border-gray-900/5 px-6 pt-6">
+                        <dt class=" grid grid-col-2 gap-x-4 gap-y-3 pb-10">
+                              <div class="col-span-4 sm:col-span-4">
+                                <label for="street" class="block text-sm font-medium leading-6 text-gray-900">Street</label>
+                                <input type="text" name="street" id="edit-street" autocomplete="cc-given-address" class="mt-2 block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6">
+                                <span class="error-message"></span>
+                            </div>
+                            <div class="col-span-2 sm:col-span-2">
+                                <label for="city" class="block text-sm font-medium leading-6 text-gray-900">City</label>
+                                <input type="text" name="city" id="edit-city" autocomplete="cc-given-address" class="mt-2 block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6">
+                                <span class="error-message"></span>
+                            </div>
+                            <div class="sm:col-span-2 mb-4 autocomplete-container">
+                                <label for="state-filter" class="block text-sm font-medium leading-6 text-slate-900">State</label>
+                                <input type="text" id="edit-state-filter" value="{{data.state}}" placeholder="Type to filter states..." class="align-input px-2 mt-2 block w-full rounded-md border-0 py-1.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6">
+                                <select name="state" id="edit-state" class="align-input hidden px-2 mt-2 block w-full rounded-md border-0 py-1.5 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6">
+                                    <option value="">Select a state</option>
+                                    {% for state in data.states %}
+                                        <option value="{{ state.id }}" data-name="{{ state.name }}" {% if state.id == data.state.id %}selected{% endif %}>{{ state.state }}</option>
+                                    {% endfor %}
+                                </select>
+                                <span class="error-message"></span>
+                            </div>
+                            <div class="col-span-1 sm:col-span-1">
+                                <label for="zip_code" class="block text-sm font-medium leading-6 text-gray-900">Zip Code</label>
+                                <input type="text" name="zip_code" id="edit-zip_code" autocomplete="cc-given-address" class="mt-2 block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6">
+                                <span class="error-message"></span>
+                            </div>
+                        </dt>
+                    </div>
+                    </dl>
+                </div>
+                </div>
+              </div>
+              {% comment "" %}
+              <div class="col-span-4 sm:col-span-4">
+                <div class="flex items-center justify-center w-full">
+                    <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-50 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                            <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                            </svg>
+                            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+                        </div>
+                        <input id="dropzone-file" type="file" class="hidden" />
+                    </label>
+                </div> 
+              </div>
+              {% endcomment %}
+              
+           
+            </div> 
+          </div>
+          <div class="bg-gray-50 px-4 py-3 text-right sm:px-6">
+            <button type="submit" class="inline-flex justify-center rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900">Save</button>
+          </div>
+        </div>
+      </form>
+    </section>
+    <div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="edit-modal-customer-backdrop"></div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('editCustomerForm');
+    const nameInput = document.getElementById('edit-first-name');
+    const lnameInput = document.getElementById('edit-last-name');
+    const phoneInput = document.getElementById('edit-phone');
+    const stateSelect = document.getElementById('edit-state');
+    const stateInput = document.getElementById('edit-state-filter');
+    const zipCodeInput = document.getElementById('edit-zip_code');
+    const streetInput = document.getElementById('edit-street');
+    const cityInput = document.getElementById('edit-city');
+    const dobInput = document.getElementById('edit-dob');
+    const genderInput = document.getElementById('edit-gender');
+
+    // Phone validation
+    phoneInput.addEventListener('keypress', function (event) {
+        if (event.which < 48 || event.which > 57 || this.value.length === 10) {
+            event.preventDefault();
+        }
+    });
+
+    form.addEventListener('submit', function (event) {
+
+      // Prevent the form from submitting
+      event.preventDefault();
+      let isValid = true;
+      resetErrorMessages();
+      
+      if (!nameInput.value.trim()) {
+        setErrorFor(nameInput, 'Customer name cannot be blank');
+        isValid = false;
+      } else if (nameInput.value.trim().length > 100) {
+        setErrorFor(nameInput, 'Customer name cannot exceed 100 characters');
+        isValid = false;
+      }
+
+      if (!lnameInput.value.trim()) {
+        setErrorFor(lnameInput, 'Customer last name cannot be blank');
+        isValid = false;
+      } else if (lnameInput.value.trim().length > 200) {
+        setErrorFor(lnameInput, 'Customer last name cannot exceed 100 characters');
+        isValid = false;
+      }
+
+       if (dobInput) {
+        const dobValue = dobInput.value;
+        const today = new Date();
+        const dobDate = new Date(dobValue);
+        // Restablece la hora a 00:00:00 para ambas fechas para asegurarte de que la comparación se realiza correctamente
+        dobDate.setHours(0, 0, 0, 0);
+        today.setHours(0, 0, 0, 0);
+        if (dobDate >= today) {
+            setErrorFor(dobInput, 'Date of birth cannot be today or in the future.');
+            isValid = false;
+        }
+      }
+
+      if (!phoneInput.value.trim()) {
+        setErrorFor(phoneInput, 'Phone number cannot be blank.');
+        isValid = false;
+      }
+
+       if (!genderInput.value.trim()) {
+        setErrorFor(genderInput, 'Gender cannot be blank, please select one.');
+        isValid = false;
+      }
+
+      if (!cityInput.value.trim()) {
+        setErrorFor(cityInput, 'City cannot be blank.');
+        isValid = false;
+      } else if (cityInput.value.trim().length > 100) {
+        setErrorFor(cityInput, 'City name cannot exceed 100 characters');
+        isValid = false;
+      }
+
+      if (!streetInput.value.trim()) {
+        setErrorFor(streetInput, 'Address cannot be blank');
+        isValid = false;
+      } else if (streetInput.value.trim().length > 255) {
+        setErrorFor(streetInput, 'Address cannot exceed 255 characters');
+        isValid = false;
+      }
+
+      if (!isStateValid()) {
+        isValid = false;
+        setErrorFor(stateInput, 'Please select a valid state from the list.');
+      }
+
+      if (zipCodeInput.value.trim().length > 10) {
+        setErrorFor(zipCodeInput, 'Zip code cannot exceed 9 characters.');
+        isValid = false;
+      } else if (!isZipCodeValid()) {
+        isValid = false;
+        setErrorFor(zipCodeInput, 'Zip code should contain only numbers.');
+      } else if (!zipCodeInput.value.trim()) {
+        setErrorFor(zipCodeInput, 'Zip code cannot be blank');
+        isValid = false;
+      }
+
+      if (isValid) {
+        // Show loading indicator
+        document.getElementById('loadingIndicator').classList.remove('hidden');
+        toggleModal('edit-modal-customer');
+        // Submit the form
+        form.submit();
+      }
+    });
+
+    // Function to reset all error messages
+    function resetErrorMessages() {
+        const errorMessages = document.querySelectorAll('.error-message');
+        errorMessages.forEach(function (errorMessage) {
+            errorMessage.textContent = '';
+        });
+    }
+
+    // Function to set error message for a field
+    function setErrorFor(input, message) {
+      const formControl = input.parentElement;
+      const errorMessage = formControl.querySelector('.error-message');
+      errorMessage.textContent = message;
+      input.classList.add('error');
+    }
+
+    stateInput.addEventListener('input', function () {
+        const filter = stateInput.value.toLowerCase();
+        const options = stateSelect.querySelectorAll('option');
+
+        let matchFound = false;
+        options.forEach(option => {
+            const text = option.textContent.toLowerCase();
+            if (text.includes(filter) && filter !== '') {
+                option.style.display = '';
+                matchFound = true;
+            } else {
+                option.style.display = 'none';
+            }
+        });
+
+        if (matchFound) {
+            stateSelect.size = options.length;
+            stateSelect.style.display = 'block';
+        } else {
+            stateSelect.style.display = 'none';
+        }
+    });
+
+    stateSelect.addEventListener('change', function () {
+        const selectedOption = stateSelect.options[stateSelect.selectedIndex];
+        stateInput.value = selectedOption.textContent;
+        stateSelect.style.display = 'none';
+    });
+
+    document.addEventListener('click', function (event) {
+        if (!stateInput.contains(event.target) && !stateSelect.contains(event.target)) {
+            stateSelect.style.display = 'none';
+        }
+    });
+
+    function isStateValid() {
+        const stateValue = stateInput.value.toLowerCase();
+        const options = stateSelect.querySelectorAll('option');
+        for (let option of options) {
+            if (option.textContent.toLowerCase() === stateValue) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function isZipCodeValid() {
+      const zipCodePattern = /^[0-9-]{1,10}$/;
+      return zipCodePattern.test(zipCodeInput.value);
+    }
+});
+
+</script>
+

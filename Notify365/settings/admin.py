@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Company, State, CompanyType, ProviderType, TemplateCategory, RequiredDocument, Product
+from .models import Company, State, CompanyType, ProviderType, TemplateCategory, RequiredDocument, Product, Provider
 
 
 
@@ -10,3 +10,4 @@ admin.site.register(ProviderType)
 admin.site.register(TemplateCategory)
 admin.site.register(RequiredDocument)
 admin.site.register(Product)
+admin.site.register(Provider)

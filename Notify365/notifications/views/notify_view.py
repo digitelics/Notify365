@@ -107,7 +107,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 # Create your views here.
-
+login_required
 def notify(request):
     calls = Notification.objects.filter(
         Q(channel='call') &

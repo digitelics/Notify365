@@ -1,7 +1,7 @@
 from django.db import models
 from simple_history.models import HistoricalRecords
 from customers.models import Customer # Ajusta la importación según tu estructura de carpetas
-from settings.models import Product  # Ajusta la importación según tu estructura de carpetas
+from settings.models import Product, Provider  # Ajusta la importación según tu estructura de carpetas
 from security.models import CustomUser as User
 from django.utils import timezone
 from datetime import timedelta
@@ -35,6 +35,7 @@ class CustomerService(models.Model):
     code = models.CharField(max_length=20)
     activation_date = models.DateField()
     base_premium = models.DecimalField(max_digits=10, decimal_places=2)
+    provider = models.ForeignKey(Provider, on_delete=models.CASCADE)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='services_created')
     activation_period = models.CharField(max_length=20, choices=ACTIVATION_PERIOD_CHOICES)
     deactivation_date = models.DateField(blank=True, null=True)

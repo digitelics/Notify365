@@ -14,7 +14,7 @@
                 </svg>
                 <div class="ml-3 text-sm">
                   <p class="font-medium text-slate-900">General</p>
-                  <p class="mt-1 text-slate-500">Ullamcorper id at suspendisse nec id volutpat vestibulum enim. Interdum blandit.</p>
+                  <p class="mt-1 text-slate-500">Manage basic system settings and preferences.</p>
                 </div>
               </a>
               <a href={% url 'account' %} class="account hover:bg-blue-50 hover:bg-opacity-50 border-slate-200 flex border-b p-6">
@@ -23,7 +23,7 @@
                 </svg>
                 <div class="ml-3 text-sm">
                   <p class="font-medium text-slate-900">Account</p>
-                  <p class="mt-1 text-slate-500">Ullamcorper id at suspendisse nec id volutpat vestibulum enim. Interdum blandit.</p>
+                  <p class="mt-1 text-slate-500">Update your account details and subscription information.</p>
                 </div>
               </a>
               <a href={% url 'notification'  %} class="notifications hover:bg-blue-50 hover:bg-opacity-50 border-slate-200 flex border-b p-6">
@@ -32,7 +32,7 @@
                 </svg>
                 <div class="ml-3 text-sm">
                   <p class="font-medium text-slate-900">Notifications</p>
-                  <p class="mt-1 text-slate-500">Enim, nullam mi vel et libero urna lectus enim. Et sed in maecenas tellus.</p>
+                  <p class="mt-1 text-slate-500">Configure how and when you receive alerts.</p>
                 </div>
               </a>
               <a href={% url 'security' %} style="display:none" class="hover:bg-blue-50 hover:bg-opacity-50 border-slate-200 flex border-b p-6">
@@ -41,7 +41,7 @@
                 </svg>
                 <div class="ml-3 text-sm">
                   <p class="font-medium text-slate-900">Security</p>
-                  <p class="mt-1 text-slate-500">Semper accumsan massa vel volutpat massa. Non turpis ut nulla aliquet turpis.</p>
+                  <p class="mt-1 text-slate-500">Adjust security settings, including passwords and two-factor authentication.</p>
                 </div>
               </a>
               <a href={% url 'company' %} class="company hover:bg-blue-50 hover:bg-opacity-50 border-slate-200 flex border-b p-6">
@@ -50,7 +50,7 @@
                 </svg>
                 <div class="ml-3 text-sm">
                   <p class="font-medium text-slate-900">Company</p>
-                  <p class="mt-1 text-slate-500">Magna nulla id sed ornare ipsum eget. Massa eget porttitor suscipit consequat.</p>
+                  <p class="mt-1 text-slate-500">Manage company information and branding.</p>
                 </div>
               </a>
               <a href={% url 'users' %} id="user-setting-menu" class="users hover:bg-blue-50 hover:bg-opacity-50 border-slate-200 flex border-b p-6">
@@ -59,7 +59,7 @@
                 </svg>
                 <div class="ml-3 text-sm">
                   <p class="font-medium text-slate-900">Users</p>
-                  <p class="mt-1 text-slate-500">Orci aliquam arcu egestas turpis cursus. Lectus faucibus netus dui auctor mauris.</p>
+                  <p class="mt-1 text-slate-500">Control user access and permissions.</p>
                 </div>
               </a>
               <a href="#" class="hover:bg-blue-50 hover:bg-opacity-50 border-slate-200 flex border-b p-6">
@@ -68,16 +68,16 @@
                 </svg>
                 <div class="ml-3 text-sm">
                   <p class="font-medium text-slate-900">Logs</p>
-                  <p class="mt-1 text-slate-500">Nisi, elit volutpat odio urna quis arcu faucibus dui. Mauris adipiscing pellentesque.</p>
+                  <p class="mt-1 text-slate-500">View system activity and audit logs.</p>
                 </div>
               </a>
-              <a href="#" class="hover:bg-blue-50 hover:bg-opacity-50 border-slate-200 flex border-b p-6">
+              <a href={% url 'import' %} class="hover:bg-blue-50 hover:bg-opacity-50 border-slate-200 flex border-b p-6">
                 <svg class="-mt-0.5 h-6 w-6 flex-shrink-0 text-slate-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
                 </svg>
                 <div class="ml-3 text-sm">
                   <p class="font-medium text-slate-900">Import external data</p>
-                  <p class="mt-1 text-slate-500">Quis viverra netus donec ut auctor fringilla facilisis. Nunc sit donec cursus sit quis et.</p>
+                  <p class="mt-1 text-slate-500">Bring in data from external sources.</p>
                 </div>
               </a>
             </div>

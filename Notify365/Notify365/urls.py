@@ -21,8 +21,8 @@ urlpatterns = [
     path('customers/', views.customer_view.customer, name='customers'),
     path('customers/add', views.customer_view.add_customer_view, name='add-customer'),
     path('customers/<int:customer_id>/', views.customer_view.customer_detail_view, name='customer_detail'),
-    #path('customers/edit/<int:id>', views.customer_view.customer, name='customer'),
-    #path('customers/delete/<int:id>', views.customer_view.customer, name='customer'),
+    path('customers/edit/<int:id>', views.customer_view.edit_customer_view, name='edit-customer'),
+    path('customers/delete/<int:id>', views.customer_view.delete_customer, name='delete-customer'),
 
     path('customers/deal/add', views.customer_service_view.add_deal_view, name='add-deal'),
     path('customers/note/add', views.note_view.add_note_view, name='add-note'),
@@ -50,6 +50,9 @@ urlpatterns = [
     path('setting/general_settings/product/add', views.product_view.add_product_view, name='product-add'),
     path('setting/general_settings/product/edit/<int:id>', views.product_view.edit_product_view, name='product-edit'),
     path('setting/general_settings/product/remove/<int:id>', views.product_view.delete_product, name='product-remove'),
+
+    path('setting/import/', views.import_view.data_import, name='import'),
+    path('setting/import/data/', views.import_view.file_import, name='file-import'),
     
     path('save/log/call/', views.call_view.save_log_call, name="save_log_call"),
     

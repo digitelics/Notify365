@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from security.models import CustomUser as User
 from customers.models import Customer, CustomerService, CustomerDocument
-from settings.models import Product, RequiredDocument
+from settings.models import Product, RequiredDocument, Provider
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.urls import reverse
@@ -20,12 +20,14 @@ def add_deal_view(request):
         activation_date_str = request.POST.get('activation_date')
         activation_period = request.POST.get('activation_true')
         code = request.POST.get('code')
+        providerId = request.POST.get('provider')
 
         if customerId and productId:
             try:
                 with transaction.atomic():
                     customer = Customer.objects.get(pk=customerId)
                     product = Product.objects.get(pk=productId)
+                    provider = Provider.objects.get(pk=providerId)
                     activation_date = datetime.strptime(activation_date_str, '%Y-%m-%d').date()
 
                     customer.customer_status = Customer.CLIENT
@@ -41,7 +43,8 @@ def add_deal_view(request):
                         code=code,
                         created_by=request.user,
                         created_at=timezone.now(),
-                        product_status=CustomerService.ACTIVE
+                        product_status=CustomerService.ACTIVE,
+                        provider = provider,
                     )
                     service.save()
 

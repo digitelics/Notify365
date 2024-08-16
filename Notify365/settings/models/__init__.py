@@ -5,3 +5,4 @@ from .required_document_model import RequiredDocument
 from .template_category_model import TemplateCategory
 from .provider_type_model import ProviderType
 from .product_model import Product
+from .provider_model import Provider

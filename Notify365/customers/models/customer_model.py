@@ -33,7 +33,7 @@ class Customer(models.Model):
     city = models.CharField(max_length=255)
     zip_code = models.CharField(max_length=10)
     dob = models.DateField(null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField()
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
     gender = models.CharField(max_length=10, choices=GENDER_CHOICE)

@@ -22,8 +22,13 @@
                     <input type="text" name="code" id="code" class="mt-2 block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6">
                   </div>
 
+                   <div class="col-span-4 sm:col-span-2">
+                    <label for="dealamount" class="block text-sm font-medium leading-6 text-gray-900">Deal amount</label>
+                    <input type="number" name="dealamount" id="dealamount" class="mt-2 block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6">
+                  </div>
+
                   <div class="col-span-4 sm:col-span-2">
-                    <label for="service" class="block text-sm font-medium leading-6 text-gray-900">Service</label>
+                    <label for="service" class="block text-sm font-medium leading-6 text-gray-900">Business line</label>
                     <select id="service" name="service" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
                         {% if data.services %}
                           <option selected>-- Selet --</option>
@@ -35,8 +40,15 @@
                   </div>
 
                   <div class="col-span-4 sm:col-span-2">
-                    <label for="dealamount" class="block text-sm font-medium leading-6 text-gray-900">Deal amount</label>
-                    <input type="number" name="dealamount" id="dealamount" class="mt-2 block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6">
+                    <label for="provider" class="block text-sm font-medium leading-6 text-gray-900">Provider</label>
+                    <select id="provider" name="provider" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        {% if data.providers %}
+                          <option selected>-- Selet --</option>
+                          {% for provider in data.providers %}
+                               <option value={{provider.id}}>  {{provider.provider}} </option>
+                          {% endfor %}
+                       {% endif %}
+                    </select>
                   </div>
 
                    <div class="col-span-4 sm:col-span-2">
