@@ -1,66 +1,84 @@
-
+    
       <div class="space-y-6 sm:px-6 lg:col-span-9 lg:px-0">
-        <section aria-labelledby="payment-details-heading">
-          <form action="#" method="POST">
-            <div class="shadow sm:overflow-hidden sm:rounded-md">
-              <div class="bg-white px-4 py-6 sm:p-6">
-                <div>
-                  <h2 id="payment-details-heading" class="text-lg font-medium leading-6 text-gray-900">Messages Templates</h2>
-                  <p class="mt-1 text-sm text-gray-500">Update your billing information. Please note that updating your location could affect your tax rates.</p>
-                </div>
-
-                <div class="mt-6 grid grid-cols-4 gap-6">
-                  <div class="col-span-4 sm:col-span-2">
-                    <label for="first-name" class="block text-sm font-medium leading-6 text-gray-900">First name</label>
-                    <input type="text" name="first-name" id="first-name" autocomplete="cc-given-name" class="mt-2 block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6">
-                  </div>
-
-                  <div class="col-span-4 sm:col-span-2">
-                    <label for="last-name" class="block text-sm font-medium leading-6 text-gray-900">Last name</label>
-                    <input type="text" name="last-name" id="last-name" autocomplete="cc-family-name" class="mt-2 block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6">
-                  </div>
-
-                  <div class="col-span-4 sm:col-span-2">
-                    <label for="email-address" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
-                    <input type="text" name="email-address" id="email-address" autocomplete="email" class="mt-2 block w-full rounded-md border-0 px-3 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6">
-                  </div>
-
-                  <div class="col-span-4 sm:col-span-1">
-                    <label for="expiration-date" class="block text-sm font-medium leading-6 text-gray-900">Expration date</label>
-                    <input type="text" name="expiration-date" id="expiration-date" autocomplete="cc-exp" class="mt-2 block w-full rounded-md border-0 px-3 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6" placeholder="MM / YY">
-                  </div>
-
-                  <div class="col-span-4 sm:col-span-1">
-                    <label for="security-code" class="flex items-center text-sm font-medium leading-6 text-gray-900">
-                      <span>Security code</span>
-                      <svg class="ml-1 h-5 w-5 flex-shrink-0 text-gray-300" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM8.94 6.94a.75.75 0 11-1.061-1.061 3 3 0 112.871 5.026v.345a.75.75 0 01-1.5 0v-.5c0-.72.57-1.172 1.081-1.287A1.5 1.5 0 108.94 6.94zM10 15a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
-                      </svg>
-                    </label>
-                    <input type="text" name="security-code" id="security-code" autocomplete="cc-csc" class="mt-2 block w-full rounded-md border-0 px-3 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6">
-                  </div>
-
-                  <div class="col-span-4 sm:col-span-2">
-                    <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Country</label>
-                    <select id="country" name="country" autocomplete="country-name" class="mt-2 block w-full rounded-md border-0 bg-white px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6">
-                      <option>United States</option>
-                      <option>Canada</option>
-                      <option>Mexico</option>
-                    </select>
-                  </div>
-
-                  <div class="col-span-4 sm:col-span-2">
-                    <label for="postal-code" class="block text-sm font-medium leading-6 text-gray-900">ZIP / Postal code</label>
-                    <input type="text" name="postal-code" id="postal-code" autocomplete="postal-code" class="mt-2 block w-full rounded-md border-0 px-3 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6">
-                  </div>
-                </div>
+        <section aria-labelledby="billing-history-heading">
+          <div class="bg-white pt-6 shadow sm:overflow-hidden sm:rounded-md">
+            
+            <div class="md:flex md:items-center md:justify-between px-4 sm:px-6">
+              <div class="min-w-0 flex-1">
+                <h2 id="payment-details-heading" class="text-lg font-medium leading-6 text-gray-900">Messages Templates</h2>
+                <p class="mt-1 text-sm text-gray-500">Create and update your messages templates to make an stadard comunication with your clients.</p>
               </div>
-              <div class="bg-gray-50 px-4 py-3 text-right sm:px-6">
-                <button type="submit" class="inline-flex justify-center rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900">Save</button>
+              <div class="mt-4 flex md:ml-4 md:mt-0">
+               <button type="button" onclick="toggleModal('modal-add-template')" class="order-0 inline-flex items-center rounded-md bg-purple-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600 sm:order-1 sm:ml-3">Create</button>
               </div>
             </div>
-          </form>
+            <div class="mt-6 flex flex-col">
+              <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                  <div class="overflow-hidden border-t border-gray-200">
+                    <table class="min-w-full divide-y divide-gray-200">
+                      <thead class="bg-gray-300 bg-opacity-50">
+                        <tr>
+                          <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Template name</th>
+                          <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Type</th>
+                          <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Channel</th>
+                           <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-900">Text</th>
+                          <!--
+                            `relative` is added here due to a weird bug in Safari that causes `sr-only` headings to introduce overflow on the body on mobile.
+                          -->
+                          <th scope="col" class="relative px-6 py-3 text-left text-sm font-medium text-gray-500">
+                            <span class="sr-only">View datails</span>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-gray-200 bg-white">
+                       {% for template in templates %}
+                        <tr>
+                           <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">{{template.name}} </td>
+                            <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{{ template.type }}</td>
+                            <td class="whitespace-wrap px-6 py-4 text-sm text-gray-500">{{ template.channel }}</td>
+                            <td class="whitespace-wrap px-6 py-4 text-sm text-gray-500">{{ template.text }}</td>
+                            <td class="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
+                              <div class="flex flex-1 gap-2 justify-end">
+                                <button class="edit-template-btn" data-templateId={{template.id}} data-templateName="{{ template.name }}" data-templateText="{{ template.text }}" data-templateChannel="{{ template.channel_to }}" data-templateType="{{ template.type }}">
+                                    <span title="Edit">
+                                        <svg fill="none" viewBox="0 0 26 26" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-green-500 hover:text-green-300">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                                        </svg>
+                                    </span>
+                                </button>
+                                <button class="delete-template-btn" data-deleteTemplateId="{{template.id}}">
+                                    <span title="Delete user">
+                                      <svg fill="none" viewBox="0 0 26 26" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-red-600 hover:text-red-400">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                      </svg>
+                                    </span>
+                                </button>
+                              </div>
+                            </td>
+                        </tr>
+                         {% endfor %}
+                        <!-- More payments... -->
+                      </tbody>
+                    </table>
+                    {% include "layouts/partials/pagination.html" %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
+{% include "settings/modals/template_message_modal.html" %}
+{% include "settings/modals/update_template_message_modal.html" %}
+{% include "settings/modals/delete_template.html" %}
+      </div>
+<div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="modal-add-template-backdrop"></div>
+<div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="modal-update-template-backdrop"></div>
+<div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="modal-delete-template-backdrop"></div>
+
+
+
+
 <script type="text/javascript">
       function toggleModal(modalID){
         document.getElementById(modalID).classList.toggle("hidden");
@@ -76,4 +94,173 @@
                   console.log(event.currentTarget);
               }
       });
+
+       $(document).ready(function() {
+        // Evento de clic en el botón Editar producto
+        $('.edit-template-btn').click(function() {
+            // Obtener los datos del producto del atributo data
+            var id = $(this).data('templateid');
+            var name = $(this).data('templatename');
+            var text = $(this).data('templatetext');
+            var channel = $(this).data('templatechannel');
+            var type = $(this).data('templatetype');
+
+            // Actualizar el action del formulario con el ID del producto
+            var actionUrl = '{% url "template-edit" 0 %}'.replace('0', id);
+            $('#editTemplateForm').attr('action', actionUrl);
+
+            // Llenar los campos del formulario en el modal de edición con los datos del producto
+            $('#edit-template-name').val(name); 
+            $('#edit-template-text').val(text);
+            $('#edit-template-channel').val(channel);
+            $('#edit-template-type').val(type);
+            // Mostrar el modal
+            toggleModal("modal-update-template");
+        });
+
+        // Evento de clic en el botón delete
+        $('.delete-template-btn').click(function() {
+            // Obtener los datos del atributo data
+            var id = $(this).data('deletetemplateid');
+            // Actualizar el action del formulario con el ID
+            var actionUrl = '{% url "template-remove" 0 %}'.replace('0', id);
+            $('#deleteTemplateForm').attr('action', actionUrl);
+          
+            toggleModal("modal-delete-template")
+        });
+    });
+
+  document.addEventListener('DOMContentLoaded', function () {
+        const addTemplateForm = document.getElementById('addTemplateForm');
+        const addTemplateNameInput = document.getElementById('add-template-name');
+        const addTextInput = document.getElementById('add-template-text');
+        const addChannelSelect = document.getElementById('add-template-channel');
+        const addTypeSelect = document.getElementById('add-template-type');
+
+        const editTemplateForm = document.getElementById('editTemplateForm');
+        const editTemplateNameInput = document.getElementById('edit-template-name');
+        const editTextInput = document.getElementById('edit-template-text');
+        const editChannelSelect = document.getElementById('edit-template-channel');
+        const editTypeSelect = document.getElementById('edit-template-type');
+
+        const deleteTemplateForm = document.getElementById('deleteTemplateForm')
+
+
+          addTemplateForm.addEventListener('submit', function (event) {
+          // Prevent the form from submitting
+          event.preventDefault();
+          let isValid = true;
+          resetErrorMessages();
+
+          if (!addTemplateNameInput.value.trim()) {
+            setErrorFor(addTemplateNameInput, 'Template name cannot be blank');
+            isValid = false;
+          } else if (addTemplateNameInput.value.trim().length > 100) {
+            setErrorFor(addTemplateNameInput, 'Template name cannot exceed 100 characters');
+            isValid = false;
+          }
+
+          if (addTextInput.value.trim().length > 255) {
+            setErrorFor(addTextInput, 'Template text cannot exceed 255 characters');
+            isValid = false;
+          } else if (!addTemplateNameInput.value.trim()) {
+            setErrorFor(addTextInput, 'Template text cannot be blank');
+            isValid = false;
+          }
+
+          if (!addChannelSelect.value.trim()) {
+            setErrorFor(addChannelSelect, 'Channel cannot be blank');
+            isValid = false;
+          }
+
+          if (!addTypeSelect.value.trim()) {
+            setErrorFor(addTypeSelect, 'Channel cannot be blank');
+            isValid = false;
+          }
+
+          if (isValid) {
+            // Show loading indicator
+            document.getElementById('loadingIndicator').classList.remove('hidden');
+            toggleModal('modal-add-template');
+            // Submit the form
+            addTemplateForm.submit();
+          }
+        });
+
+        editTemplateForm.addEventListener('submit', function (event) {
+          // Prevent the form from submitting
+          event.preventDefault();
+          let isValid = true;
+          resetErrorMessages();
+
+          if (!editTemplateNameInput.value.trim()) {
+            setErrorFor(editTemplateNameInput, 'Template name cannot be blank');
+            isValid = false;
+          } else if (editTemplateNameInput.value.trim().length > 100) {
+            setErrorFor(editTemplateNameInput, 'Template name cannot exceed 100 characters');
+            isValid = false;
+          }
+
+          if (editTextInput.value.trim().length > 255) {
+            setErrorFor(editTextInput, 'Template text cannot exceed 255 characters');
+            isValid = false;
+          } else if (!editTextInput.value.trim()) {
+            setErrorFor(editTextInput, 'Template text cannot be blank');
+            isValid = false;
+          }
+
+          if (!editChannelSelect.value.trim()) {
+            setErrorFor(addChannelSelect, 'Channel cannot be blank');
+            isValid = false;
+          }
+
+          if (!editTypeSelect.value.trim()) {
+            setErrorFor(addTypeSelect, 'Channel cannot be blank');
+            isValid = false;
+          }
+
+          if (isValid) {
+            // Show loading indicator
+            document.getElementById('loadingIndicator').classList.remove('hidden');
+            toggleModal('modal-update-template');
+            // Submit the form
+            editTemplateForm.submit();
+          }
+        });
+        
+        
+        deleteTemplateForm.addEventListener('submit', function (event) {
+          // Prevent the form from submitting
+          event.preventDefault();
+          let isValid = true;
+          
+
+          if (isValid) {
+            // Show loading indicator
+            document.getElementById('loadingIndicator').classList.remove('hidden');
+            toggleModal('modal-delete-template');
+            // Submit the form
+            deleteTemplateForm.submit();
+          }
+        });
+
+        // Function to reset all error messages
+        function resetErrorMessages() {
+            const errorMessages = document.querySelectorAll('.error-message');
+            errorMessages.forEach(function (errorMessage) {
+                errorMessage.textContent = '';
+            });
+        }
+
+        // Function to set error message for a field
+        function setErrorFor(input, message) {
+          const formControl = input.parentElement;
+          const errorMessage = formControl.querySelector('.error-message');
+          errorMessage.textContent = message;
+          input.classList.add('error');
+        }
+
+  });
+
+
 </script>

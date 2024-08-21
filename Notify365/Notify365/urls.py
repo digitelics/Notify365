@@ -23,6 +23,7 @@ urlpatterns = [
     path('customers/<int:customer_id>/', views.customer_view.customer_detail_view, name='customer_detail'),
     path('customers/edit/<int:id>', views.customer_view.edit_customer_view, name='edit-customer'),
     path('customers/delete/<int:id>', views.customer_view.delete_customer, name='delete-customer'),
+    path('customers/filter/', views.customer_view.filter_customer_view, name='filter-customer'),
 
     path('customers/deal/add', views.customer_service_view.add_deal_view, name='add-deal'),
     path('customers/note/add', views.note_view.add_note_view, name='add-note'),
@@ -50,6 +51,10 @@ urlpatterns = [
     path('setting/general_settings/product/add', views.product_view.add_product_view, name='product-add'),
     path('setting/general_settings/product/edit/<int:id>', views.product_view.edit_product_view, name='product-edit'),
     path('setting/general_settings/product/remove/<int:id>', views.product_view.delete_product, name='product-remove'),
+
+     path('setting/general_settings/template/add', views.template_view.add_template_view, name='template-add'),
+    path('setting/general_settings/template/edit/<int:id>', views.template_view.edit_template_view, name='template-edit'),
+    path('setting/general_settings/template/remove/<int:id>', views.template_view.delete_template, name='template-remove'),
 
     path('setting/import/', views.import_view.data_import, name='import'),
     path('setting/import/data/', views.import_view.file_import, name='file-import'),

@@ -4,7 +4,7 @@ def user_context_processor(request):
     try:
       avatar = user.avatar.url
     except:
-      avatar = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png"
+      avatar = "https://notify365.us/static/images/customer-avatar.png"
     context = {
         'name':user.name,
         'username':user.user,

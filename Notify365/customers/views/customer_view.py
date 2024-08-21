@@ -251,3 +251,43 @@ def customer_detail_view(request, customer_id):
             'all_document': list(all_document)
         }
         return render(request, 'customers/customer_template.html', {'data':context})
+    
+@login_required
+def filter_customer_view(request):
+    first_name = request.POST.get('first-name') or None
+    last_name = request.POST.get('last-name') or None
+    phone = request.POST.get('phone') or None
+    email = request.POST.get('email') or None
+    dob = request.POST.get('dob') or None
+
+    user_subscription = request.user.suscription
+    customers = Customer.objects.filter(deleted_at=None, created_by__suscription=user_subscription)
+
+    # Aplicar filtros según los parámetros recibidos
+    if first_name:
+        customers = customers.filter(first_name__icontains=first_name)
+    if last_name:
+        customers = customers.filter(last_name__icontains=last_name)
+    if phone:
+        customers = customers.filter(phone__icontains=phone)
+    if email:
+        customers = customers.filter(email__icontains=email)
+    if dob:
+        customers = customers.filter(dob=dob)
+
+    customers = customers.order_by('first_name')
+    customer_count = customers.count()
+    grouped_customers = defaultdict(list)
+
+    for customer in customers:
+        first_letter = customer.first_name[0].upper()
+        grouped_customers[first_letter].append(customer)
+    
+    states = State.objects.all()
+
+    context = {
+        'states': states,
+        'grouped_customers': dict(grouped_customers),
+        'customer_count': customer_count
+    }
+    return render(request, 'customers/customer_template.html', {'data': context})

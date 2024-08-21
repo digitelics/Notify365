@@ -1,5 +1,6 @@
 from django.views.generic import TemplateView
 from settings.models import ProviderType, TemplateCategory, RequiredDocument, Product
+from notifications.models import Template
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.shortcuts import redirect, get_object_or_404
@@ -35,6 +36,12 @@ class GeneralSettingView(TemplateView):
             context['documents'] = documents
             context['documents_json'] = documents_json
             paginator = Paginator(products, 10) 
+            page_number = self.request.GET.get('page')  
+            context['page_obj'] = paginator.get_page(page_number)
+        elif tab == 'mt':
+            templates = Template.objects.filter(suscription = user_subscription, deleted_at=None).order_by('name')
+            context['templates'] = templates
+            paginator = Paginator(templates, 10) 
             page_number = self.request.GET.get('page')  
             context['page_obj'] = paginator.get_page(page_number)
      

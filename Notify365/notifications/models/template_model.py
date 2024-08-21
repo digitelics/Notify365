@@ -40,8 +40,8 @@ class Template(models.Model):
         blank=True,
         related_name='created_templates'
     )
-    channel_to = models.CharField(max_length=5, choices=CHANNEL_CHOICES, default="text")
-    created_at = models.DateTimeField(auto_now_add=True)
+    channel_to = models.CharField(max_length=6, choices=CHANNEL_CHOICES, default="text")
+    created_at = models.DateTimeField()
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
 
