@@ -25,9 +25,15 @@ def getText(text, customer, documents=False, expiry_date=False):
     if expiry_date:
         today = timezone.now().date()
         thirty_days_from_now = today + timedelta(days=30)
-        deal = CustomerService.objects.filter( customer=customer.id,deactivation_date__gte=today, deactivation_date__lte=thirty_days_from_now).first()
-        expiration_date = deal.deactivation_date.strftime('%m-%d-%Y')
-        service = deal.product
+        seven_day_ago = today - timedelta(days=8)
+        deal = CustomerService.objects.filter( customer=customer.id,deactivation_date__gte=seven_day_ago, deactivation_date__lte=thirty_days_from_now).first()
+        if deal:
+            expiration_date = deal.deactivation_date.strftime('%m-%d-%Y')
+            service = deal.product
+        else:
+            expiration_date =None
+            service = None
+        
 
     replacements = {
         "<<customer>>": f"{customer.first_name}",
