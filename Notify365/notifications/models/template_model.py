@@ -11,6 +11,7 @@ class Template(models.Model):
     NEXT_EXPIRY = 'nextExpiry'
     EXPIRY = 'expiry'
     PAYMENT_REMINDER = 'paymentReminder'
+    SERVICE_EXPIRED = 'serviceExpired'
     TYPE_CHOICES = [
         (BIRTHDAY, 'Birthday'),
         (PENDING_DOCUMENT, 'Pending Document'),
@@ -19,6 +20,7 @@ class Template(models.Model):
         (EXPIRY, 'Expiry'),
         (PAYMENT_REMINDER, 'Payment Reminder'),
         (EXPIRY_TOMORROW, 'Expiry Tomorrow'),
+        (SERVICE_EXPIRED, 'Service Expired'),
     ]
 
     EMAIL = 'email'

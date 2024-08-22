@@ -33,7 +33,8 @@ urlpatterns = [
     path('sms/send/chat/', views.notify_view.send_message_chat, name='send-chat'),
     path('sms/<int:customer_id>/messages/', views.notify_view.load_messages, name='load-messages'),
 
-    path('notify/', views.notify_view.notify, name="notify"),
+    path('notification/', views.notify_view.notify, name="notify"),
+    path('notification/search', views.notify_view.notify_filter, name="filter-call-logs"),
     path('calendar/', views.calendar_views.calendar, name='calendar'),
     path('calendar/today', views.calendar_views.day_calendar, name='day'),
     path('setting/general_settings/<str:tab>', views.general_view.GeneralSettingView.as_view(), name='general_setting'),
@@ -52,7 +53,7 @@ urlpatterns = [
     path('setting/general_settings/product/edit/<int:id>', views.product_view.edit_product_view, name='product-edit'),
     path('setting/general_settings/product/remove/<int:id>', views.product_view.delete_product, name='product-remove'),
 
-     path('setting/general_settings/template/add', views.template_view.add_template_view, name='template-add'),
+    path('setting/general_settings/template/add', views.template_view.add_template_view, name='template-add'),
     path('setting/general_settings/template/edit/<int:id>', views.template_view.edit_template_view, name='template-edit'),
     path('setting/general_settings/template/remove/<int:id>', views.template_view.delete_template, name='template-remove'),
 

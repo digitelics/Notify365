@@ -259,6 +259,7 @@ def filter_customer_view(request):
     phone = request.POST.get('phone') or None
     email = request.POST.get('email') or None
     dob = request.POST.get('dob') or None
+    policy = request.POST.get('policy-number') or None
 
     user_subscription = request.user.suscription
     customers = Customer.objects.filter(deleted_at=None, created_by__suscription=user_subscription)
@@ -274,6 +275,8 @@ def filter_customer_view(request):
         customers = customers.filter(email__icontains=email)
     if dob:
         customers = customers.filter(dob=dob)
+    if policy:
+        customers = customers.filter(services__code__icontains=policy)
 
     customers = customers.order_by('first_name')
     customer_count = customers.count()

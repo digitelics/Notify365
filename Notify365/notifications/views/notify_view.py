@@ -87,7 +87,7 @@ def send_message_chat(request):
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse, HttpResponse, Http404
 from customers.models import Customer
-from notifications.task import send_birthday_notifications, send_document_notifications, send_expiry_notifications, send_next_expiry_notifications, send_expiry_tomorrow_notifications
+from notifications.task import send_birthday_notifications, send_document_notifications, send_expiry_notifications, send_next_expiry_notifications, send_expiry_tomorrow_notifications, send_expired_service_notifications
 from django.contrib.auth.decorators import login_required
 from notifications.models import Notification
 from django.utils import timezone
@@ -109,6 +109,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 # Create your views here.
 login_required
 def notify(request):
+    send_expired_service_notifications.delay()
     calls = Notification.objects.filter(
         Q(channel='call') &
         (
@@ -126,6 +127,43 @@ def notify(request):
     context = {'page_obj': page_obj}  # Pasar el objeto de página al contexto
     
     return render(request, 'notifications/notify_template.html', context)
+
+@login_required
+def notify_filter(request):
+    phone = request.POST.get('phone-number') or request.GET.get('phone-number')
+    
+    if phone and phone.isdigit():
+        calls = Notification.objects.filter(
+            Q(channel='call') &
+            (
+                # Coincidencia en from_number y verificación del to_number
+                (Q(from_number__icontains=phone) & Q(to_number=request.user.suscription.company.phone) &  Q(customer__created_by__suscription=request.user.suscription)) |
+                
+                # Coincidencia en to_number y verificación del from_number
+                (Q(to_number=phone) & Q(from_number=request.user.suscription.company.phone) &  Q(customer__created_by__suscription=request.user.suscription)) 
+                
+            )
+        ).order_by('-date')
+    else:
+        calls = Notification.objects.filter(
+            Q(channel='call') &
+            (
+                Q(customer__created_by__suscription=request.user.suscription) |
+                Q(to_number=request.user.suscription.company.phone)
+            )
+        ).order_by('-date')
+        
+    paginator = Paginator(calls, 10)  # Paginar el queryset con 10 elementos por página
+    page_number = request.GET.get('page')  # Obtener el número de página de la solicitud GET
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'page_obj': page_obj,
+        'phone': phone,  # Pasar el valor del filtro al contexto
+    }  # Pasar el objeto de página al contexto
+    
+    return render(request, 'notifications/notify_template.html', context)
+
 
 
 

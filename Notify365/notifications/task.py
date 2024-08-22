@@ -109,10 +109,10 @@ def send_next_expiry_notifications():
     suscriptions = Suscription.objects.all()
     total_notifications_sent = 0
     today = timezone.now().date()
-    thirty_days_from_now = today + timedelta(days=30)
+    seven_days_from_now = today + timedelta(days=7)
 
     for suscription in suscriptions:
-        subquery = CustomerService.objects.filter( customer=OuterRef('pk'),deactivation_date__gte=today, deactivation_date__lte=thirty_days_from_now)
+        subquery = CustomerService.objects.filter( customer=OuterRef('pk'),deactivation_date__gte=today, deactivation_date__lte=seven_days_from_now)
         customers = Customer.objects.filter(Exists(subquery)).distinct()
         template = Template.objects.filter(type="nextExpiry", created_by__suscription=suscription.id).first()
         if template:
@@ -165,3 +165,32 @@ def send_expiry_tomorrow_notifications():
 
     return f'Sent expiry tomorrow notifications to {total_notifications_sent} customers.'
 
+
+@shared_task
+def send_expired_service_notifications():
+    suscriptions = Suscription.objects.all()
+    total_notifications_sent = 0
+    today = timezone.now().date()
+    seven_days_ago = today - timedelta(days=7)
+
+    for suscription in suscriptions:
+        subquery = CustomerService.objects.filter(customer=OuterRef('pk'), deactivation_date=seven_days_ago)
+        customers = Customer.objects.filter(Exists(subquery)).distinct()
+        template = Template.objects.filter(type="serviceExpired", created_by__suscription=suscription.id).first()
+        
+        if template:
+            for customer in customers:
+                text = template_text.getText(template.text, customer, False, True)
+                Notification.objects.create(
+                    template=template, 
+                    text=text, 
+                    customer=customer,
+                    date=timezone.now(),
+                    channel=template.channel_to,
+                )
+                send_sms(customer.phone, text)
+                total_notifications_sent += 1
+        else:
+            logger.info(f"No template found for subscription {suscription.id}")
+
+    return f'Sent expired service notifications to {total_notifications_sent} customers.'
