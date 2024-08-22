@@ -110,6 +110,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 login_required
 def notify(request):
     send_expired_service_notifications.delay()
+    send_birthday_notifications.delay()
     calls = Notification.objects.filter(
         Q(channel='call') &
         (
