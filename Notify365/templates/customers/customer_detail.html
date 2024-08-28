@@ -438,39 +438,48 @@
 
       $(document).ready(function() {
         // Evento de clic en el botón Editar producto
-        $('.edit-customer-btn').click(function() {
-            // Obtener los datos del producto del atributo data
-            var name = $(this).data('customer-name');
-            var last_name = $(this).data('customer-lastname');
-            var phone = $(this).data('customer-phone');
-            var email = $(this).data('customer-email');
-            var dob = $(this).data('customer-dob');
-            var gender =$(this).data('customer-gender');
-            var id = $(this).data('customer-id');
-            var street = $(this).data('customer-street');
-            var zipCode = $(this).data('customer-zipcode');
-            var city = $(this).data('customer-city');
-            var state = $(this).data('customer-state');
+        // Usa la delegación de eventos para asegurar que siempre capturas el evento más reciente
+          $(document).on('click', '.edit-customer-btn', function() {
+              // Obtener los datos del producto del atributo data
+              var name = $(this).data('customer-name');
+              var last_name = $(this).data('customer-lastname');
+              var phone = $(this).data('customer-phone');
+              var email = $(this).data('customer-email');
+              var dob = $(this).data('customer-dob');
+              var gender = $(this).data('customer-gender');
+              var id = $(this).data('customer-id');
+              var street = $(this).data('customer-street');
+              var zipCode = $(this).data('customer-zipcode');
+              var city = $(this).data('customer-city');
+              var state = $(this).data('customer-state');
 
-            // Actualizar el action del formulario con el ID del producto
-            var actionUrl = '{% url "edit-customer" 0 %}'.replace('0', id);
-            $('#editCustomerForm').attr('action', actionUrl);
-            
-            // Llenar los campos del formulario en el modal de edición con los datos del producto
-            $('#edit-first-name').val(name);
-            $('#edit-last-name').val(last_name);
-            $('#edit-phone').val(phone);
-            $('#edit-dob').val(new Date(dob).toISOString().split('T')[0]);
-            $('#edit-email').val(email);
-            $('#edit-gender').val(gender).change();
-            $('#edit-street').val(street);
-            $('#edit-city').val(city);
-            $('#edit-state').val(state).change();
-            $('#edit-zip_code').val(zipCode);
+              // Asegúrate de que los valores correctos están siendo obtenidos
+              console.log(name, last_name, phone, email, dob, gender, id, street, zipCode, city, state);
 
-            // Mostrar el modal
-            toggleModal("edit-modal-customer");
-        });
+              // Actualizar el action del formulario con el ID del producto
+              var actionUrl = '{% url "edit-customer" 0 %}'.replace('0', id);
+              $('#editCustomerForm').attr('action', actionUrl);
+              
+              // Llenar los campos del formulario en el modal de edición con los datos del producto
+              $('#edit-first-name').val(name);
+              $('#edit-last-name').val(last_name);
+              $('#edit-phone').val(phone);
+              $('#edit-dob').val(new Date(dob).toISOString().split('T')[0]);
+              $('#edit-email').val(email);
+              $('#edit-gender').val(gender).change();
+              $('#edit-street').val(street);
+              $('#edit-city').val(city);
+              $('#edit-state').val(state).change();
+              $('#edit-zip_code').val(zipCode);
+
+              toggleModal("edit-modal-customer");
+          });
+
+          $('#edit-modal-customer').on('hidden.bs.modal', function () {
+              // Resetea los campos del formulario al cerrar el modal
+              $('#editCustomerForm').trigger("reset");
+          });
+
 
         // Evento de clic en el botón delete
         $('.delete-customer-btn').click(function() {
