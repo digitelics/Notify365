@@ -7,7 +7,7 @@ from settings.models import RequiredDocument
 class Product(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True, max_length=255)
-    documents = models.ManyToManyField(RequiredDocument, related_name='document')
+    documents = models.ManyToManyField(RequiredDocument, related_name='document', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     suscription = models.ForeignKey(Suscription, on_delete=models.CASCADE, related_name='suscription')
     deleted_at = models.DateTimeField(null=True, blank=True)

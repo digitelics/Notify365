@@ -12,15 +12,17 @@ class Template(models.Model):
     EXPIRY = 'expiry'
     PAYMENT_REMINDER = 'paymentReminder'
     SERVICE_EXPIRED = 'serviceExpired'
+    SERVICE_PENDING_EXPIRED = 'servicePendingExpired'
     TYPE_CHOICES = [
-        (BIRTHDAY, 'Birthday'),
-        (PENDING_DOCUMENT, 'Pending Document'),
-        (PROMO, 'Promo'),
-        (NEXT_EXPIRY, 'Next Expiry'),
-        (EXPIRY, 'Expiry'),
-        (PAYMENT_REMINDER, 'Payment Reminder'),
-        (EXPIRY_TOMORROW, 'Expiry Tomorrow'),
-        (SERVICE_EXPIRED, 'Service Expired'),
+        (BIRTHDAY, 'Birthday'), # Template para notificar a los clientes que cumplen años
+        (PENDING_DOCUMENT, 'Pending Document'), # Template para notificar a los clientes que tengan documentos pendientes de enviar.
+        (PROMO, 'Promo'), # Template para enviar promociones a los clientes
+        (NEXT_EXPIRY, 'Next Expiry'), # Template para notificar a los clientes que su poliza expira en 7 dias
+        (EXPIRY, 'Expiry'), # Template para notificar a los clientes que su poliza expiro hace 7 dias
+        (PAYMENT_REMINDER, 'Payment Reminder'), # Template para notificar a los clientes que tienen pagos pendientes.
+        (EXPIRY_TOMORROW, 'Expiry Tomorrow'), # Template para notificar a los clientes que su poliza expira el dia siguiente
+        (SERVICE_EXPIRED, 'Service Expired'), # Template para notificar a los clientes que su poliza acaba de expirar.
+        (SERVICE_PENDING_EXPIRED, 'Service Pending Expire'), # Template para notificar a los clientes que su poliza esta vencida pero se le daran unos dias de gracia antes de cancelarla
     ]
 
     EMAIL = 'email'
@@ -33,7 +35,7 @@ class Template(models.Model):
     name = models.CharField(max_length=255)
     text = models.TextField()
     suscription = models.ForeignKey(Suscription, on_delete=models.CASCADE, related_name='templates')
-    type = models.CharField(max_length=20, choices=TYPE_CHOICES)
+    type = models.CharField(max_length=30, choices=TYPE_CHOICES)
 
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,

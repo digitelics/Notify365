@@ -19,6 +19,7 @@ urlpatterns = [
     path('setting/notification/', views.notification_view.notification, name="notification"),
 
     path('customers/', views.customer_view.customer, name='customers'),
+    path('customers/import/canceled', views.customer_view.cancel_customers_automatically, name='import-canceled-customers'),
     path('customers/add', views.customer_view.add_customer_view, name='add-customer'),
     path('customers/<int:customer_id>/', views.customer_view.customer_detail_view, name='customer_detail'),
     path('customers/edit/<int:id>', views.customer_view.edit_customer_view, name='edit-customer'),
@@ -74,6 +75,7 @@ urlpatterns = [
     #path('notifications/get_notifications/<int:customer_id>/', views.notify_view.get_notifications, name='get_customer_messages'),
 
     path('login=fail/', views.login_view.my_login_view, name="my_login_view"),
+     path('login=responsive/', views.login_view.responsive_login_view, name="responsive_login_view"),
     path('logout/', views.login_view.logout_view, name="logout"),
     path('setting/users/', views.user_view.UserListView.as_view(), name="users"),
     path('setting/users/new/', views.user_view.create_user, name="new-user"),

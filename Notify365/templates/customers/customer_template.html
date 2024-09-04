@@ -217,17 +217,23 @@
               <input type="search" name="search-customer" id="search-customer" class="block w-full rounded-md border-0 py-1.5 pl-10 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-pink-500 sm:text-sm sm:leading-6" placeholder="Search">
             </div>
           </div>
-          <button onclick="toggleSlideover()"  class="inline-flex height-fit justify-center hover:text-indigo-600 rounded-md bg-white px-3 py-2 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+          <button title="Customers filters" onclick="toggleSlideover()"  class="inline-flex height-fit justify-center hover:text-indigo-600 rounded-md bg-white px-3 py-2 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
             <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
               <path fill-rule="evenodd" d="M2.628 1.601C5.028 1.206 7.49 1 10 1s4.973.206 7.372.601a.75.75 0 01.628.74v2.288a2.25 2.25 0 01-.659 1.59l-4.682 4.683a2.25 2.25 0 00-.659 1.59v3.037c0 .684-.31 1.33-.844 1.757l-1.937 1.55A.75.75 0 018 18.25v-5.757a2.25 2.25 0 00-.659-1.591L2.659 6.22A2.25 2.25 0 012 4.629V2.34a.75.75 0 01.628-.74z" clip-rule="evenodd" />
             </svg>
             <span class="sr-only">Search</span>
           </button>
-          <button onclick="toggleModal('modal-customer')" class="inline-flex height-fit justify-center hover:text-indigo-600 rounded-md bg-white px-3 py-2 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+          <button title="Add new customer" onclick="toggleModal('modal-customer')" class="inline-flex height-fit justify-center hover:text-indigo-600 rounded-md bg-white px-3 py-2 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
             <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path fill-rule="evenodd" d="M5.25 6.375a4.125 4.125 0 1 1 8.25 0 4.125 4.125 0 0 1-8.25 0ZM2.25 19.125a7.125 7.125 0 0 1 14.25 0v.003l-.001.119a.75.75 0 0 1-.363.63 13.067 13.067 0 0 1-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 0 1-.364-.63l-.001-.122ZM18.75 7.5a.75.75 0 0 0-1.5 0v2.25H15a.75.75 0 0 0 0 1.5h2.25v2.25a.75.75 0 0 0 1.5 0v-2.25H21a.75.75 0 0 0 0-1.5h-2.25V7.5Z" clip-rule="evenodd" />
             </svg>
-            <span class="sr-only">Search</span>
+            <span class="sr-only">Add</span>
+          </button>
+          <button title="Import and notify canceled customers" onclick="toggleModal('modal-upload-canceled-customers')" class="inline-flex height-fit justify-center hover:text-indigo-600 rounded-md bg-white px-3 py-2 text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+            </svg>
+            <span class="sr-only">Import</span>
           </button>
         </div>
       </div>
@@ -296,6 +302,9 @@
 
   <!-- DELETE CUSTOMER CONFIRMATION MODAL -->
    {% include "customers/delete_customer_modal.html" %}
+
+  <!-- IMPORT CANCELED CUSTOMERS MODAL -->
+   {% include "customers/upload_canceled_customers_list_modal.html" %}
 
 
   <!-- DELETE CUSTOMER DEAL MODAL -->

@@ -9,9 +9,11 @@ from datetime import timedelta
 class CustomerService(models.Model):
     SEMI_ANNUAL = 'semi-annual'
     ANNUAL = 'annual'
+    UNDEFINED = 'undefined'
     ACTIVATION_PERIOD_CHOICES = [
         (SEMI_ANNUAL, 'Semi-Annual'),
         (ANNUAL, 'Annual'),
+        (UNDEFINED, 'Undefined'),
     ]
 
     NEW = 'new'

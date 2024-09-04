@@ -7,11 +7,17 @@ from django.utils import timezone
 from settings.models import State, Product, Provider, RequiredDocument
 from security.models import CustomUser as User
 from customers.models import Customer, CustomerService, Note, CustomerDocument, AdditionalContact
-from notifications.models import Notification
+from notifications.models import Notification, Template
 from collections import defaultdict
 from django.http import JsonResponse
 from django.db.models import F
 from django.conf import settings
+import pandas as pd
+from django.db import transaction
+from utils.send_text_notification import send_sms
+from utils import template_text
+
+
 
 
 
@@ -294,3 +300,81 @@ def filter_customer_view(request):
         'customer_count': customer_count
     }
     return render(request, 'customers/customer_template.html', {'data': context})
+
+@login_required
+def cancel_customers_automatically(request):
+    if request.method == 'POST':
+            excel_file = request.FILES.get('customer-list-file')
+            count = 0
+            if excel_file:
+                if True:
+                    # Read the Excel file using pandas
+                    df = pd.read_excel(excel_file)
+
+                    with transaction.atomic():
+                        for _, row in df.iterrows():
+                            # Save data
+                            poliza=row['PolicyNumber']
+                            status = row['CSRStatus']
+                            if status == 'Canceled' or status == 'Canceled in Follow Up':
+                                if True:
+                                    customerService = CustomerService.objects.get(code=poliza)
+                                    customerService.product_status = 'inactive'
+                                    customerService.activation_period = 'undefined'
+                                    customerService.deactivation_date = timezone.now()
+                                    customerService.save()
+
+                                    template = Template.objects.filter(type="serviceExpired", suscription=request.user.suscription).first()
+                                    if template:
+                                        customer = Customer.objects.get(pk=customerService.customer.id)
+                                        text = template_text.getText(template.text, customer, False, True)
+                                        send_sms(customer.phone, text)
+                                        notification = Notification(
+                                            template = template,
+                                            customer = customer, 
+                                            date = timezone.now(),
+                                            channel = template.channel_to,
+                                            text = template.text,
+                                            sent_by = request.user,
+                                            to_number = customer.phone,
+                                            created_by = request.user,
+                                        )
+                                        notification.save()
+                                    count = count =+ 1
+                                else:
+                                    pass
+                            elif status == 'Not Called':
+                                if True:
+                                    customerService = CustomerService.objects.get(code=poliza)
+                                    template = Template.objects.filter(type="servicePendingExpired", suscription=request.user.suscription).first()
+                                    if template:
+                                        customer = Customer.objects.get(pk=customerService.customer.id)
+                                        text = template_text.getText(template.text, customer, False, True)
+                                        send_sms(customer.phone, text)
+                                        notification = Notification(
+                                            template = template,
+                                            customer = customer, 
+                                            date = timezone.now(),
+                                            channel = template.channel_to,
+                                            text = template.text,
+                                            sent_by = request.user,
+                                            to_number = customer.phone,
+                                            created_by = request.user,
+                                        )
+                                        notification.save()
+                                    count = count =+ 1
+                                else:
+                                    pass
+
+                            
+                        messages.add_message(request, messages.SUCCESS, 'Initial data imported successfully. We add ' + str(count) + ' new customers', extra_tags='File_imported success')
+                        return redirect(reverse('customers'))
+                else:
+                    messages.add_message(request, messages.ERROR, 'Error importing data. Please provide all required fields.', extra_tags='Importing_error error')
+                    return redirect(reverse('customers'))     
+            else:
+                messages.add_message(request, messages.ERROR, 'Error importing data. Please provide all required fields.', extra_tags='Importing_error error')
+                return redirect(reverse('customers'))
+    
+    messages.add_message(request, messages.ERROR, 'Unexpected error. Please try again later.', extra_tags='Importing_error error')
+    return redirect(reverse('customers'))

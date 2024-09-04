@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from settings.models.company_model import Company, State
+from settings.models import Provider, State, Product, ProviderType
 from security.models import Suscription, CustomUser as Users
 from customers.models import Customer, CustomerService
 from django.contrib.auth.decorators import login_required
@@ -37,6 +37,14 @@ def file_import(request):
                             status=row['PolicyStatus']
                             company=row['company']
                             expiration=row['PolicyExpirationDateTime']
+                            address = row['ADDRESS1']
+                            importedCity = row['city']
+                            PolicyEffective = row['PolicyEffectiveDateTime']
+                            premium=row['premium']
+                            service = row['lobName']
+
+
+
                             
                             state = get_object_or_404(State, abbreviation='FL')
 
@@ -55,6 +63,8 @@ def file_import(request):
                                 last_name=last_name,
                                 phone=phone,
                                 email=email,
+                                street = address,
+                                city = importedCity,
                                 dob=timezone.now(),
                                 state=state,
                                 defaults={
@@ -67,20 +77,49 @@ def file_import(request):
                             if created:
                                 count += 1
                             
-                            '''
-                            deal = CustomerService(
-                                customer = customer,
-                                product = 'product',
-                                code = poliza,
-                                activation_date = datetime.now(),
-                                base_premium = 0,
-                                provider = company,
+                            ensuranceService, created = Product.objects.get_or_create(
+                                name = service, 
+                                suscription = request.user.suscription,
+                                defaults={
+                                    'created_by': request.user,
+                                    'created_at': timezone.now(),
+                                }
+                            )
+
+                            providerType, created = ProviderType.objects.get_or_create(
+                                name = 'Initial Data',
                                 created_by = request.user,
+                                suscription = request.user.suscription,
+                                defaults={
+                                    'created_at': timezone.now(),
+                                }
+                            )
+                           
+                            provider, created = Provider.objects.get_or_create(
+                                provider = company,
+                                suscription = request.user.suscription,
+                                provider_type = providerType,
+                                defaults={
+                                    'created_by': request.user,
+                                    'created_at': timezone.now(),
+                                }
+                            )
+
+                            deal, created = CustomerService.objects.get_or_create(
+                                customer = customer,
+                                product = ensuranceService,
+                                code = poliza,
+                                activation_date = PolicyEffective,
+                                base_premium = premium,
+                                provider = provider,
                                 activation_period = 'semi-annual',
                                 deactivation_date = expiration,
-                                product_status = status
+                                product_status = status,
+                                defaults={
+                                    'created_by': request.user,
+                                }
                             )
-                            '''
+                            
                            
                         messages.add_message(request, messages.SUCCESS, 'Initial data imported successfully. We add ' + str(count) + ' new customers', extra_tags='File_imported success')
                         return redirect(reverse('customers'))
