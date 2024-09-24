@@ -17,6 +17,7 @@ from settings.views import setting_view, company_view, security_view, notificati
 from notifications.views import notify_view
 from schedules.views import calendar_views
 from webcall.views import call_view
+from reports.views import reports_views
 
 
 from django.contrib.auth.decorators import login_required

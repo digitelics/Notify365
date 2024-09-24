@@ -22,14 +22,16 @@ def add_template_view(request):
         suscription = request.user.suscription  
         if name and text and type and channel:
             # Creating the template
-            template = Template.objects.create(
-                name=name,
-                text=text,
-                type=type,
-                suscription = suscription,
-                channel_to = channel,
-                created_at = timezone.now(),
-                created_by=request.user,
+            template, created = Template.objects.update_or_create(
+                suscription=suscription, 
+                type=type, 
+                channel_to=channel,
+                defaults={
+                    'name': name,
+                    'text': text,
+                    'created_at': timezone.now(),
+                    'created_by': request.user,
+                }
             )
             
 
@@ -50,14 +52,10 @@ def edit_template_view(request, id):
     if request.method == 'POST':
         name = request.POST.get('edit-template-name')
         text = request.POST.get('edit-template-text')
-        type = request.POST.get('edit-template-type') 
-        channel = request.POST.get('edit-template-channel') 
 
-        if name and text and type and channel:
+        if name and text:
             template.name = name
             template.text = text
-            template.channel_to = channel
-            template.type = type
             template.updated_at = timezone.now()
             template.save()
             

@@ -5,7 +5,7 @@
               <div class="bg-white">
                 <div class="flex items-center justify-between p-4 bg-purple-50 bg-opacity-50 md:p-5 border-b rounded-t dark:border-gray-600">
                   <div>
-                      <h2 id="payment-details-heading" class="text-lg font-medium leading-6 text-gray-900">edit new template</h2>
+                      <h2 id="payment-details-heading" class="text-lg font-medium leading-6 text-gray-900">Edit template</h2>
                       <p class="mt-1 text-sm text-gray-500"></p>
                     </div>
                     <button type="button" onclick="toggleModal('modal-update-template')" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
@@ -31,13 +31,16 @@
 
                   <div class="col-span-4 sm:col-span-2">
                     <label for="edit-template-type" class="block text-sm font-medium leading-6 text-gray-900">Template Type</label>
-                    <select id="edit-template-type" name="edit-template-type" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    <select disabled id="edit-template-type" name="edit-template-type" class="mt-2 block w-full bg-slate-200 rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
                         <option value="birthday">Birthday</option>
                         <option value="pendingDocument">Pending Document</option>
                         <option value="nextExpiry">Next Expiry</option>
                         <option value="expiry">Expiry</option>
                         <option value="expiryTomorrow">Expiry Tomorrow</option>
+                        <option value="serviceExpired">Deal Expired</option>
                         <option value="promo">Promo</option>
+                        <option value="serviceExpired">Service Expired</option>
+                        <option value="servicePendingExpired">Cancel Pending</option>
                         <option selected value="">Not specified</option>
                     </select>
                     <span class="error-message"></span>
@@ -45,7 +48,7 @@
 
                   <div class="col-span-4 sm:col-span-2">
                     <label for="edit-template-channel" class="block text-sm font-medium leading-6 text-gray-900">Channel</label>
-                    <select id="edit-template-channel" name="edit-template-channel" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                    <select disabled id="edit-template-channel" name="edit-template-channel" class="mt-2 bg-slate-200 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
                         <option value="text">Text</option>
                         <option value="email">Email</option>
                         <option selected value="">Not specified</option>

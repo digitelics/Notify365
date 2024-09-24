@@ -4,3 +4,4 @@ from .customer_services_model import CustomerService
 from .attachment_model import Attachment
 from .aditional_contact_model import AdditionalContact
 from .customer_document import CustomerDocument
+from .premium_transaction_model import PremiumTransaction

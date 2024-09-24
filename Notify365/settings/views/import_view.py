@@ -44,8 +44,6 @@ def file_import(request):
                             service = row['lobName']
 
 
-
-                            
                             state = get_object_or_404(State, abbreviation='FL')
 
                             if not phone.startswith('+1'):
@@ -105,6 +103,11 @@ def file_import(request):
                                 }
                             )
 
+                            if expiration > datetime.now():
+                                 product_status = "active"
+                            else:
+                                 product_status = "inactive"
+
                             deal, created = CustomerService.objects.get_or_create(
                                 customer = customer,
                                 product = ensuranceService,
@@ -114,7 +117,7 @@ def file_import(request):
                                 provider = provider,
                                 activation_period = 'semi-annual',
                                 deactivation_date = expiration,
-                                product_status = status,
+                                product_status = product_status,
                                 defaults={
                                     'created_by': request.user,
                                 }

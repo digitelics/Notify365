@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.utils import timezone
 from settings.models import State, Product, Provider, RequiredDocument
 from security.models import CustomUser as User
-from customers.models import Customer, CustomerService, Note, CustomerDocument, AdditionalContact
+from customers.models import Customer, CustomerService, Note, CustomerDocument, AdditionalContact, PremiumTransaction
 from notifications.models import Notification, Template
 from collections import defaultdict
 from django.http import JsonResponse
@@ -266,6 +266,7 @@ def filter_customer_view(request):
     email = request.POST.get('email') or None
     dob = request.POST.get('dob') or None
     policy = request.POST.get('policy-number') or None
+    status = request.POST.get('customer-status-filter') or None
 
     user_subscription = request.user.suscription
     customers = Customer.objects.filter(deleted_at=None, created_by__suscription=user_subscription)
@@ -283,6 +284,8 @@ def filter_customer_view(request):
         customers = customers.filter(dob=dob)
     if policy:
         customers = customers.filter(services__code__icontains=policy)
+    if status:
+        customers = customers.filter(customer_status=status)
 
     customers = customers.order_by('first_name')
     customer_count = customers.count()
@@ -301,13 +304,14 @@ def filter_customer_view(request):
     }
     return render(request, 'customers/customer_template.html', {'data': context})
 
+# ESTE METODO SE ACTIVA 
 @login_required
 def cancel_customers_automatically(request):
     if request.method == 'POST':
             excel_file = request.FILES.get('customer-list-file')
             count = 0
             if excel_file:
-                if True:
+                try:
                     # Read the Excel file using pandas
                     df = pd.read_excel(excel_file)
 
@@ -316,18 +320,27 @@ def cancel_customers_automatically(request):
                             # Save data
                             poliza=row['PolicyNumber']
                             status = row['CSRStatus']
+                            cancel_base_premium =row['CancelBasePremium']
                             if status == 'Canceled' or status == 'Canceled in Follow Up':
-                                if True:
+                                try:
                                     customerService = CustomerService.objects.get(code=poliza)
                                     customerService.product_status = 'inactive'
-                                    customerService.activation_period = 'undefined'
                                     customerService.deactivation_date = timezone.now()
                                     customerService.save()
+
+                                    premium_transaction = PremiumTransaction(
+                                        deal = customerService,
+                                        premium = cancel_base_premium,
+                                        type = 'cancel',
+                                        created_by = request.user
+                                    )
+                                    premium_transaction.save()
 
                                     template = Template.objects.filter(type="serviceExpired", suscription=request.user.suscription).first()
                                     if template:
                                         customer = Customer.objects.get(pk=customerService.customer.id)
                                         text = template_text.getText(template.text, customer, False, True)
+                                        
                                         send_sms(customer.phone, text)
                                         notification = Notification(
                                             template = template,
@@ -341,7 +354,7 @@ def cancel_customers_automatically(request):
                                         )
                                         notification.save()
                                     count = count =+ 1
-                                else:
+                                except:
                                     pass
                             elif status == 'Not Called':
                                 if True:
@@ -369,7 +382,7 @@ def cancel_customers_automatically(request):
                             
                         messages.add_message(request, messages.SUCCESS, 'Initial data imported successfully. We add ' + str(count) + ' new customers', extra_tags='File_imported success')
                         return redirect(reverse('customers'))
-                else:
+                except:
                     messages.add_message(request, messages.ERROR, 'Error importing data. Please provide all required fields.', extra_tags='Importing_error error')
                     return redirect(reverse('customers'))     
             else:

@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from security.models import CustomUser as User
-from customers.models import Customer, CustomerService, CustomerDocument
+from customers.models import Customer, CustomerService, CustomerDocument, PremiumTransaction
 from settings.models import Product, RequiredDocument, Provider
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
@@ -47,6 +47,14 @@ def add_deal_view(request):
                         provider = provider,
                     )
                     service.save()
+
+                    premium_transaction = PremiumTransaction(
+                        deal = service,
+                        premium = base_premium,
+                        type = 'writer',
+                        created_by = request.user
+                    )
+                    premium_transaction.save()
 
                     # Guardar los documentos asociados al producto si no existen para el cliente
                     documents = product.documents.all()

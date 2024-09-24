@@ -1,0 +1,301 @@
+{% extends 'layouts/base.html' %} 
+{% load static %}
+{% block header-button %}
+   <!-- <button type="button" class="sm:order-0 order-1 ml-3 inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:ml-0">Share</button>
+    <button type="button" class="order-0 inline-flex items-center rounded-md bg-purple-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600 sm:order-1 sm:ml-3">Create</button>-->
+{% endblock header-button %}
+{% block title %}Reports{% endblock %}
+{% block content %}     
+ 
+  
+  <div class="space-y-16 py-28 xl:space-y-20">
+    <div class="px-16">
+      <h1 class="text-2xl text-gray-600">System reports </h1>
+      <h3 class="text-gray-400 text-sm">Here you can find all data analisys using the information contened in to the solution.</h3>
+    </div>
+     <!-- Client estatus -->
+    <div class="mx-auto">
+          <div class="mt-2 grid px-10 grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <!-- Card -->
+            <div class="overflow-hidden rounded-lg bg-gray-50">
+              <div class="p-5">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0">
+                    <svg class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                    </svg>
+                  </div>
+                  <div class="ml-5 w-0 flex-1">
+                    <dl>
+                      <dt class="truncate text-sm font-medium text-gray-500">Total clients by companies</dt>
+                      <dt class="truncate text-xs font-medium text-gray-400 text-wrap">Total number of clients per company, divided by business lines for each insurer.</dt>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-orange-600 px-5 py-3">
+                <div class="text-sm">
+                  <a href={% url 'total-client-by-company'  %} class="font-medium text-white hover:text-gray-900 cursor-pointer">View details</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="overflow-hidden rounded-lg bg-gray-50 shadow">
+              <div class="p-5">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0">
+                   <svg class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                  </svg>
+                  </div>
+                  <div class="ml-5 w-0 flex-1">
+                    <dl>
+                      <dt class="truncate text-sm font-medium text-gray-500">Client Remarketing List</dt>
+                      <dt class="truncate text-xs font-medium text-gray-400 text-wrap">List of clients who are not currently active, but whose renewal date is approaching soon.</dt>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-orange-600 px-5 py-3">
+                <div class="text-sm">
+                   <a href={% url 'remarketing' %} class="font-medium text-white hover:text-gray-900 cursor-pointer">View details</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="overflow-hidden rounded-lg bg-gray-50 shadow">
+              <div class="p-5">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0">
+                    <svg class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                    </svg>
+                  </div>
+                  <div class="ml-5 w-0 flex-1">
+                    <dl>
+                      <dt class="truncate text-sm font-medium text-gray-500">List of clients by company</dt>
+                      <dt class="truncate text-xs font-medium text-gray-400 text-wrap">List of clients filtered by the companies you want to see. You can retrieve the main information for each customer.</dt>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-orange-600 px-5 py-3">
+                <div class="text-sm">
+                    <a href={% url 'list-client-by-company' %} class="font-medium text-white hover:text-gray-900 cursor-pointer">View details</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="overflow-hidden rounded-lg bg-gray-50 mt-10">
+              <div class="p-5">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0">
+                    <svg class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25M9 16.5v.75m3-3v3M15 12v5.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                    </svg>
+                  </div>
+                  <div class="ml-5 w-0 flex-1">
+                    <dl>
+                      <dt class="truncate text-sm font-medium text-gray-500">Total clients by business line</dt>
+                      <dt class="truncate text-xs font-medium text-gray-400 text-wrap">Total number of clients per business line, divided by companies.</dt>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-orange-600 px-5 py-3">
+                <div class="text-sm">
+                  <a href={% url 'total-client-by-business-line'  %} class="font-medium text-white hover:text-gray-900 cursor-pointer">View details</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="overflow-hidden rounded-lg bg-gray-50 mt-10">
+              <div class="p-5">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0">
+                    <svg class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                       <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                    </svg>
+                  </div>
+                  <div class="ml-5 w-0 flex-1">
+                    <dl>
+                      <dt class="truncate text-sm font-medium text-gray-500">Inactive Clients List</dt>
+                      <dt class="truncate text-xs font-medium text-gray-400 text-wrap">List of inactive clients. Include all customers who do not have any active policy.</dt>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-orange-600 px-5 py-3">
+                <div class="text-sm">
+                  <a href={% url 'inactive-clients'  %} class="font-medium text-white hover:text-gray-900 cursor-pointer">View details</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="overflow-hidden rounded-lg bg-gray-50 mt-10">
+              <div class="p-5">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0">
+                    <svg class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                       <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                    </svg>
+                  </div>
+                  <div class="ml-5 w-0 flex-1">
+                    <dl>
+                      <dt class="truncate text-sm font-medium text-gray-500">Messages that have been responded to</dt>
+                      <dt class="truncate text-xs font-medium text-gray-400 text-wrap">Providing an overview of customer interactions handled by the agent.</dt>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-green-600 px-5 py-3">
+                <div class="text-sm">
+                  <a href={% url 'responded-messages-agent'  %} class="font-medium text-white hover:text-gray-900 cursor-pointer">View details</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="overflow-hidden rounded-lg bg-gray-50 mt-10">
+              <div class="p-5">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0">
+                    <svg class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                       <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                    </svg>
+                  </div>
+                  <div class="ml-5 w-0 flex-1">
+                    <dl>
+                      <dt class="truncate text-sm font-medium text-gray-500">Calls that have been responded to</dt>
+                      <dt class="truncate text-xs font-medium text-gray-400 text-wrap">Providing an overview of customer call responses managed by the agent.</dt>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-green-600 px-5 py-3">
+                <div class="text-sm">
+                  <a href={% url 'answered-calls-agent'  %} class="font-medium text-white hover:text-gray-900 cursor-pointer">View details</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="overflow-hidden rounded-lg bg-gray-50 mt-10">
+              <div class="p-5">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0">
+                    <svg class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
+                    </svg>
+                  </div>
+                  <div class="ml-5 w-0 flex-1">
+                    <dl>
+                      <dt class="truncate text-sm font-medium text-gray-500">Agent-assisted cancellation and reinstallation.</dt>
+                      <dt class="truncate text-xs font-medium text-gray-400 text-wrap">Provides a summary of cancellations and reinstallations handled by agents.</dt>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-green-600 px-5 py-3">
+                <div class="text-sm">
+                  <a href={% url 'total-client-by-company'  %} class="font-medium text-white hover:text-gray-900 cursor-pointer">View details</a>
+                </div>
+              </div>
+            </div>
+
+             <div class="overflow-hidden rounded-lg bg-gray-50 mt-10">
+              <div class="p-5">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0">
+                    <svg class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m3.75 9v7.5m2.25-6.466a9.016 9.016 0 0 0-3.461-.203c-.536.072-.974.478-1.021 1.017a4.559 4.559 0 0 0-.018.402c0 .464.336.844.775.994l2.95 1.012c.44.15.775.53.775.994 0 .136-.006.27-.018.402-.047.539-.485.945-1.021 1.017a9.077 9.077 0 0 1-3.461-.203M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                    </svg>
+                  </div>
+                  <div class="ml-5 w-0 flex-1">
+                    <dl>
+                      <dt class="truncate text-sm font-medium text-gray-500">Premium Balance.</dt>
+                      <dt class="truncate text-xs font-medium text-gray-400 text-wrap">Displays all transactions related to premium balance, classified as written and canceled.</dt>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+              <div class="bg-green-600 px-5 py-3">
+                <div class="text-sm">
+                  <a href={% url 'premium-balance'  %} class="font-medium text-white hover:text-gray-900 cursor-pointer">View details</a>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+    
+   
+
+{% include "reports/all_leads_modal.html" %}
+{% include "reports/all_customers_modal.html" %}
+{% include "reports/all_inactive_customers_modal.html" %}
+    
+
+
+{% endblock  %}
+{% block script %}  
+<script src="https://unpkg.com/@popperjs/core@2.9.1/dist/umd/popper.min.js" charset="utf-8"></script>
+<script>
+
+  function toggleModal(modalID) {
+      document.getElementById(modalID).classList.toggle("hidden");
+      document.getElementById(modalID + "-backdrop").classList.toggle("hidden");
+      document.getElementById(modalID).classList.toggle("flex");
+      document.getElementById(modalID + "-backdrop").classList.toggle("flex");
+  }
+
+  function openDropdown(event,dropdownID){
+    let element = event.target;
+    while(element.nodeName !== "BUTTON"){
+      element = element.parentNode;
+    }
+    var popper = Popper.createPopper(element, document.getElementById(dropdownID), {
+      placement: 'bottom-start'
+    });
+    document.getElementById(dropdownID).classList.toggle("hidden");
+    document.getElementById(dropdownID).classList.toggle("block");
+  }
+
+  function closeDropdown(event,dropdownID){
+    document.getElementById(dropdownID).classList.toggle("hidden");
+  }
+
+   window.addEventListener("load", (event) => {
+        const menulinks = document.getElementsByClassName("report");
+         
+        for (i = 0; i < menulinks.length; i++) {
+                menulinks[i].className += " main-menu-selected";
+            }
+        // event.currentTarget.className += " tab-selected";
+    
+    });
+
+  function printLeads() {
+      const printSection = document.getElementById('print-section').innerHTML;
+      const originalContents = document.body.innerHTML;
+      document.body.innerHTML = printSection;
+      window.print();
+      document.body.innerHTML = originalContents;
+  }
+
+  function printCustomers() {
+      const printSection = document.getElementById('print-section-customers').innerHTML;
+      const originalContents = document.body.innerHTML;
+      document.body.innerHTML = printSection;
+      window.print();
+      document.body.innerHTML = originalContents;
+  }
+
+  function printInactive() {
+      const printSection = document.getElementById('print-section-inactive').innerHTML;
+      const originalContents = document.body.innerHTML;
+      document.body.innerHTML = printSection;
+      window.print();
+      document.body.innerHTML = originalContents;
+  }
+</script>
+{% endblock script %} 
+

@@ -1,0 +1,192 @@
+{% extends 'layouts/base.html' %} 
+{% load static %}
+{% block header-button %}
+   <!-- <button type="button" class="sm:order-0 order-1 ml-3 inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:ml-0">Share</button>
+    <button type="button" class="order-0 inline-flex items-center rounded-md bg-purple-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600 sm:order-1 sm:ml-3">Create</button>-->
+{% endblock header-button %}
+{% block title %}Reports{% endblock %}
+{% block content %}     
+ 
+  
+  
+     <!-- Client estatus -->
+  <div class="mx-auto">
+    {% load static %}
+    <section class="px-16 space-y-16 py-28 xl:space-y-20">
+      <div class="px-4 sm:px-6 lg:px-8">
+        <div class="sm:flex sm:items-center">
+          <div class="sm:flex-auto">
+            <h1 class="text-base font-semibold leading-6 text-gray-900">Messages that have been responded to</h1>
+            <p class="mt-2 text-sm text-gray-700">List of messages that have been responded to, providing an overview of customer interactions and ensuring all inquiries or concerns have been addressed.</p>
+          </div>
+          <!--<button type="button" title="Print" onclick="printLeads()" class="text-gray-400 bg-transparent ml-3 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
+              <svg viewBox="0 0 24 24" fill="currentColor" class="size-8">
+                  <path fill-rule="evenodd" d="M7.875 1.5C6.839 1.5 6 2.34 6 3.375v2.99c-.426.053-.851.11-1.274.174-1.454.218-2.476 1.483-2.476 2.917v6.294a3 3 0 0 0 3 3h.27l-.155 1.705A1.875 1.875 0 0 0 7.232 22.5h9.536a1.875 1.875 0 0 0 1.867-2.045l-.155-1.705h.27a3 3 0 0 0 3-3V9.456c0-1.434-1.022-2.7-2.476-2.917A48.716 48.716 0 0 0 18 6.366V3.375c0-1.036-.84-1.875-1.875-1.875h-8.25ZM16.5 6.205v-2.83A.375.375 0 0 0 16.125 3h-8.25a.375.375 0 0 0-.375.375v2.83a49.353 49.353 0 0 1 9 0Zm-.217 8.265c.178.018.317.16.333.337l.526 5.784a.375.375 0 0 1-.374.409H7.232a.375.375 0 0 1-.374-.409l.526-5.784a.373.373 0 0 1 .333-.337 41.741 41.741 0 0 1 8.566 0Zm.967-3.97a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H18a.75.75 0 0 1-.75-.75V10.5ZM15 9.75a.75.75 0 0 0-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 0 0 .75-.75V10.5a.75.75 0 0 0-.75-.75H15Z" clip-rule="evenodd" />
+              </svg>
+          </button>-->
+        </div>
+        <div class="mt-8 flow-root">
+          <form action={% url 'responded-messages-agent' %} method="POST">
+              {% csrf_token %}
+               <div class="flex items-center space-x-4 py-5">
+                  <div class="flex items-center space-x-2">
+                      <label for="start_date" class="text-sm font-medium leading-6 text-gray-900">Start date:</label>
+                      <input type="date" name="start_date" id="start_date" class="block w-auto rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6">
+                      <span class="error-message"></span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                      <label for="end_date" class="text-sm font-medium leading-6 text-gray-900">End date:</label>
+                      <input type="date" name="end_date" id="end_date" class="block w-auto rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm sm:leading-6">
+                      <span class="error-message"></span>
+                  </div>
+                  <div class="flex items-center">
+                      <button type="submit" class="inline-flex justify-center rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900">Filter</button>
+                  </div>
+              </div>
+          </form>
+          <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+              <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+                <table class="min-w-full divide-y divide-gray-300">
+                  <thead class="bg-gray-50">
+                    <tr>
+                      <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Agent</th>
+                      <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Total comunication</th>
+                      <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Details</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-gray-200 bg-white">
+                    {% for agent_data in data.agents_with_communications_data %}
+                      <tr>
+                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ agent_data.name }}</td>
+                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"> {{ agent_data.total_communications }} </td>
+                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">  
+                          <a href="#" onclick="toggleModal('modal-{{ agent_data.id }}')"  title="details"><span title="Details">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-green-500 hover:text-green-300">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                              </svg>
+                          </a>
+                        </td>
+                      </tr>  
+                    {% endfor %}
+                  </tbody>
+                </table>
+                <div class="bg-gray-50 px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+                  <div class="flex flex-1 justify-between sm:hidden">
+                      {% if data.page_obj.has_previous %}
+                      <a href="?page={{ data.page_obj.previous_page_number }}" class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Previous</a>
+                      {% endif %}
+                      {% if data.page_obj.has_next %}
+                      <a href="?page={{ data.page_obj.next_page_number }}" class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Next</a>
+                      {% endif %}
+                  </div>
+                  <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+                      <div>
+                      <p class="text-sm text-gray-700">
+                          Showing
+                          <span class="font-medium">{{ data.page_obj.start_index }}</span>
+                          to
+                          <span class="font-medium">{{ data.page_obj.end_index }}</span>
+                          of
+                          <span class="font-medium">{{ data.page_obj.paginator.count }}</span>
+                          results
+                      </p>
+                      </div>
+                      <div>
+                      <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+                          {% if data.page_obj.has_previous %}
+                          <a href="?page={{ page_obj.previous_page_number }}" class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+                              <span class="sr-only">Previous</span>
+                              <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                              <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
+                              </svg>
+                          </a>
+                          {% endif %}
+                          
+                          {% for num in data.page_obj.paginator.page_range %}
+                          {% if data.page_obj.number == num %}
+                              <a href="?page={{ num }}" aria-current="page" class="relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">{{ num }}</a>
+                          {% else %}
+                              <a href="?page={{ num }}" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">{{ num }}</a>
+                          {% endif %}
+                          {% endfor %}
+                          
+                          {% if data.page_obj.has_next %}
+                          <a href="?page={{ page_obj.next_page_number }}" class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
+                              <span class="sr-only">Next</span>
+                              <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                              <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+                              </svg>
+                          </a>
+                          {% endif %}
+                      </nav>
+                      </div>
+                  </div>
+              </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  {% for agent_data in data.agents_with_communications_data %}
+      {% include "reports/responded_message_details_modal.html" %} 
+  {% endfor %}  
+
+  
+{% endblock  %}
+
+{% block script %}  
+<script src="https://unpkg.com/@popperjs/core@2.9.1/dist/umd/popper.min.js" charset="utf-8"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+
+  function toggleModal(modalID) {
+      document.getElementById(modalID).classList.toggle("hidden");
+      document.getElementById(modalID + "-backdrop").classList.toggle("hidden");
+      document.getElementById(modalID).classList.toggle("flex");
+      document.getElementById(modalID + "-backdrop").classList.toggle("flex");
+  }
+
+
+  function openDropdown(event,dropdownID){
+    let element = event.target;
+    while(element.nodeName !== "BUTTON"){
+      element = element.parentNode;
+    }
+    var popper = Popper.createPopper(element, document.getElementById(dropdownID), {
+      placement: 'bottom-start'
+    });
+    document.getElementById(dropdownID).classList.toggle("hidden");
+    document.getElementById(dropdownID).classList.toggle("block");
+  }
+
+  function closeDropdown(event,dropdownID){
+    document.getElementById(dropdownID).classList.toggle("hidden");
+  }
+
+   window.addEventListener("load", (event) => {
+        const menulinks = document.getElementsByClassName("report");
+         
+        for (i = 0; i < menulinks.length; i++) {
+                menulinks[i].className += " main-menu-selected";
+            }
+        // event.currentTarget.className += " tab-selected";
+    
+    });
+
+  function printLeads() {
+      const printSection = document.getElementById('print-section').innerHTML;
+      const originalContents = document.body.innerHTML;
+      document.body.innerHTML = printSection;
+      window.print();
+      document.body.innerHTML = originalContents;
+  }
+
+ 
+</script>
+{% endblock script %} 
+

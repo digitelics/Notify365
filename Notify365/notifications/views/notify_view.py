@@ -228,6 +228,7 @@ def send_message_chat(request):
                     date=timezone.now(),
                     sent_by=request.user,
                     text=message,
+                    created_by=request.user,
                     attach=attach
                 )
                 notification.save()
@@ -241,6 +242,7 @@ def send_message_chat(request):
                     channel=Notification.TEXT,
                     date=timezone.now(),
                     sent_by=request.user,
+                    created_by=request.user,
                     text=message
                 )
                 notification.save()

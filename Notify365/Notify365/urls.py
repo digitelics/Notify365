@@ -75,7 +75,7 @@ urlpatterns = [
     #path('notifications/get_notifications/<int:customer_id>/', views.notify_view.get_notifications, name='get_customer_messages'),
 
     path('login=fail/', views.login_view.my_login_view, name="my_login_view"),
-     path('login=responsive/', views.login_view.responsive_login_view, name="responsive_login_view"),
+    path('login=responsive/', views.login_view.responsive_login_view, name="responsive_login_view"),
     path('logout/', views.login_view.logout_view, name="logout"),
     path('setting/users/', views.user_view.UserListView.as_view(), name="users"),
     path('setting/users/new/', views.user_view.create_user, name="new-user"),
@@ -83,5 +83,16 @@ urlpatterns = [
     path('setting/users/password/reset/<int:user_id>/', views.user_view.reset_password, name="reset-password"),
     path('setting/users/remove/<int:user_id>/', views.user_view.delete_user, name="delete-user"),
     path('setting/company/edit', views.company_view.edit_company, name="company-edit"),
+
+    path('reports/', views.reports_views.reports, name="reports"),
+    path('reports/clients/company/list', views.reports_views.list_client_by_company, name="list-client-by-company"),
+    path('reports/clients/remarketing', views.reports_views.remarketing, name="remarketing"),
+    path('reports/clients/company/total', views.reports_views.total_client_by_company, name="total-client-by-company"),
+    path('reports/clients/bussines-line/total', views.reports_views.total_client_by_busines_line, name="total-client-by-business-line"),
+    path('reports/clients/inactive', views.reports_views.inactive_client, name="inactive-clients"),
+    path('reports/agent/messages/responded', views.reports_views.agent_communications_view, name="responded-messages-agent"),
+    path('reports/agent/calls/answered', views.reports_views.agent_answered_calls_view, name="answered-calls-agent"),
+    path('reports/agent/premium/balance', views.reports_views.premium_balance, name="premium-balance"),
+    
    
 ]
