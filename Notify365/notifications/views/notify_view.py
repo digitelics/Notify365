@@ -173,7 +173,10 @@ def notify_filter(request):
 
 @login_required
 def sms(request, customer_id=None):
+    user = request.user
+    suscription = user.suscription
     customers = Customer.objects.filter(notifications__channel__in=['text', 'reply']).distinct().annotate(latest_notification_date=Max('notifications__date')).order_by('-latest_notification_date')
+    customers = customers.filter(created_by__suscription=suscription) 
     selected_customer = None
 
     for customer in customers:
