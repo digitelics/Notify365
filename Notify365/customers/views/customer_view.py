@@ -286,9 +286,9 @@ def filter_customer_view(request):
         customers = customers.filter(services__code__icontains=policy)
     if status:
         customers = customers.filter(customer_status=status)
-    else:
+    if not first_name and not last_name and not phone and not email and not dob and not policy and not status:
         customers = Customer.objects.filter(deleted_at=None, created_by__suscription=user_subscription)
-
+    
     customers = customers.order_by('first_name')
     customer_count = customers.count()
     grouped_customers = defaultdict(list)
