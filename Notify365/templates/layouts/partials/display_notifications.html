@@ -4,43 +4,45 @@
                 {% with message.extra_tags.split as tags %}
                     {% with tags.0|replace_underscore_with_space as title %}
                         {% with tags.1 as message_type %}
-                            <div aria-live="assertive" class="notification-container pointer-events-none fixed inset-0 items-end px-4 py-6 sm:items-start sm:p-6">
-                              <div class="flex w-full flex-col items-center space-y-4 sm:items-end">
-                                <div class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5" data-message-type="{{ message_type }}">
-                                  <div id="messageContainer" class="p-4">
-                                    <div class="flex items-start">
-                                      <div class="flex-shrink-0">
-                                        {% if message_type == "success" %}
-                                            <svg class="h-10 w-10 text-green-400" id="succes" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                                              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            {% if message_type %}
+                                <div aria-live="assertive" class="notification-container pointer-events-none fixed inset-0 items-end px-4 py-6 sm:items-start sm:p-6">
+                                <div class="flex w-full flex-col items-center space-y-4 sm:items-end">
+                                  <div class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5" data-message-type="{{ message_type }}">
+                                    <div id="messageContainer" class="p-4">
+                                      <div class="flex items-start">
+                                        <div class="flex-shrink-0">
+                                          {% if message_type == "success" %}
+                                              <svg class="h-10 w-10 text-green-400" id="succes" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                              </svg>
+                                          {% elif message_type == "error" %}
+                                              <svg fill="none" id="fail" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-red-500">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                              </svg>
+                                          {% elif message_type == "warning" %}
+                                              <svg fill="none" id="warning" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-orange-400">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+                                              </svg>
+                                          {% endif %}
+                                        </div>
+                                        <div class="ml-3 w-0 flex-1 pt-0.5">
+                                          <p id="notification-title" class="text-sm font-semibold text-gray-900">{{ title|capfirst|cut:"_"|add:" " }}</p>
+                                          <p id="notification-message" class="mt-1 text-sm text-gray-500">{{ message }}</p>
+                                        </div>
+                                        <div class="ml-4 flex flex-shrink-0">
+                                          <button type="button" id="close" class="inline-flex rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                            <span class="sr-only">Close</span>
+                                            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                              <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
                                             </svg>
-                                        {% elif message_type == "error" %}
-                                             <svg fill="none" id="fail" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-red-500">
-                                              <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                            </svg>
-                                        {% elif message_type == "warning" %}
-                                            <svg fill="none" id="warning" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-orange-400">
-                                              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
-                                            </svg>
-                                        {% endif %}
-                                      </div>
-                                      <div class="ml-3 w-0 flex-1 pt-0.5">
-                                        <p id="notification-title" class="text-sm font-semibold text-gray-900">{{ title|capfirst|cut:"_"|add:" " }}</p>
-                                        <p id="notification-message" class="mt-1 text-sm text-gray-500">{{ message }}</p>
-                                      </div>
-                                      <div class="ml-4 flex flex-shrink-0">
-                                        <button type="button" id="close" class="inline-flex rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                                          <span class="sr-only">Close</span>
-                                          <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                            <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
-                                          </svg>
-                                        </button>
+                                          </button>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
+                            {% endif %}
                         {% endwith %}
                     {% endwith %}
                 {% endwith %}
