@@ -9,6 +9,7 @@ from django.urls import reverse
 import pandas as pd
 from django.db import transaction
 from datetime import datetime
+import re
 
 
 
@@ -43,11 +44,20 @@ def file_import(request):
                             premium=row['premium']
                             service = row['lobName']
 
-
                             state = get_object_or_404(State, abbreviation='FL')
 
-                            if not phone.startswith('+1'):
-                                phone = '+1' + phone.lstrip('0')
+                            email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+                            if not re.match(email_regex, email):
+                                email = "notemail@notify365.us"
+                            
+
+                            if phone:
+                                if not phone.startswith('+1') and phone != 'NULL':
+                                    phone = '+1' + phone.lstrip('0')
+                                else:
+                                    phone = '+10000000000'    
+                            else:
+                                phone = '+10000000000' 
 
                             if status == "A":  
                                   customer_status = 'client'
@@ -55,6 +65,17 @@ def file_import(request):
                                  customer_status = 'lead'
                             else:
                                  customer_status = 'inactive'
+
+                            if address == 'NULL' or not address:
+                                address = 'Not Address available'
+
+                            if importedCity == 'NULL' or not importedCity:
+                                importedCity = 'Not city available'
+
+                            if not poliza:
+                                continue
+
+                            
 
                             customer, created = Customer.objects.get_or_create(
                                 first_name=first_name,
