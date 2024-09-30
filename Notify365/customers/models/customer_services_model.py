@@ -34,7 +34,7 @@ class CustomerService(models.Model):
 
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='services')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='service')
-    code = models.CharField(max_length=20)
+    code = models.CharField(max_length=100)
     activation_date = models.DateField()
     base_premium = models.DecimalField(max_digits=10, decimal_places=2)
     provider = models.ForeignKey(Provider, on_delete=models.CASCADE)
