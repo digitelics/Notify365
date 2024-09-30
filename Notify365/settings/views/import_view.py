@@ -24,7 +24,7 @@ def file_import(request):
             excel_file = request.FILES.get('document-file')
             count = 0
             if excel_file:
-                try:
+                if True:
                     # Read the Excel file using pandas
                     df = pd.read_excel(excel_file)
 
@@ -75,7 +75,7 @@ def file_import(request):
                             if not poliza:
                                 continue
 
-                            
+
 
                             customer, created = Customer.objects.get_or_create(
                                 first_name=first_name,
@@ -147,7 +147,7 @@ def file_import(request):
                            
                         messages.add_message(request, messages.SUCCESS, 'Initial data imported successfully. We add ' + str(count) + ' new customers', extra_tags='File_imported success')
                         return redirect(reverse('customers'))
-                except:
+                else:
                     messages.add_message(request, messages.ERROR, 'Error importing data. Please provide all required fields.', extra_tags='Importing_error error')
                     return redirect(reverse('import'))     
             else:
