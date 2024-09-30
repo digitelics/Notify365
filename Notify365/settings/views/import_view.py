@@ -47,7 +47,7 @@ def file_import(request):
                             state = get_object_or_404(State, abbreviation='FL')
 
                             email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
-                            if not re.match(email_regex, email):
+                            if not re.match(email_regex, str(email)):
                                 email = "notemail@notify365.us"
                             
 
