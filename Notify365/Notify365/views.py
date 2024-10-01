@@ -81,7 +81,7 @@ def index(request):
           )
     ).order_by('-date') 
 
-    text_messages = Notification.objects.filter(channel='reply',date__gte=last_24_hours).order_by('-date')
+    text_messages = Notification.objects.filter(channel='reply',date__gte=last_24_hours, customer__created_by__suscription=request.user.suscription,).order_by('-date')
 
     context = {
         'new_customers_today': new_customers_today.count(),

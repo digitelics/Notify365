@@ -37,6 +37,7 @@ class Customer(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
     gender = models.CharField(max_length=10, choices=GENDER_CHOICE)
+    do_not_disturb = models.BooleanField(default=False)
 
     history = HistoricalRecords()
 
