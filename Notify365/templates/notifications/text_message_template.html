@@ -7,7 +7,7 @@
 {% block content %}
 <div class="wrapper">
     <div class="container">
-        <div class="left overflow-auto">
+        <div class="left overflow-auto" id="customer-panel">
             <div class="top fixed">
                 <input class="text-left" type="text" placeholder="Search" id="searchInput" />
             </div>
@@ -29,6 +29,11 @@
                     </li>
                 {% endfor %}
             </ul>
+
+            <!-- Sección para mostrar el mensaje de carga mientras se cargan más clientes -->
+            <div id="loading" style="display: none; text-align: center; margin-top: 10px;">
+                Loading more customers...
+            </div>
         </div>
         <div class="right">
             <div class="top"><span>To: <span class="name"></span></span></div>

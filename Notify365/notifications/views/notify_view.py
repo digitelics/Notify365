@@ -84,10 +84,9 @@ def send_message_chat(request):
 
 '''
 
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse, HttpResponse, Http404
+from django.shortcuts import render, redirect
+from django.http import JsonResponse, HttpResponse
 from customers.models import Customer
-from notifications.task import send_birthday_notifications, send_document_notifications, send_expiry_notifications, send_next_expiry_notifications, send_expiry_tomorrow_notifications, send_expired_service_notifications
 from django.contrib.auth.decorators import login_required
 from notifications.models import Notification
 from django.utils import timezone
@@ -99,14 +98,9 @@ from django.template.loader import render_to_string
 import os
 from django.db.models import Max, Q
 from django.core.paginator import Paginator
-from django.views.generic import ListView
-from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 
-
-
-# Create your views here.
 login_required
 def notify(request):
     '''
@@ -172,14 +166,35 @@ def notify_filter(request):
 
 
 @login_required
+
 def sms(request, customer_id=None):
     user = request.user
     suscription = user.suscription
-    customers = Customer.objects.filter(notifications__channel__in=['text', 'reply']).distinct().annotate(latest_notification_date=Max('notifications__date')).order_by('-latest_notification_date')
-    customers = customers.filter(created_by__suscription=suscription) 
-    selected_customer = None
 
-    for customer in customers:
+    # Filtramos los clientes con notificaciones de texto o respuesta
+    customers = Customer.objects.filter(notifications__channel__in=['text', 'reply']).distinct().annotate(
+        latest_notification_date=Max('notifications__date')
+    ).order_by('-latest_notification_date')
+
+    customers = customers.filter(created_by__suscription=suscription)
+
+    # Paginamos los clientes
+    paginator = Paginator(customers, 10)  # 10 clientes por página
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+
+    # Si es una solicitud AJAX (scroll infinito)
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        # Renderizar el template de la lista de clientes
+        html = render_to_string('notifications/customer_list.html', {'customers': page_obj})
+        return JsonResponse({
+            'html': html,  # HTML para los nuevos clientes
+            'has_next': page_obj.has_next()  # Si hay más páginas
+        })
+
+    # Lógica para manejar la selección de un cliente y el renderizado inicial
+    selected_customer = None
+    for customer in page_obj:
         customer.notifications_list = customer.notifications.filter(channel__in=['text', 'reply']).order_by('-date')
         for notification in customer.notifications_list:
             if notification.attach:
@@ -189,17 +204,14 @@ def sms(request, customer_id=None):
         if customer_id and customer.id == int(customer_id):
             selected_customer = customer
 
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        if selected_customer:
-            html = render_to_string('notifications/notification_list.html', {'customer': selected_customer})
-            return JsonResponse({'html': html})
-
     context = {
-        'customers': customers,
-        'selected_customer_id': selected_customer.id if selected_customer else None
+        'customers': page_obj,  # Paginación
+        'selected_customer_id': selected_customer.id if selected_customer else None,
+        'page_obj': page_obj  # Pasamos el objeto de paginación al contexto
     }
 
     return render(request, 'notifications/text_message_template.html', context)
+
 
 
 @login_required
