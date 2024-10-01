@@ -24,6 +24,27 @@ class Template(models.Model):
         (SERVICE_EXPIRED, 'Service Expired'), # Template para notificar a los clientes que su poliza acaba de expirar.
         (SERVICE_PENDING_EXPIRED, 'Service Pending Expire'), # Template para notificar a los clientes que su poliza esta vencida pero se le daran unos dias de gracia antes de cancelarla
     ]
+    
+    ONCE = 'once'
+    DAILY = 'Daily'
+    EVERY3DAY = 'Every 3 days'
+    WEEKLY = 'Weekly'
+    BIWEEKLY = 'Biweekly'
+    MONTHLY = 'Monthly'
+    QUARTERLY = 'Quarterly'
+    SEMIANUAL = 'Semi-annually'
+    ANNUALLY = 'Annually'
+    INTERVAL = [
+        (ONCE, 'Once'),
+        (DAILY, 'Daily'),
+        (EVERY3DAY, 'Every 3 days'),
+        (WEEKLY, 'Weekly'),
+        (BIWEEKLY, 'Biweekly'),
+        (MONTHLY, 'Monthly'),
+        (QUARTERLY, 'Quarterly'),
+        (SEMIANUAL, 'Semi-annually'),
+        (ANNUALLY, 'Annually'),
+    ]
 
     EMAIL = 'email'
     TEXT = 'text'
@@ -36,6 +57,7 @@ class Template(models.Model):
     text = models.TextField()
     suscription = models.ForeignKey(Suscription, on_delete=models.CASCADE, related_name='templates')
     type = models.CharField(max_length=30, choices=TYPE_CHOICES)
+    interval = models.CharField(max_length=30, choices=INTERVAL, default=ANNUALLY)
 
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
