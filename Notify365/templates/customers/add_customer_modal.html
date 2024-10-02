@@ -209,12 +209,12 @@
         setErrorFor(streetInput, 'Address cannot exceed 255 characters');
         isValid = false;
       }
-
+      /*
       if (!isStateValid()) {
         isValid = false;
         setErrorFor(stateInput, 'Please select a valid state from the list.');
       }
-
+      */
       if (zipCodeInput.value.trim().length > 10) {
         setErrorFor(zipCodeInput, 'Zip code cannot exceed 9 characters.');
         isValid = false;

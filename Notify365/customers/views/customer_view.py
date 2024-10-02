@@ -62,7 +62,7 @@ def add_customer_view(request):
         gender = request.POST.get('gender')
 
         # Fetching state
-        state = get_object_or_404(State, pk=state_id)
+        state = get_object_or_404(State, pk=1)
 
         if first_name and last_name and phone:
             if not phone.startswith('+1'):
@@ -159,7 +159,7 @@ def customer_detail_view(request, customer_id):
         user = customer.created_by
         state = customer.state
         deals = CustomerService.objects.filter(customer=customer_id).annotate(product_name=F('product__name'), provider_name=F('provider__provider')).values(
-            'id', 'product_name', 'customer', 'code', 'activation_date', 'base_premium', 'created_by', 'activation_period', 'deactivation_date', 'product_status', 'provider_name'
+            'id', 'product_name', 'customer', 'code', 'activation_date', 'base_premium', 'created_by', 'activation_period', 'deactivation_date', 'product_status', 'provider_name', 'provider', 'product', 'product_classification', 'notes'
         ).order_by('-created_at')
         
         deal_list = list(deals)
@@ -220,7 +220,7 @@ def customer_detail_view(request, customer_id):
         all_document = RequiredDocument.objects.filter(suscription=request.user.suscription, deleted_at=None).values('name', 'id')
 
         deals = CustomerService.objects.filter(customer=customer_id).annotate(product_name=F('product__name'), provider_name=F('provider__provider')).values(
-            'id', 'product_name', 'customer', 'code', 'activation_date', 'base_premium', 'created_by', 'activation_period', 'deactivation_date', 'product_status', 'provider_name'
+            'id', 'product_name', 'customer', 'code', 'activation_date', 'base_premium', 'created_by', 'activation_period', 'deactivation_date', 'product_status', 'provider_name', 'provider', 'product'
         ).order_by('-created_at')
 
         notes = Note.objects.filter(customer=customer_id).annotate(created_by_name=F('created_by__name')).values(
