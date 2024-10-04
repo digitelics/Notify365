@@ -44,7 +44,13 @@ $(document).ready(function() {
                 // Actualiza los demás campos
                 $('#edit-code').val(code);
                 $('#edit-dealamount').val(premium);
-                $('#edit-activation-date').val(new Date(activation).toISOString().split('T')[0]);
+                if (activation) {
+                    var formattedDate = new Date(activation).toISOString().split('T')[0];
+                    $('#edit-date').val(formattedDate);
+                } else {
+                    console.log("Activation date is invalid or null.");
+                    $('#edit-date').val('');  // Deja el campo vacío si no hay fecha válida
+                }
                 $('#edit-type').val(type).change();
                 $('#edit-activation_true').val(periodo).change();
                 $('#edit-details').val(notes);
