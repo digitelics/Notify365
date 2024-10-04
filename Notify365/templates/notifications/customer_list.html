@@ -1,6 +1,6 @@
 {% load static %}
 {% for customer in customers %}
-    <li class="person" data-chat="person{{ forloop.counter }}" data-id="{{ customer.id }}">
+    <li class="person {% if customer.id == selected_customer_id %}active{% endif %}" data-chat="person{{ forloop.counter }}" data-id="{{ customer.id }}">
         <img src="{% static 'images/user-circle-icon.png' %}" alt="" />
         <span class="name">{{ customer.first_name }} {{ customer.last_name }}</span>
         <span class="time">

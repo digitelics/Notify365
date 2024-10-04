@@ -99,9 +99,29 @@ def send_expiry_notifications():
 
     for suscription in suscriptions:
         # Encontrar los clientes cuyos servicios han expirado
-        subquery = CustomerService.objects.filter(customer=OuterRef('pk'), deactivation_date__lt=today)
-        customers = Customer.objects.filter(Exists(subquery), created_by__suscription=suscription.id).distinct()
+        today = timezone.now().date()
+        seven_days_ago = today - timedelta(days=7)
 
+        renewed_services_subquery = CustomerService.objects.filter(
+        customer=OuterRef('pk'),  # Mismo cliente
+        product=OuterRef('product'),  # Mismo producto
+        deactivation_date__gt=today,  # Fecha de desactivación mayor que hoy (renovación)
+        deleted_at__isnull=True  # Excluir los eliminados
+        )
+
+        expired_services_subquery = CustomerService.objects.filter(
+            customer=OuterRef('pk'),  # Relacionado con el mismo cliente
+            deactivation_date__lt=seven_days_ago,  # Fecha de desactivación menor que hace 7 días
+            deleted_at__isnull=True  # Asegurarte de no contar los eliminados
+        ).exclude(
+            Exists(renewed_services_subquery)  # Excluir si hay una renovación
+        )
+
+        customers = Customer.objects.filter(
+            Exists(expired_services_subquery),  # Filtrar clientes con servicios expirados y sin renovación
+            created_by__suscription=suscription.id  # Filtrar por suscripción del usuario actual (si aplica)
+        ).distinct()  
+              
         # Obtener el template para "expiry"
         template = Template.objects.filter(type="expiry", created_by__suscription=suscription.id).first()
 

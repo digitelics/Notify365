@@ -79,3 +79,141 @@ def add_deal_view(request):
 
     messages.add_message(request, messages.ERROR, 'Unexpected error. Please try again later.', extra_tags='Adding_error error')
     return redirect(reverse('customers'))
+
+
+
+@login_required
+def edit_deal_view(request, id):
+    redirect_tab = 'customer'
+    if request.method == 'POST':
+        customerId = request.POST.get('customerId')
+        base_premium = request.POST.get('edit-dealamount')
+        product_classification = request.POST.get('edit-type')
+        activation_date_str = request.POST.get('edit-activation-date')
+        activation_period = request.POST.get('edit-activation_true')
+        code = request.POST.get('edit-code')
+        providerId = request.POST.get('edit-provider')
+        detail = request.POST.get('edit-details')
+
+        if id:
+            try:
+                with transaction.atomic():
+                    provider = Provider.objects.get(pk=providerId)
+                    user = User.objects.get(pk=request.user.id)
+
+                    activation_date = datetime.strptime(activation_date_str, '%Y-%m-%d').date()
+                    service = CustomerService.objects.get(pk=id)
+                    service.base_premium=base_premium
+                    service.product_classification=product_classification
+                    service.activation_date=activation_date
+                    service.activation_period=activation_period
+                    service.code=code
+                    service.created_by=user
+                    service.product_status=CustomerService.ACTIVE
+                    service.provider = provider
+                    service.notes = detail
+                    service.save()
+
+                    # Obtener o crear una instancia de PremiumTransaction
+                    premium_transaction, created = PremiumTransaction.objects.get_or_create(
+                        deal=service,  # Buscar por la relación con el deal
+                        defaults={
+                            'premium': base_premium,  # Valor por defecto para la creación
+                            'created_by': user,       # Valor por defecto para la creación
+                            'type': PremiumTransaction.PREMIUM_WRITER,  # Valor por defecto
+                        }
+                    )
+
+                    # Si la transacción ya existía, actualizamos los campos que correspondan
+                    if not created:
+                        premium_transaction.premium = base_premium  # Actualizar si es necesario
+                        premium_transaction.created_by = user
+                        premium_transaction.save()  # Guardar los cambios
+                                        
+                    messages.add_message(request, messages.SUCCESS, 'Deal updated successfully.', extra_tags='Deal_updated success')
+                    return redirect(reverse('customer_detail', args=[service.customer.id]))
+
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, f'Error updating deal: {e}', extra_tags='Updating_error error')
+                return redirect(reverse('customers'))
+        else:
+            messages.add_message(request, messages.ERROR, 'Error updating deal. Please provide all required fields.', extra_tags='Updating_error error')
+            return redirect(reverse('customers'))
+
+    messages.add_message(request, messages.ERROR, 'Unexpected error. Please try again later.', extra_tags='Adding_error error')
+    return redirect(reverse('customers'))
+
+
+@login_required
+def cancel_deal_view(request, id):
+    if request.method == 'POST':
+        dealID = request.POST.get('customerId')
+        cancelPremium = request.POST.get('cancel-dealamount')
+        detail = request.POST.get('cancel-details')
+
+        if id and cancelPremium:
+            try:
+                with transaction.atomic():
+                    customerService = CustomerService.objects.get(pk=id)
+                    customerService.notes = detail
+                    customerService.product_status = 'inactive'
+                    customerService.save()
+
+                    premium_transaction = PremiumTransaction(
+                        deal = customerService,
+                        premium = cancelPremium,
+                        type = 'cancel',
+                        created_by = request.user
+                    )
+                    premium_transaction.save()
+
+                    messages.add_message(request, messages.SUCCESS, 'Deal canceled successfully.', extra_tags='Deal_canceled success')
+                    return redirect(reverse('customer_detail', args=[customerService.customer.id]))
+
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, f'Error canceling deal: {e}', extra_tags='Canceling_error error')
+                return redirect(reverse('customers'))
+        else:
+            messages.add_message(request, messages.ERROR, 'Error canceling deal. Please provide all required fields.', extra_tags='Canceling_error error')
+            return redirect(reverse('customers'))
+
+    messages.add_message(request, messages.ERROR, 'Unexpected error. Please try again later.', extra_tags='Canceling_error error')
+    return redirect(reverse('customers'))
+
+
+@login_required
+def delete_deal_view(request, id):
+    if request.method == 'POST':
+        dealID = request.POST.get('customerId')
+        if id:
+            try:
+                with transaction.atomic():
+                    customerService = CustomerService.objects.get(pk=id)
+                    customerService.deleted_at = timezone.now()
+                    customerService.product_status = 'inactive'
+                    customerService.save()
+
+                    premiumTransaction = PremiumTransaction.objects.get(deal=id)
+                    premiumTransaction.delete()
+
+                    documets = Product.objects.get(pk=customerService.product.id).documents.all()
+                    for document in documets:
+                        try:    
+                            customerDocument = CustomerDocument.objects.get(document=document.id, customer=customerService.customer.id)
+                            if customerDocument.created_by == None:
+                                customerDocument.delete()
+                        except:
+                            continue
+
+                    messages.add_message(request, messages.SUCCESS, 'Deal deleted successfully.', extra_tags='Deal_deleted success')
+                    return redirect(reverse('customer_detail', args=[customerService.customer.id]))
+
+            except Exception as e:
+                messages.add_message(request, messages.ERROR, f'Error deleting deal: {e}', extra_tags='Deleting_error error')
+                return redirect(reverse('customers'))
+        else:
+            messages.add_message(request, messages.ERROR, 'Error deleting deal. Please provide all required fields.', extra_tags='Deleting_error error')
+            return redirect(reverse('customers'))
+
+    messages.add_message(request, messages.ERROR, 'Unexpected error. Please try again later.', extra_tags='Canceling_error error')
+    return redirect(reverse('customers'))

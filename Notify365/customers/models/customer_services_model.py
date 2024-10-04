@@ -44,6 +44,7 @@ class CustomerService(models.Model):
     notes = models.TextField(blank=True, null=True)
     product_classification = models.CharField(max_length=20, choices=PRODUCT_CLASSIFICATION_CHOICES)
     product_status = models.CharField(max_length=20, choices=PRODUCT_STATUS_CHOICES)
+    deleted_at = models.DateTimeField(null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

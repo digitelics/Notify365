@@ -27,7 +27,12 @@ urlpatterns = [
     path('customers/filter/', views.customer_view.filter_customer_view, name='filter-customer'),
 
     path('customers/deal/add', views.customer_service_view.add_deal_view, name='add-deal'),
+    path('customers/deal/edit/<int:id>', views.customer_service_view.edit_deal_view, name='edit-deal'),
+    path('customers/deal/cancel/<int:id>', views.customer_service_view.cancel_deal_view, name='cancel-deal'),
+    path('customers/deal/delete/<int:id>', views.customer_service_view.delete_deal_view, name='delete-deal'),
+
     path('customers/note/add', views.note_view.add_note_view, name='add-note'),
+    path('customers/get/services-providers', views.customer_view.get_services_providers, name='services-providers'),
     path('customers/contact/add', views.contact_view.add_contact_view, name='add-contact'),
     path('customers/document/update', views.document_view.update_document_view, name='update-document'),
     path('customers/send/text/', views.customer_send_text_message_view.customer_send_message, name='customer-send-text'),

@@ -16,6 +16,7 @@ import pandas as pd
 from django.db import transaction
 from utils.send_text_notification import send_sms
 from utils import template_text
+from datetime import date
 
 
 
@@ -153,12 +154,24 @@ def delete_customer(request, id):
     return redirect('customers')
 
 @login_required
+def get_services_providers(request):
+    services = Product.objects.filter(suscription=request.user.suscription, deleted_at=None).values('name', 'id')
+    providers = Provider.objects.filter(suscription=request.user.suscription, deleted_at=None).values('provider', 'id')  
+    data = {
+        'services':list(services),
+        'providers':list(providers),
+        }
+    return JsonResponse(data)
+
+@login_required
 def customer_detail_view(request, customer_id):
-    customer = get_object_or_404(Customer, id=customer_id)
+    user_subscription = request.user.suscription
+    customer = get_object_or_404(Customer, id=customer_id, created_by__suscription=user_subscription)
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        print('ajax')
         user = customer.created_by
         state = customer.state
-        deals = CustomerService.objects.filter(customer=customer_id).annotate(product_name=F('product__name'), provider_name=F('provider__provider')).values(
+        deals = CustomerService.objects.filter(customer=customer_id, deleted_at=None).annotate(product_name=F('product__name'), provider_name=F('provider__provider')).values(
             'id', 'product_name', 'customer', 'code', 'activation_date', 'base_premium', 'created_by', 'activation_period', 'deactivation_date', 'product_status', 'provider_name', 'provider', 'product', 'product_classification', 'notes'
         ).order_by('-created_at')
         
@@ -208,7 +221,7 @@ def customer_detail_view(request, customer_id):
         }
         return JsonResponse(data)
     else:
-        user_subscription = request.user.suscription
+        print('http')
         customers = Customer.objects.filter(deleted_at=None, created_by__suscription=user_subscription).order_by('first_name')
         customer_count = customers.count()
         grouped_customers = defaultdict(list)
@@ -219,7 +232,7 @@ def customer_detail_view(request, customer_id):
         providers = Provider.objects.filter(suscription=request.user.suscription, deleted_at=None).values('provider', 'id') 
         all_document = RequiredDocument.objects.filter(suscription=request.user.suscription, deleted_at=None).values('name', 'id')
 
-        deals = CustomerService.objects.filter(customer=customer_id).annotate(product_name=F('product__name'), provider_name=F('provider__provider')).values(
+        deals = CustomerService.objects.filter(customer=customer_id, deleted_at=None).annotate(product_name=F('product__name'), provider_name=F('provider__provider')).values(
             'id', 'product_name', 'customer', 'code', 'activation_date', 'base_premium', 'created_by', 'activation_period', 'deactivation_date', 'product_status', 'provider_name', 'provider', 'product'
         ).order_by('-created_at')
 
@@ -239,6 +252,7 @@ def customer_detail_view(request, customer_id):
         for notification in notifications:
             notification['date'] = notification['date'].strftime('%b %d, %Y %I:%M%p').lower().replace('am', 'am').replace('pm', 'pm')
 
+        today = date.today()
     
         context = {
             'states':states,
@@ -254,7 +268,8 @@ def customer_detail_view(request, customer_id):
             'contacts' : aditional_contact,
             'customer_id':customer_id,
             'notifications':list(notifications),
-            'all_document': list(all_document)
+            'all_document': list(all_document),
+            'today': today,
         }
         return render(request, 'customers/customer_template.html', {'data':context})
     
@@ -337,7 +352,7 @@ def cancel_customers_automatically(request):
                                         created_by = request.user
                                     )
                                     premium_transaction.save()
-
+                                    
                                     template = Template.objects.filter(type="serviceExpired", suscription=request.user.suscription).first()
                                     if template:
                                         customer = Customer.objects.get(pk=customerService.customer.id)

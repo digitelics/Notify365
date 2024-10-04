@@ -1,6 +1,6 @@
 <!-- DELETE DEAL MODAL -->
 <section class="hidden overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none" id="modal-delete-deal">
-    <form action="#" method="POST" id="deleteProductForm" class="modal-position">
+    <form  method="POST" id="deleteDealForm" class="modal-position">
       {% csrf_token %}
       <div class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
         <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
@@ -32,5 +32,9 @@
         </div>
     </form>
   </section>
+
+  <script type="text/javascript">
+         var deleteDealUrl = "{% url 'delete-deal' 0 %}";
+    </script>
 
 
