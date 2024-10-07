@@ -227,9 +227,9 @@ def sms_reply(request):
     if 'stop' in body.lower():
         customer.do_not_disturb  = True
         customer.save()
-        response.message(".")
-    else:
         response.message("We have received your request, and you have been unsubscribed from our notifications. If you change your mind or need assistance in the future, feel free to contact us. Thank you!")
+    else:
+        response.message("Gracias por tu mensaje. Pronto te responderemos.")
     return HttpResponse(str(response), content_type='text/xml')
 
 
