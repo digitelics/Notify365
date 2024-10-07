@@ -98,8 +98,7 @@ def send_expiry_notifications():
     today = timezone.now().date()
 
     for suscription in suscriptions:
-        # Encontrar los clientes cuyos servicios han expirado
-        today = timezone.now().date()
+        
         seven_days_ago = today - timedelta(days=7)
 
         renewed_services_subquery = CustomerService.objects.filter(
@@ -139,9 +138,9 @@ def send_expiry_notifications():
 
             if last_notification:
                 next_send_date = calculate_next_send_date(last_notification.date, template.interval)
-
+                
                 # Si el próximo envío es None (porque el intervalo es "Once") o la fecha actual es menor que el próximo envío, no enviamos.
-                if next_send_date and timezone.now().date() < next_send_date:
+                if next_send_date and today < next_send_date.date():
                     logger.info(f"Skipping notification for customer {customer.id}. Next send date: {next_send_date}")
                     continue
 
