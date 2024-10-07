@@ -138,14 +138,14 @@ def send_expiry_notifications():
 
             if last_notification:
                 next_send_date = calculate_next_send_date(last_notification.date, template.interval)
-                
+
                 # Si el próximo envío es None (porque el intervalo es "Once") o la fecha actual es menor que el próximo envío, no enviamos.
                 if next_send_date and today < next_send_date.date():
                     logger.info(f"Skipping notification for customer {customer.id}. Next send date: {next_send_date}")
                     continue
 
             # Si no hay notificación previa o ya es tiempo de enviar otra notificación, la enviamos
-            text = template.text  # Asume que tienes una función para personalizar el texto con datos del cliente
+            text = template_text.getText(template.text, customer, False, True) # Asume que tienes una función para personalizar el texto con datos del cliente
             Notification.objects.create(
                 template=template, 
                 text=text, 
