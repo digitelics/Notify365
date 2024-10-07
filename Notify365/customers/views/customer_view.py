@@ -284,7 +284,7 @@ def filter_customer_view(request):
     status = request.POST.get('customer-status-filter') or None
 
     user_subscription = request.user.suscription
-    customers = Customer.objects.filter(created_by__suscription=user_subscription, deleted_at=None)
+    customers = Customer.objects.filter(created_by__suscription=user_subscription)
 
     # Aplicar filtros según los parámetros recibidos
     if first_name:
