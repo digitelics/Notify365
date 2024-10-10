@@ -100,6 +100,7 @@ def send_expiry_notifications():
     for suscription in suscriptions:
         
         seven_days_ago = today - timedelta(days=7)
+        one_month_ago = today - timedelta(days=30)
 
         renewed_services_subquery = CustomerService.objects.filter(
         customer=OuterRef('pk'),  # Mismo cliente
@@ -111,6 +112,7 @@ def send_expiry_notifications():
         expired_services_subquery = CustomerService.objects.filter(
             customer=OuterRef('pk'),  # Relacionado con el mismo cliente
             deactivation_date__lt=seven_days_ago,  # Fecha de desactivación menor que hace 7 días
+            deactivation_date__gte=one_month_ago,  # Expirado hace menos de 1 mes
             deleted_at__isnull=True  # Asegurarte de no contar los eliminados
         ).exclude(
             Exists(renewed_services_subquery)  # Excluir si hay una renovación

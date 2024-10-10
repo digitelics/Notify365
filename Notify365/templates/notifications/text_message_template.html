@@ -12,8 +12,8 @@
                 <input class="text-left" type="text" placeholder="Search" id="searchInput" />
             </div>
             <ul class="people" id="customerList">
-                {% for customer in customers %}
-                    <li class="person {% if customer.id == selected_customer_id %}active{% endif %}" data-chat="person{{ forloop.counter }}" data-id="{{ customer.id }}">
+               {% for customer in customers %}
+                    <li class="person" data-chat="person{{ forloop.counter0|add:chatCounter }}" data-id="{{ customer.id }}">
                         <img src="{% static 'images/user-circle-icon.png' %}" alt="" />
                         <span class="name">{{ customer.first_name }} {{ customer.last_name }}</span>
                         <span class="time">
@@ -53,7 +53,8 @@
                         <span id="file-name" class="ml-2"></span>
                     </label>
                     <input type="text" id="message-text" name="message-text" placeholder="Write your message..." class="message-input">
-                    <button type="submit" class="write-link send"></button>
+                    <button type="submit" class="write-link send pr-2"></button>
+                    <span class="error-message pr-2"></span>
                 </div>
                 <div id="error-message" class="error-message text-xl -mt-8" style="color: red; display: none;"></div>
             </form>
@@ -64,4 +65,110 @@
 {% block script %}
     <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="{% static 'js/sms.js' %}"></script>
+    <script type="text/javascript">
+        var chatCounter = {{ customers|length }}; // Inicia el contador con el número actual de clientes
+        
+       document.addEventListener('DOMContentLoaded', function () {
+            const sendMessageForm = document.getElementById('send-message-form');
+            const textMessage = document.getElementById('message-text');
+            const attach = document.getElementById('file-name'); 
+            const fileInput = document.getElementById('dropzone-file');
+
+            sendMessageForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+                let formData = new FormData(this);
+                let isValid = true;
+                resetErrorMessages();
+
+                // Validaciones de longitud y GSM-7
+                if (textMessage.value.trim().length > 300) {
+                    setErrorFor(textMessage, 'Message text cannot exceed 300 characters');
+                    isValid = false;
+                } else if (!textMessage.value.trim()) {
+                    setErrorFor(textMessage, 'Message text cannot be blank');
+                    isValid = false;
+                } else if (fileInput.files.length > 0) {
+                    const fileSize = fileInput.files[0].size; // in bytes
+                    if (fileSize > 2 * 1024 * 1024) { // 2 MB in bytes
+                        setErrorFor(textMessage, 'Attach file size cannot exceed 2MB');
+                        isValid = false;
+                    }
+                } else {
+                    const gsm7Validation = isGSM7(textMessage.value.trim());
+                    if (!gsm7Validation.isValid) {
+                        setErrorFor(textMessage, `Message text contains unsupported character: "${gsm7Validation.invalidCharacter}"`);
+                        isValid = false;
+                    }
+                }
+
+                if (isValid) {
+                    $.ajax({
+                        url: this.action,
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest' 
+                        },
+                        success: function(response) {
+                            console.log('Respuesta del servidor:', response.html);
+                            if (response.html) {
+                                console.log("entro aqui y debe funcoionar")
+                                let activeChat = document.querySelector('.chat-container .active-chat');
+                                if (activeChat) {
+                                    console.log('aqui debe dibujar la vista')
+                                    activeChat.insertAdjacentHTML('afterbegin', response.html);
+                                    console.log(activeChat);
+                                    scrollToBottom();
+                                }
+                                textMessage.value = ''; // Limpiar el campo
+                                attach.textContent = ''; // Limpiar el campo
+                                fileInput.value = '' ; // Limpiar el campo
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error enviando el mensaje:', error);
+                            let errorMessage = document.getElementById('error-message');
+                            errorMessage.style.display = 'block';
+                            errorMessage.innerText = 'Error sending message. Please try again later.';
+                        }
+                    });
+                }
+            });
+
+            function resetErrorMessages() {
+                const errorMessages = document.querySelectorAll('.error-message');
+                errorMessages.forEach(errorMessage => {
+                    errorMessage.textContent = '';
+                });
+            }
+
+            function setErrorFor(input, message) {
+                const formControl = input.parentElement;
+                const errorMessage = formControl.querySelector('.error-message');
+                errorMessage.textContent = message;
+                input.classList.add('error');
+            }
+
+            function isGSM7(text) {
+                const gsm7Characters = '@£$¥èéùìòÇ\nØø\rÅåΔ_ΦΓΛΩΠΨΣΘΞÆæßÉ !"#¤%&\'()*+,-./0123456789:;<=>?¡ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑÜ§¿abcdefghijklmnopqrstuvwxyzäöñüà';
+                for (let i = 0; i < text.length; i++) {
+                    if (!gsm7Characters.includes(text[i])) {
+                        return { isValid: false, invalidCharacter: text[i] };
+                    }
+                }
+                return { isValid: true, invalidCharacter: null };
+            }
+
+            function scrollToBottom() {
+                let activeChat = document.querySelector('.chat-container .active-chat');
+                if (activeChat) {
+                    activeChat.scrollTop = activeChat.scrollHeight;
+                }
+            }
+        });
+
+       
+    </script>
 {% endblock script %}

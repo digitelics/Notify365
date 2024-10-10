@@ -14,7 +14,7 @@ $(document).ready(function() {
 
          // Usar la URL obtenida desde el HTML y reemplazar el '0' con el ID correcto
          var actionUrl = updateDealUrl.replace('0', id);
-         console.log(actionUrl)
+         console.log(activation)
          $('#editDealForm').attr('action', actionUrl);
 
         // Realizar la solicitud AJAX para obtener los datos completos del deal
@@ -51,7 +51,14 @@ $(document).ready(function() {
                     console.log("Activation date is invalid or null.");
                     $('#edit-date').val('');  // Deja el campo vacío si no hay fecha válida
                 }
+                if (type == null) {
+                    console.log('entro')
+                    type = "-- Select -- ";
+                }
                 $('#edit-type').val(type).change();
+                if (periodo == null) {
+                    periodo = "-- Select -- ";
+                }
                 $('#edit-activation_true').val(periodo).change();
                 $('#edit-details').val(notes);
 
@@ -102,17 +109,12 @@ document.addEventListener('DOMContentLoaded', function () {
       } 
 
 
-      if (editType.value.trim() == '-- Select --') {
+      if (editType.value.trim() == '-- Select --' || editType.value.trim() == '' ) {
         setErrorFor(editType, 'This field cannot be blank.');
         isValid = false;
       } 
 
-      if (!editActivation.value.trim()) {
-        setErrorFor(editActivation, 'This field cannot be blank.');
-        isValid = false;
-      } 
-
-      if (editPeriodo.value.trim() == '-- Select --') {
+      if (editPeriodo.value.trim() == '-- Select --' || editPeriodo.value.trim() == '') {
         setErrorFor(editPeriodo, 'This field cannot be blank.');
         isValid = false;
       } 
