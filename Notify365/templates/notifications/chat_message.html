@@ -1,0 +1,23 @@
+{% load static %}
+<div class="bubble me">
+    {% if attach_url %}
+        {% if notification.extension == '.jpg' or notification.extension  == '.jpeg' or notification.extension == '.png' or notification.extension == '.gif' %}
+            <a style="text-align: -webkit-center;" href={{ attach_url }} target="_BLANK"><img class="w-full max-w-64" src="{{ attach_url }}" alt="customer-attach"></a>
+            <p class="text-xs pb-5 text-center">{{ attach_name }}</p>
+        {% elif notification.extension == '.pdf' %}
+            <a style="text-align: -webkit-center;" href={{ attach_url }} target="_BLANK"><img class="w-full max-w-64" src="{% static 'images/pdf-file-icon.png' %}" alt="customer-attach"></a>
+            <p class="text-xs pb-5 text-center">{{ attach_name }}</p>
+        {% elif notification.extension == '.doc' or notification.extension == '.docx' %}
+            <a style="text-align: -webkit-center;" href={{ attach_url }} target="_BLANK"><img class="w-full max-w-64" src="{% static 'images/microsoft-word-icon.png' %}" alt="customer-attach"></a>
+            <p class="text-xs pb-5 text-center">{{ attach_name }}</p>
+        {% else %}
+            <a style="text-align: -webkit-center;" href={{ attach_url }} target="_BLANK"><img class="w-full max-w-64" src="{% static 'images/default-file.png' %}" alt="customer-attach"></a>
+            <p class="text-xs pb-5 text-center">{{ attach_name }}</p>
+        {% endif %}
+    {% endif %}
+    <p>{{ message_text }}</p>
+    <div class="message-time">{{ message_time }}</div>
+</div>
+
+
+            

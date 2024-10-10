@@ -1,0 +1,5 @@
+{% for customer in customers %}
+    <div class="chat" data-chat="person{{ forloop.counter0|add:chatCounter }}">
+        {% include 'notifications/notification_list.html' with customer=customer %}
+    </div>
+{% endfor %}
