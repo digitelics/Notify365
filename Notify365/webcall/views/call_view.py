@@ -67,7 +67,8 @@ def call(request):
     if to_number and to_number != TWILIO_NUMBER:
         print('outbound call')
         dial = Dial(record="record-from-answer", caller_id=TWILIO_NUMBER)
-        dial.number(to_number)
+        dial.number(to_number)  # Asegúrate de usar 'number' para llamadas a teléfonos
+        response.append(dial)
         response.record(max_length=120, action='/webcall/handle_recording/')
     else:
         print('incoming call')
