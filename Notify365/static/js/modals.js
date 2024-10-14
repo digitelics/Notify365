@@ -3,9 +3,12 @@ $(document).ready(function () {
 
 
     let btnOpenNumberPad = document.getElementById('btnOpenNumberPad')
-    let inputPhoneNumber = document.getElementById('phoneNumber')
-    let btnDelete = document.getElementById('btnDelete')
 
+    let inputPhoneNumber = document.getElementById('phoneNumber')
+    let inputExtNumber = document.getElementById('extNumber')
+
+    let btnDelete = document.getElementById('btnDelete')
+    let btnDeleteExt = document.getElementById('btnDeleteExt')
 
     btnOpenNumberPad.addEventListener('click', (event) => {
         const inputModal = document.getElementById('phoneNumber');
@@ -18,9 +21,18 @@ $(document).ready(function () {
         $('#modal-dial').modal('hide')
     });
 
+    $('#btnCloseDialExtModal').bind('click', function () {
+      $('#modal-dial-ext').modal('hide')
+    });
+
     $('.btnNumber').bind('click', function () {
         let text = $(this).text()
         inputPhoneNumber.value += text
+    });
+
+    $('.btnExt').bind('click', function () {
+      let text = $(this).text()
+      inputExtNumber.value += text
     });
 
 
@@ -32,6 +44,15 @@ $(document).ready(function () {
         str = str.substr(0, position) + '' + str.substr(position + 1);
         inputPhoneNumber.value = str
     })
+
+    btnDeleteExt.addEventListener('click', (event) => {
+      console.log('clicked', event)
+      var str = inputExtNumber.value
+      var position = inputExtNumber.selectionStart - 1;
+
+      str = str.substr(0, position) + '' + str.substr(position + 1);
+      inputExtNumber.value = str
+  })
 
     // Variables para almacenar la posición inicial del mouse y del modal
 

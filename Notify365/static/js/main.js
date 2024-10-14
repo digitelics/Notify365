@@ -33,7 +33,8 @@ $(function () {
             });
 
             device.on("error", function (error) {
-                log("Twilio.Device Error: " + error.message);
+                console.log("Twilio.Device Error:", error.message);
+                console.log("Error details:", error);
             });
 
             device.on("connect", function (conn) {
@@ -47,6 +48,10 @@ $(function () {
             });
             
             device.on("disconnect", function (conn) {
+                console.log("Call disconnected");
+                if (conn && conn.error) {
+                    console.log("Disconnect error:", conn.error.message);
+                }
                 let phoneNumber = conn.parameters.From;
                 let toNumber = conn.parameters.To;
                 stop()
@@ -157,7 +162,8 @@ $(function () {
             console.log(err);
             log("Could not get a token from server!");
         });
-
+    
+    var outgoingConnection = null;
     // Bind button to make call
     $('#btnDial').bind('click', function () {
         $('#modal-dial').modal('hide')
@@ -165,21 +171,37 @@ $(function () {
         var params = {
             To: document.getElementById("phoneNumber").value
         };
-
+        
         // output destination number
         $("#txtPhoneNumber").text(params.To)
-        
 
         console.log("Calling " + params.To + "...");
         if (device) {
-            var outgoingConnection = device.connect(params);
+            
+            outgoingConnection = device.connect(params);
             outgoingConnection.on("ringing", function () {
                 log("Ringing...");
             });
+        } else {
+            console.log("No hay dispositivo disponible.");
         }
         document.getElementById('phoneNumber').innerHTML = "";
 
     })
+
+    $('#btnDialExt').on('click', function() {
+        var extension = $('#extNumber').val();  // Tomamos la extensión desde un input
+        console.log("Enviando la extensión: " + extension);
+        $('#modal-dial-ext').modal('hide');
+        document.getElementById('extNumber').value = "";  // Asegúrate de usar `value` en lugar de `innerHTML`
+        
+        if (outgoingConnection) {
+            outgoingConnection.sendDigits(extension);  // Enviamos los dígitos de la extensión
+        } else {
+            console.log("No hay una conexión activa.");
+        }
+    });
+
 
      // Bind button to make call from customer section
      $('#btnCall').bind('click', function () {
@@ -221,6 +243,12 @@ $(function () {
         if (device) {
             device.disconnectAll();
         }
+    })
+
+    $('.btnOpenDialPad').bind('click', function () {
+        console.log("entro aqui al hacer clck")
+        $('#modal-dial-ext').modal('show')
+        
     })
 
     function formatPhoneNumber(phoneNumber) {
@@ -325,10 +353,6 @@ $(function () {
             console.log('entro aqui')
             stop();
         });
-    }
-
-    function stop() {
-        clearInterval(time);
     }
 
 });
