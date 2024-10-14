@@ -63,11 +63,12 @@ def call(request):
     response = VoiceResponse()
     to_number = request.POST.get('To')
     print(to_number)
+    print(TWILIO_NUMBER)
     if to_number and to_number != TWILIO_NUMBER:
         print('outbound call')
         dial = Dial(record="record-from-answer", caller_id=TWILIO_NUMBER)
         dial.number(to_number)
-        #response.record(max_length=120, action='/webcall/handle_recording/')
+        response.record(max_length=120, action='/webcall/handle_recording/')
     else:
         print('incoming call')
         if not get_available_agents(to_number):  # Verifica la disponibilidad de agentes
@@ -77,7 +78,7 @@ def call(request):
             dial = Dial(record="record-from-answer", caller_id=TWILIO_NUMBER)
             dial.client(TWILIO_NUMBER)
             response.append(dial)
-            #response.record(max_length=120, action='/webcall/handle_recording/')
+            response.record(max_length=120, action='/webcall/handle_recording/')
 
     return HttpResponse(str(response), content_type='text/xml')
 
