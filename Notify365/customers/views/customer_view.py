@@ -109,8 +109,10 @@ def edit_customer_view(request, id):
         gender = request.POST.get('gender')
 
         # Fetching state
-        state = State.objects.get(pk=state_id)
-        print(state)
+        try:
+            state = State.objects.get(pk=state_id)
+        except:
+            state = None
         customer = Customer.objects.get(pk=id)
         
         if not phone.startswith('+1'):
@@ -170,7 +172,11 @@ def customer_detail_view(request, customer_id):
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         print('ajax')
         user = customer.created_by
-        state = customer.state
+        try:
+            state = customer.state
+        except:
+            state = None
+
         deals = CustomerService.objects.filter(customer=customer_id, deleted_at=None).annotate(product_name=F('product__name'), provider_name=F('provider__provider')).values(
             'id', 'product_name', 'customer', 'code', 'activation_date', 'base_premium', 'created_by', 'activation_period', 'deactivation_date', 'product_status', 'provider_name', 'provider', 'product', 'product_classification', 'notes'
         ).order_by('-created_at')
@@ -208,7 +214,7 @@ def customer_detail_view(request, customer_id):
             'gender': customer.get_gender_display(),
             'created_by': user.name,
             'last_change': customer.updated_at.strftime('%m-%d-%Y'),
-            'state': state.abbreviation,
+            'state': state.abbreviation if state else '',
             'deals': deal_list,
             'notes': note_list,
             'documents': list(documents),

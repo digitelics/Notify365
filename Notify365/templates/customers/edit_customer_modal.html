@@ -189,30 +189,14 @@
         isValid = false;
       }
 
-       if (!genderInput.value.trim()) {
-        setErrorFor(genderInput, 'Gender cannot be blank, please select one.');
-        isValid = false;
-      }
-
-      if (!cityInput.value.trim()) {
-        setErrorFor(cityInput, 'City cannot be blank.');
-        isValid = false;
-      } else if (cityInput.value.trim().length > 100) {
+      if (cityInput.value.trim().length > 100) {
         setErrorFor(cityInput, 'City name cannot exceed 100 characters');
         isValid = false;
       }
 
-      if (!streetInput.value.trim()) {
-        setErrorFor(streetInput, 'Address cannot be blank');
-        isValid = false;
-      } else if (streetInput.value.trim().length > 255) {
+      if (streetInput.value.trim().length > 255) {
         setErrorFor(streetInput, 'Address cannot exceed 255 characters');
         isValid = false;
-      }
-
-      if (!isStateValid()) {
-        isValid = false;
-        setErrorFor(stateInput, 'Please select a valid state from the list.');
       }
 
       if (zipCodeInput.value.trim().length > 10) {
@@ -221,10 +205,7 @@
       } else if (!isZipCodeValid()) {
         isValid = false;
         setErrorFor(zipCodeInput, 'Zip code should contain only numbers.');
-      } else if (!zipCodeInput.value.trim()) {
-        setErrorFor(zipCodeInput, 'Zip code cannot be blank');
-        isValid = false;
-      }
+      } 
 
       if (isValid) {
         // Show loading indicator
@@ -299,6 +280,10 @@
 
     function isZipCodeValid() {
       const zipCodePattern = /^[0-9-]{1,10}$/;
+      const zipCodeValue = zipCodeInput.value.trim();
+      if (!zipCodeValue) {
+        return true; // Devuelve verdadero si el campo está vacío
+      }
       return zipCodePattern.test(zipCodeInput.value);
     }
 });

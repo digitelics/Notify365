@@ -1,5 +1,5 @@
  <section class="hidden overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center" id="modal-text">
-      <form action={% url 'customer-send-text' %} method="POST" class="modal-position">
+      <form id="textMessageForm" action={% url 'customer-send-text' %} method="POST" class="modal-position">
       {% csrf_token %}
         <div class="shadow sm:overflow-hidden sm:rounded-md">
           <div class="bg-white">
@@ -25,10 +25,11 @@
               <div class="col-span-4 sm:col-span-4">
                 <label for="message" class="block text-sm font-medium leading-6 text-gray-900">Add your message here</label>
                 <div class="mt-2">
-                    <textarea maxlength="160" id="textareaCaracteres" rows="4" name="message" class="px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
+                    <textarea maxlength="300" id="textareaCaracteres" rows="4" name="message" class="px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
                     <p class="text-xs">
-                        Characters <span id="contadorCaracteres"></span>/160
+                        Characters <span id="contadorCaracteres"></span>/300
                     </p>
+                    <span class="error-message"></span>
                 </div>
               </div>
           </div>
@@ -39,3 +40,63 @@
       </form>
     </section>
     <div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="modal-text-backdrop"></div>
+    <script>
+     document.addEventListener('DOMContentLoaded', function () {
+            const textMessageForm = document.getElementById('textMessageForm');
+            const textMessage = document.getElementById('textareaCaracteres');
+
+            textMessageForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+                let isValid = true;
+                resetErrorMessages();
+
+                // Validaciones de longitud y GSM-7
+                if (textMessage.value.trim().length > 300) {
+                    setErrorFor(textMessage, 'Message text cannot exceed 300 characters');
+                    isValid = false;
+                } else if (!textMessage.value.trim()) {
+                    setErrorFor(textMessage, 'Message text cannot be blank');
+                    isValid = false;
+                } else {
+                    const gsm7Validation = isGSM7(textMessage.value.trim());
+                    if (!gsm7Validation.isValid) {
+                        setErrorFor(textMessage, `Message text contains unsupported character: "${gsm7Validation.invalidCharacter}"`);
+                        isValid = false;
+                    }
+                }
+
+                if (isValid) {
+                  document.getElementById('loadingIndicator').classList.remove('hidden');
+                  toggleModal('modal-text');
+                  // Submit the form
+                  textMessageForm.submit();
+                } 
+
+            function resetErrorMessages() {
+                const errorMessages = document.querySelectorAll('.error-message');
+                errorMessages.forEach(errorMessage => {
+                    errorMessage.textContent = '';
+                });
+            }
+
+            function setErrorFor(input, message) {
+                const formControl = input.parentElement;
+                const errorMessage = formControl.querySelector('.error-message');
+                errorMessage.textContent = message;
+                input.classList.add('error');
+            }
+
+            function isGSM7(text) {
+                const gsm7Characters = '@£$¥èéùìòÇ\nØø\rÅåΔ_ΦΓΛΩΠΨΣΘΞÆæßÉ !"#¤%&\'()*+,-./0123456789:;<=>?¡ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑÜ§¿abcdefghijklmnopqrstuvwxyzäöñüà';
+                for (let i = 0; i < text.length; i++) {
+                    if (!gsm7Characters.includes(text[i])) {
+                        return { isValid: false, invalidCharacter: text[i] };
+                    }
+                }
+                return { isValid: true, invalidCharacter: null };
+            }
+        });
+    });
+
+       
+    </script>

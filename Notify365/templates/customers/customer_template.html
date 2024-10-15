@@ -844,7 +844,7 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             let contadorCaracteres = document.getElementById('contadorCaracteres');
-            let textareaElement = document.getElementById('textareaCaracteres');
+            let textareaElement = document.getElementById('textareaCaracteres'); 
 
         mostrarCaracteres(textareaElement, contadorCaracteres);
             textareaElement.addEventListener('input', function() {
@@ -861,7 +861,7 @@
             // Calculate the age
             return Math.abs(ageDate.getUTCFullYear() - 1970);
         } else {
-          return "-"
+          return null; 
         }
           
       }

@@ -448,7 +448,7 @@
       });
 
       $(document).ready(function() {
-        // Evento de clic en el botón Editar producto
+        // Evento de clic en el botón Editar customers
         // Usa la delegación de eventos para asegurar que siempre capturas el evento más reciente
           $(document).on('click', '.edit-customer-btn', function() {
 
@@ -479,8 +479,12 @@
               $('#edit-first-name').val(name);
               $('#edit-last-name').val(last_name);
               $('#edit-phone').val(phone);
-              $('#edit-dob').val(new Date(dob).toISOString().split('T')[0]);
-              $('#edit-email').val(email);
+              if (dob != '-'){
+                $('#edit-dob').val(new Date(dob).toISOString().split('T')[0]);
+              }
+              if (email != '-') {
+                $('#edit-email').val(email);
+              }
               $('#edit-gender').val(gender).change();
               $('#edit-street').val(street);
               $('#edit-city').val(city);
