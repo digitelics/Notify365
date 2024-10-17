@@ -46,10 +46,11 @@ $(document).ready(function() {
                 $('#edit-dealamount').val(premium);
                 if (activation) {
                     const formattedDate = new Date(activation).toISOString().split('T')[0];
-                    document.getElementById('edit-date').value = formattedDate;
+                    console.log(formattedDate)
+                    document.getElementById('edit-activation-date').value = formattedDate;
                 } else {
                     console.log("Activation date is invalid or null.");
-                    $('#edit-date').val('');  // Deja el campo vacío si no hay fecha válida
+                    $('#edit-activation-date').val('');  // Deja el campo vacío si no hay fecha válida
                 }
                 if (type == null) {
                     console.log('entro')

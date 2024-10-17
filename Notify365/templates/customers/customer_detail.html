@@ -456,17 +456,17 @@
               var $button = $(this);
               
               // Obtener los datos actualizados del botón clicado
-              var name = $button.data('customer-name');
-              var last_name = $button.data('customer-lastname');
-              var phone = $button.data('customer-phone');
-              var email = $button.data('customer-email');
-              var dob = $button.data('customer-dob');
-              var gender = $button.data('customer-gender');
-              var id = $button.data('customer-id');
-              var street = $button.data('customer-street');
-              var zipCode = $button.data('customer-zipcode');
-              var city = $button.data('customer-city');
-              var state = $button.data('customer-state');
+              var name = $button.attr('data-customer-name');
+              var last_name = $button.attr('data-customer-lastname');
+              var phone = $button.attr('data-customer-phone');
+              var email = $button.attr('data-customer-email');
+              var dob = $button.attr('data-customer-dob');
+              var gender = $button.attr('data-customer-gender');
+              var id = $button.attr('data-customer-id');
+              var street = $button.attr('data-customer-street');
+              var zipCode = $button.attr('data-customer-zipcode');
+              var city = $button.attr('data-customer-city');
+              var state = $button.attr('data-customer-state');
 
               // Asegúrate de que los valores correctos están siendo obtenidos
               console.log('Datos obtenidos del botón:', name, last_name, phone, email, dob, gender, id, street, zipCode, city, state);

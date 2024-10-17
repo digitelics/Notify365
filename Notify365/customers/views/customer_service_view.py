@@ -94,18 +94,17 @@ def edit_deal_view(request, id):
         code = request.POST.get('edit-code')
         providerId = request.POST.get('edit-provider')
         detail = request.POST.get('edit-details')
-        
+
         if id:
             try:
                 with transaction.atomic():
                     provider = Provider.objects.get(pk=providerId)
                     user = User.objects.get(pk=request.user.id)
-                    
+                    service = CustomerService.objects.get(pk=id)
                     if activation_date_str:
                         activation_date_str = activation_date_str.strip()
                         activation_date = datetime.strptime(activation_date_str, '%Y-%m-%d').date()
                         service.activation_date=activation_date
-                    service = CustomerService.objects.get(pk=id)
                     service.base_premium=base_premium
                     service.product_classification=product_classification
                     service.activation_period=activation_period

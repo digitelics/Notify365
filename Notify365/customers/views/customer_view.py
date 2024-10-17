@@ -17,7 +17,7 @@ from django.db import transaction
 from utils.send_text_notification import send_sms
 from utils import template_text
 from datetime import date
-
+import datetime
 
 
 
@@ -95,7 +95,8 @@ def add_customer_view(request):
 
 @login_required
 def edit_customer_view(request, id):
-    redirect_tab = 'customer'
+    customer = get_object_or_404(Customer, pk=id)
+    
     if request.method == 'POST':
         first_name = request.POST.get('first-name')
         last_name = request.POST.get('last-name')
@@ -107,34 +108,57 @@ def edit_customer_view(request, id):
         zip_code = request.POST.get('zip_code')
         dob = request.POST.get('dob') or None
         gender = request.POST.get('gender')
-
+       
         # Fetching state
         try:
             state = State.objects.get(pk=state_id)
         except:
             state = None
-        customer = Customer.objects.get(pk=id)
-        
-        if not phone.startswith('+1'):
-            phone = '+1' + phone.lstrip('0')
-        # Creating the customer
-        
-        customer.first_name=first_name
-        customer.last_name=last_name
-        customer.phone=phone
-        customer.email=email
-        customer.street=street
-        customer.city=city
-        customer.state=state
-        customer.zip_code=zip_code
-        customer.dob=dob
-        customer.gender= gender
+      
+        if isinstance(dob, str):
+            try:
+                dob = datetime.datetime.strptime(dob, '%Y-%m-%d').date()
+            except ValueError:
+                dob = None  # Handle invalid date formats
+
+        # Actualizando el cliente
+        customer.first_name = first_name
+        customer.last_name = last_name
+        customer.phone = phone if phone.startswith('+1') else '+1' + phone.lstrip('0')
+        customer.email = email
+        customer.street = street
+        customer.city = city
+        customer.state = state
+        customer.zip_code = zip_code
+        customer.dob = dob
+        customer.gender = gender
         customer.save()
 
-        messages.add_message(request, messages.SUCCESS, 'Customer updated successfully.', extra_tags='customer_updated success')
-        return redirect(reverse('customer_detail', args=[customer.id] ))
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            # Si la petición es AJAX, devolver datos en formato JSON
+            
+            return JsonResponse({
+                'message': 'Customer updated successfully.',
+                'success': True,
+                'customer': {
+                    'first_name': customer.first_name,
+                    'last_name': customer.last_name,
+                    'phone': customer.phone,
+                    'email': customer.email,
+                    'street': customer.street,
+                    'city': customer.city,
+                    'state': customer.state.abbreviation if customer.state else '',
+                    'zip_code': customer.zip_code,
+                    'dob': customer.dob.strftime('%m-%d-%Y') if customer.dob else '-',
+                    'gender': customer.get_gender_display(),
+                    'id':customer.id,
+                }
+            })
+        else:
+            messages.success(request, 'Customer updated successfully.')
+            return redirect(reverse('customer_detail', args=[customer.id]))
 
-    messages.add_message(request, messages.ERROR, 'Unexpected error. Please try again later.', extra_tags='Adding_error error')
+    messages.error(request, 'Unexpected error. Please try again later.')
     return redirect(reverse('customers'))
 
 
@@ -171,6 +195,7 @@ def customer_detail_view(request, customer_id):
     customer = get_object_or_404(Customer, id=customer_id, created_by__suscription=user_subscription)
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         print('ajax')
+        
         user = customer.created_by
         try:
             state = customer.state

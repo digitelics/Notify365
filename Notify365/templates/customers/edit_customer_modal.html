@@ -128,7 +128,7 @@
     <div class="hidden opacity-25 fixed inset-0 z-40 bg-black" id="edit-modal-customer-backdrop"></div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
+ document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('editCustomerForm');
     const nameInput = document.getElementById('edit-first-name');
     const lnameInput = document.getElementById('edit-last-name');
@@ -171,7 +171,7 @@
         isValid = false;
       }
 
-       if (dobInput) {
+      if (dobInput) {
         const dobValue = dobInput.value;
         const today = new Date();
         const dobDate = new Date(dobValue);
@@ -205,14 +205,51 @@
       } else if (!isZipCodeValid()) {
         isValid = false;
         setErrorFor(zipCodeInput, 'Zip code should contain only numbers.');
-      } 
+      }
 
       if (isValid) {
         // Show loading indicator
         document.getElementById('loadingIndicator').classList.remove('hidden');
         toggleModal('edit-modal-customer');
-        // Submit the form
-        form.submit();
+
+        // Send the form data via AJAX
+        const formData = new FormData(form);
+
+        $.ajax({
+            url: form.action,  // The form action URL
+            method: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.success) {
+                    // Update the customer details in the UI
+                    $('#detail-first-name').text(response.customer.first_name);
+                    $('#detail-last-name').text(response.customer.last_name);
+                    $('#detail-phone').text(response.customer.phone);
+                    $('#detail-email').text(response.customer.email);
+                    $('#detail-street').text(response.customer.street);
+                    $('#detail-city').text(response.customer.city);
+                    $('#detail-zip-code').text(response.customer.zip_code);
+                    $('#detail-dob').text(response.customer.dob);
+                    $('#detail-gender').text(response.customer.gender);
+                   
+                } else {
+                    // Display error message if something goes wrong
+                    alert('Error updating customer.');
+                }
+
+                // Hide loading indicator
+                document.getElementById('loadingIndicator').classList.add('hidden');
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+                alert('An unexpected error occurred.');
+
+                // Hide loading indicator
+                document.getElementById('loadingIndicator').classList.add('hidden');
+            }
+        });
       }
     });
 
